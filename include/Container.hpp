@@ -18,6 +18,8 @@ public:
   virtual ~Container();
 
   const std::vector<Widget>& getChildren() const;
+
+  virtual std::shared_ptr<Widget> getWidgetAtPos(const Vec2& pos) override;
   
 private:
   std::vector<Widget> m_children;

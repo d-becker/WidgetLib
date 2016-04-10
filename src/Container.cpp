@@ -21,4 +21,17 @@ const std::vector<Widget>& Container::getChildren() const
   return m_children;
 }
 
+std::shared_ptr<Widget> Container::getWidgetAtPos(const Vec2& pos)
+{
+  for (std::shared_ptr<Widget> child : m_children)
+  {
+    if (child && child->isInside(pos))
+    {
+      return child->getWidgetAtPos(pos - child->getPosition());
+    }
+  }
+
+  return nullptr;
+}
+
 } // namespace wl

@@ -71,15 +71,14 @@ public:
   
   /**
    * Returns the bounding box of this \c Widget as a \c Box object,
-   * with absolute (window) coordinates.
+   * in coordinates relative to the parent.
    *
    * \return The bounding box of this \c Widget as a \c Box object,
-   *         with absolute (window) coordinates.
+   *         in coordinates relative to the parent.
    */
   Box getBoundingBox() const
   {
-    Vec2 abs_pos = getAbsPosition();
-    return Box(abs_pos, abs_pos + Vec2(m_width, m_height));
+    return Box(m_position, m_position + Vec2(m_width, m_height));
   }
 
   /**
@@ -160,6 +159,30 @@ public:
   bool isInside(const Vec2& point)
   {
     return getBoundingBox().isInside(point);
+  }
+
+  /**
+   * If this is a container widget, returns the child widget that is under the
+   * given position. The position is interpreted as given by the coordinate
+   * system relative to the position of this widget. If there is no widget under
+   * the given position, returns a null pointer.
+   * If this widget is not a container, this method returns this widget or a
+   * null pointer if the given position is not inside the area if this widget.
+   *
+   * \param pos The position in the coordinate system of this widget that will
+   *            be checked.
+   *
+   * \return The child widget at the given position if this is a container
+   *         widget, this widget if this is not a container or \c nullptr
+   *         if there is no widget at the given position.
+   */
+  virtual std::shared_ptr<Widget> getWidgetAtPos(const Vec2& pos)
+  {
+    // Default implementation for non-container widgets.
+    if (isInside(pos + m_position))
+      return std::shared_ptr<Widget>(this);
+    else
+      return nullptr;
   }
 
   /**
