@@ -1,6 +1,7 @@
 #ifndef CONTAINER_HPP
 #define CONTAINER_HPP
 
+#include <memory>
 #include <vector>
 
 #include "Widget.hpp"
@@ -17,9 +18,40 @@ public:
   
   virtual ~Container();
 
+  /**
+   * Adds the given child to this container if it is not already a child and
+   * the child's parent is this container. This method should not be used
+   * directly, it will be used when passing this container to the constructor
+   * of the child widget.
+   *
+   * \param child The widget to add as a child.
+   *
+   * \return \c true if the child was added; \c false otherwise (also when
+   *         \a child is null.
+   */
+  bool addChild(std::shared_ptr<Widget> child);
+
+  /**
+   * Removes the given child if it is a child of this container.
+   *
+   * \param child The child to remove.
+   *
+   * \return \c true if the given widget was a child of this container
+   *         and it was removed; \c false otherwise.
+   */
+  bool removeChild(std::shared_ptr<Widget> child);
+
+  /**
+   * Returns a vector containing (smart) pointers to the children
+   * of this container.
+   *
+   * \return A vector containing (smart) pointers to the children
+   *         of this container.
+   */
   const std::vector<Widget>& getChildren() const;
 
-  virtual std::shared_ptr<Widget> getWidgetAtPos(const Vec2& pos) override;
+  
+  virtual Widget* getWidgetAtPos(const Vec2& pos) override;
   
 private:
   std::vector<Widget> m_children;

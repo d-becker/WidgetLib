@@ -30,6 +30,10 @@ public:
       m_width(width),
       m_height(height)
   {
+    if (m_parent)
+    {
+      // TODO
+    }
   }
   
   virtual ~Widget()
@@ -176,11 +180,11 @@ public:
    *         widget, this widget if this is not a container or \c nullptr
    *         if there is no widget at the given position.
    */
-  virtual std::shared_ptr<Widget> getWidgetAtPos(const Vec2& pos)
+  virtual Widget* getWidgetAtPos(const Vec2& pos)
   {
     // Default implementation for non-container widgets.
     if (isInside(pos + m_position))
-      return std::shared_ptr<Widget>(this);
+      return this;
     else
       return nullptr;
   }
