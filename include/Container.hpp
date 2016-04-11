@@ -1,7 +1,6 @@
 #ifndef CONTAINER_HPP
 #define CONTAINER_HPP
 
-#include <memory>
 #include <vector>
 
 #include "Widget.hpp"
@@ -11,7 +10,7 @@ namespace wl {
 class Container : public Widget
 {
 public:
-  Container(std::shared_ptr<Container> parent,
+  Container(Container *parent,
 	    Vec2 position = Vec2(0, 0),
 	    int width = 0,
 	    int height = 0);
@@ -29,7 +28,7 @@ public:
    * \return \c true if the child was added; \c false otherwise (also when
    *         \a child is null.
    */
-  bool addChild(std::shared_ptr<Widget> child);
+  bool addChild(Widget *child);
 
   /**
    * Removes the given child if it is a child of this container.
@@ -39,22 +38,22 @@ public:
    * \return \c true if the given widget was a child of this container
    *         and it was removed; \c false otherwise.
    */
-  bool removeChild(std::shared_ptr<Widget> child);
+  bool removeChild(Widget *child);
 
   /**
-   * Returns a vector containing (smart) pointers to the children
+   * Returns a vector containing pointers to the children
    * of this container.
    *
-   * \return A vector containing (smart) pointers to the children
+   * \return A vector containing pointers to the children
    *         of this container.
    */
-  const std::vector<Widget>& getChildren() const;
+  const std::vector<Widget*>& getChildren() const;
 
   
   virtual Widget* getWidgetAtPos(const Vec2& pos) override;
   
 private:
-  std::vector<Widget> m_children;
+  std::vector<Widget*> m_children;
 };
 
 } // namespace wl

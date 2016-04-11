@@ -1,8 +1,6 @@
 #ifndef WIDGET_HPP
 #define WIDGET_HPP
 
-#include <memory>
-
 #include <graphics.hpp>
 
 #include "Box.hpp"
@@ -21,31 +19,21 @@ class Container;
 class Widget
 {
 public:
-  Widget(std::shared_ptr<Container> parent,
+  Widget(Container *parent,
 	 Vec2 position = Vec2(0, 0),
 	 int width = 0,
-	 int height = 0)
-    : m_parent(parent),
-      m_position(position),
-      m_width(width),
-      m_height(height)
-  {
-    if (m_parent)
-    {
-      // TODO
-    }
-  }
+	 int height = 0);
   
   virtual ~Widget()
   {
   }
 
   /**
-   * Returns a (smart) pointer to the parent widget of this widget.
+   * Returns a pointer to the parent widget of this widget.
    *
-   * \return A (smart) pointer to the parent widget of this widget.
+   * \return A pointer to the parent widget of this widget.
    */
-  std::shared_ptr<Container> getParent()
+  Container *getParent()
   {
     return m_parent;
   }
@@ -180,7 +168,7 @@ public:
    *         widget, this widget if this is not a container or \c nullptr
    *         if there is no widget at the given position.
    */
-  virtual Widget* getWidgetAtPos(const Vec2& pos)
+  virtual Widget *getWidgetAtPos(const Vec2& pos)
   {
     // Default implementation for non-container widgets.
     if (isInside(pos + m_position))
@@ -202,7 +190,7 @@ public:
   virtual void paint() const = 0;
 
 private:
-  const std::shared_ptr<Container> m_parent;
+  Container *m_parent;
   
   Vec2 m_position;
   int m_width;

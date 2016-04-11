@@ -12,7 +12,7 @@ namespace wl {
 class Button : public Widget
 {
 public:
-  Button(std::shared_ptr<Container> parent,
+  Button(Container *parent,
 	 Vec2 position = Vec2(0, 0),
 	 int width = 0,
 	 int height = 0,

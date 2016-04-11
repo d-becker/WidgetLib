@@ -2,7 +2,7 @@
 
 namespace wl {
 
-Button::Button(std::shared_ptr<Container> parent,
+Button::Button(Container *parent,
 	       Vec2 position,
 	       int width,
 	       int height,

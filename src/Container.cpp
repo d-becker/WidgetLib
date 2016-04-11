@@ -4,21 +4,24 @@
 
 namespace wl {
 
-Container::Container(Vec2 position = Vec2(0, 0),
-		     int width = 0,
-		     int height = 0)
-  : m_parent(parent),
-    m_position(position),
-    m_width(width),
-    m_height(height)
+Container::Container(Container *parent,
+		     Vec2 position,
+		     int width,
+		     int height)
+  : Widget(parent, position, width, height)
 {
 }
 
 Container::~Container()
 {
+  for (Widget *child : m_children)
+  {
+    delete child;
+    child = nullptr;
+  }
 }
 
-bool Container::addChild(std::shared_ptr<Widget> child)
+bool Container::addChild(Widget *child)
 {
   if (!child || child->getParent() != this
       || std::find(m_children.begin(), m_children.end(), child)
@@ -29,7 +32,7 @@ bool Container::addChild(std::shared_ptr<Widget> child)
   return true;
 }
 
-bool Container::removeChild(std::shared_ptr<Widget> child)
+bool Container::removeChild(Widget *child)
 {
   auto it = std::find(m_children.begin(), m_children.end(), child);
   if (it != m_children.end())
@@ -41,14 +44,14 @@ bool Container::removeChild(std::shared_ptr<Widget> child)
   return false;
 }
 
-const std::vector<Widget>& Container::getChildren() const
+const std::vector<Widget*>& Container::getChildren() const
 {
   return m_children;
 }
 
-Widget* Container::getWidgetAtPos(const Vec2& pos)
+Widget *Container::getWidgetAtPos(const Vec2& pos)
 {
-  for (std::shared_ptr<Widget> child : m_children)
+  for (Widget *child : m_children)
   {
     if (child && child->isInside(pos))
     {
