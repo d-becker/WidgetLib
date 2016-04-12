@@ -40,7 +40,6 @@ public:
    */
   void bindOnPress(std::function<void()> on_press);
   
-  virtual void handleEvent(const genv::event& evt) override;
   virtual void paint() const override;
 
 private:

@@ -29,19 +29,6 @@ void Button::bindOnPress(std::function<void()> on_press)
   m_on_press = on_press;
 }
 
-void Button::handleEvent(const genv::event& evt)
-{
-  using namespace genv;
-  
-  if (evt.type == ev_mouse)
-  {
-    if (evt.button == btn_left && m_on_press)
-      m_on_press();
-    else if (evt.button == -btn_left && m_on_release)
-      m_on_release();
-  }
-}
-
 void Button::paint() const
 {
 }

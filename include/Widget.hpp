@@ -1,15 +1,20 @@
 #ifndef WIDGET_HPP
 #define WIDGET_HPP
 
+#include <memory>
+#include <vector>
+
 #include <graphics.hpp>
 
 #include "Box.hpp"
+#include "MouseObserver.hpp"
 #include "Vec2.hpp"
 
 
 namespace wl {
 
 class Container;
+class MouseEvent;
 
 /**
  * The base class for all widgets in the library. The position of the widget is
@@ -177,12 +182,46 @@ public:
       return nullptr;
   }
 
+  const std::vector< std::shared_ptr<MouseObserver> > getMouseObservers() const
+  {
+    return m_mouse_observers;
+  }
+
   /**
-   * Handles an event.
+   * Subsribes a mouse observer (if the same observer is not already subscribed)
+   * to this widget. The observer will be notified when a \c MouseEvent is
+   * fired by this widget.
    *
-   * \param evt The event to handle.
+   * \param observer The observer to subscribe.
    */
-  virtual void handleEvent(const genv::event& evt) = 0;
+  void addMouseObserver(std::shared_ptr<MouseObserver> observer);
+
+  /**
+   * Unsubscribes the \c MouseObserver with the given index if it exists.
+   * This method does nothing if the element with index \a index does not exist.
+   *
+   * \param index The index of the \c MouseObserver to unsubscribe.
+   */
+  void removeMouseObserver(unsigned int index);
+
+  /**
+   * Unsubscribes the provided \c MouseObserver if is subscribed to this widget.
+   * This method does nothing if provided \c MouseObserver is not subscribed to
+   * this widget.
+   *
+   * \param observer The \c MouseObserver to unsubscribe.
+   */
+  void removeMouseObserver(std::shared_ptr<MouseObserver> observer);
+
+  /**
+   * If a mouse event happens over this widget, the \c Toplevel that created
+   * the event communicates it to the widget with this method. This method then
+   * notifies all the observers that are subscribed for this event.
+   *
+   * \param evt The event to fire.
+   */
+  void fireMouseEvent(const MouseEvent& evt);
+
 
   /**
    * Paints the widget.
@@ -195,6 +234,8 @@ private:
   Vec2 m_position;
   int m_width;
   int m_height;
+
+  std::vector< std::shared_ptr<MouseObserver> > m_mouse_observers;
 };
 
 } // namespace wl

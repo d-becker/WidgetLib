@@ -1,6 +1,8 @@
 #ifndef TOPLEVEL_H
 #define TOPLEVEL_H
 
+#include <graphics.hpp>
+
 #include "Container.hpp"
 
 namespace wl {
@@ -15,8 +17,17 @@ public:
   virtual ~Toplevel();
 
 private:
-  Widget *m_mouse_btn_left_pressed;
-  Widget *m_mouse_btn_right_pressed;
+  void handle_genv_event(const genv::event& g_evt);
+  
+  void handle_genv_mouse_event(const genv::event& g_evt);
+  void handle_genv_mouse_event_no_button(const genv::event& g_evt);
+  void handle_genv_mouse_event_button(const genv::event& g_evt);
+  
+  void handle_genv_key_event(const genv::event& g_evt);
+  
+private:
+  //Widget *m_mouse_btn_left_pressed;
+  //Widget *m_mouse_btn_right_pressed;
   Widget *m_mouse_inside;
 };
 
