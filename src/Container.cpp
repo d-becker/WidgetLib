@@ -59,7 +59,7 @@ Widget *Container::getWidgetAtPos(const Vec2& pos)
     }
   }
 
-  return nullptr;
+  return this;
 }
 
 } // namespace wl

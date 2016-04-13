@@ -160,26 +160,21 @@ public:
 
   /**
    * If this is a container widget, returns the child widget that is under the
-   * given position. The position is interpreted as given by the coordinate
-   * system relative to the position of this widget. If there is no widget under
-   * the given position, returns a null pointer.
-   * If this widget is not a container, this method returns this widget or a
-   * null pointer if the given position is not inside the area if this widget.
+   * given position. The position is interpreted in the coordinate
+   * system relative to the position of this widget. If there is no widget at
+   * the given position, or if this is not a container, returns a \c this.
    *
    * \param pos The position in the coordinate system of this widget that will
    *            be checked.
    *
    * \return The child widget at the given position if this is a container
-   *         widget, this widget if this is not a container or \c nullptr
-   *         if there is no widget at the given position.
+   *         widget, this widget if there is no child widget at the given
+   *         position or if this is not a container.
    */
   virtual Widget *getWidgetAtPos(const Vec2& pos)
   {
     // Default implementation for non-container widgets.
-    if (isInside(pos + m_position))
-      return this;
-    else
-      return nullptr;
+    return this;
   }
 
   const std::vector< std::shared_ptr<MouseObserver> > getMouseObservers() const
