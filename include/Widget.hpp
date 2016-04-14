@@ -267,6 +267,11 @@ public:
   void fireKeyEvent(const KeyEvent& evt);
 
   /**
+   * Grabs the focus.
+   */
+  void grabFocus();
+
+  /**
    * Paints the widget.
    */
   virtual void paint() const = 0;

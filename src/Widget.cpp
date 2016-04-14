@@ -7,6 +7,7 @@
 #include "KeyObserver.hpp"
 #include "MouseEvent.hpp"
 #include "MouseObserver.hpp"
+#include "Toplevel.hpp"
 
 namespace wl {
 
@@ -119,6 +120,13 @@ void Widget::fireKeyEvent(const KeyEvent& evt)
 
   if (!handled && m_parent) // Propagate event to parent
     m_parent->fireKeyEvent(evt);
+}
+
+void Widget::grabFocus()
+{
+  Toplevel *tl = getToplevel();
+  if (tl)
+    tl->setFocussed(this);
 }
 
 } // namespace wl

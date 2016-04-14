@@ -14,7 +14,8 @@ Toplevel::Toplevel(int width,
   : Container(nullptr, Vec2(0, 0), width, height),
     //m_mouse_btn_left_pressed(nullptr),
     //m_mouse_btn_right_pressed(nullptr),
-    m_mouse_inside(nullptr)
+    m_mouse_inside(nullptr),
+    m_focussed(nullptr)
 {
 }
 
@@ -46,6 +47,17 @@ void Toplevel::mainloop()
       handle_genv_event(ev);
     }
   }
+}
+
+Widget *Toplevel::getFocussed() const
+{
+  return m_focussed;
+}
+
+void Toplevel::setFocussed(Widget *focussed)
+{
+  // TODO: Send focus events.
+  m_focussed = focussed;
 }
 
 // Private
@@ -137,7 +149,12 @@ void Toplevel::handle_genv_key_event(const genv::event& g_evt)
 {
   KeyEvent::KEY_EVT_TYPE type = g_evt.keycode > 0 ? KeyEvent::KEY_PRESSED
                                                   : KeyEvent::KEY_RELEASED;
-  // TODO!!! Focus!!!
+
+  // If a widget is in focus, that widget receives the event.
+  // If not, this Toplevel receives the event.
+  Widget *source = m_focussed ? m_focussed : this;
+  KeyEvent evt(source, type, g_evt.keycode);
+  source->fireKeyEvent(evt);
 }
 
 } // namespace wl
