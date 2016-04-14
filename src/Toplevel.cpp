@@ -4,6 +4,7 @@
 
 #include <graphics.hpp>
 
+#include "FocusEvent.hpp"
 #include "KeyEvent.hpp"
 #include "MouseEvent.hpp"
 
@@ -56,8 +57,25 @@ Widget *Toplevel::getFocussed() const
 
 void Toplevel::setFocussed(Widget *focussed)
 {
-  // TODO: Send focus events.
-  m_focussed = focussed;
+  if (focussed != m_focussed)
+  {
+    // Sending focus lost event
+    if (m_focussed)
+    {
+      FocusEvent evt(m_focussed, FocusEvent::FOCUS_LOST);
+      m_focussed->fireFocusEvent(evt);
+    }
+
+    // Sending focus gained event
+    if (focussed)
+    {
+      FocusEvent evt(focussed, FocusEvent::FOCUS_GAINED);
+      focussed->fireFocusEvent(evt);
+    }
+
+    // Updating m_focussed
+    m_focussed = focussed;
+  }
 }
 
 // Private

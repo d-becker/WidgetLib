@@ -13,6 +13,8 @@
 namespace wl {
 
 class Container;
+class FocusEvent;
+class FocusObserver;
 class KeyEvent;
 class KeyObserver;
 class MouseEvent;
@@ -244,7 +246,7 @@ public:
    * Unsubscribes the \c KeyObserver with the given index if it exists.
    * This method does nothing if the element with index \a index does not exist.
    *
-   * \param index The index of the \cKeyObserver to unsubscribe.
+   * \param index The index of the \c KeyObserver to unsubscribe.
    */
   void removeKeyObserver(unsigned int index);
   
@@ -267,6 +269,41 @@ public:
   void fireKeyEvent(const KeyEvent& evt);
 
   /**
+   * Subsribes a focus observer (if the same observer is not already subscribed)
+   * to this widget. The observer will be notified when a \c FocusEvent is
+   * fired by this widget.
+   *
+   * \param observer The observer to subscribe.
+   */
+  void addFocusObserver(std::shared_ptr<FocusObserver> observer);
+
+  /**
+   * Unsubscribes the \c FocusObserver with the given index if it exists.
+   * This method does nothing if the element with index \a index does not exist.
+   *
+   * \param index The index of the \c FocusObserver to unsubscribe.
+   */
+  void removeFocusObserver(unsigned int index);
+  
+  /**
+   * Unsubscribes the provided \c FocusObserver if is subscribed to this widget.
+   * This method does nothing if provided \c FocusObserver is not subscribed to
+   * this widget.
+   *
+   * \param observer The \c FocusObserver to unsubscribe.
+   */
+  void removeFocusObserver(std::shared_ptr<FocusObserver> observer);
+  
+  /**
+   * If a focus event happens over this widget, the \c Toplevel that created
+   * the event communicates it to the widget with this method. This method then
+   * notifies all the observers that are subscribed to this event.
+   *
+   * \param evt The event to fire.
+   */
+  void fireFocusEvent(const FocusEvent& evt);
+
+  /**
    * Grabs the focus.
    */
   void grabFocus();
@@ -285,6 +322,7 @@ private:
 
   std::vector< std::shared_ptr<MouseObserver> > m_mouse_observers;
   std::vector< std::shared_ptr<KeyObserver> > m_key_observers;
+  std::vector< std::shared_ptr<FocusObserver> > m_focus_observers;
 };
 
 } // namespace wl

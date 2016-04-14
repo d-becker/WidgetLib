@@ -3,6 +3,8 @@
 #include <algorithm>
 
 #include "Container.hpp"
+#include "FocusEvent.hpp"
+#include "FocusObserver.hpp"
 #include "KeyEvent.hpp"
 #include "KeyObserver.hpp"
 #include "MouseEvent.hpp"
@@ -101,14 +103,7 @@ void Widget::removeKeyObserver(std::shared_ptr<KeyObserver> observer)
   if (it < m_key_observers.end())
     m_key_observers.erase(it);
 }
-  
-/**
- * If a key event happens over this widget, the \c Toplevel that created
- * the event communicates it to the widget with this method. This method then
- * notifies all the observers that are subscribed to this event.
- *
- * \param evt The event to fire.
- */
+
 void Widget::fireKeyEvent(const KeyEvent& evt)
 {
   bool handled = false;
@@ -120,6 +115,42 @@ void Widget::fireKeyEvent(const KeyEvent& evt)
 
   if (!handled && m_parent) // Propagate event to parent
     m_parent->fireKeyEvent(evt);
+}
+
+void Widget::addFocusObserver(std::shared_ptr<FocusObserver> observer)
+{
+  if (std::find(m_focus_observers.begin(), m_focus_observers.end(), observer)
+      == m_focus_observers.end())
+    m_focus_observers.emplace_back(observer);
+}
+
+void Widget::removeFocusObserver(unsigned int index)
+{
+  auto it = m_focus_observers.begin() + index;
+  if (it < m_focus_observers.end())
+    m_focus_observers.erase(it);
+}
+
+void Widget::removeFocusObserver(std::shared_ptr<FocusObserver> observer)
+{
+  auto it = std::find(m_focus_observers.begin(),
+		      m_focus_observers.end(),
+		      observer);
+  if (it < m_focus_observers.end())
+    m_focus_observers.erase(it);
+}
+
+void Widget::fireFocusEvent(const FocusEvent& evt)
+{
+  bool handled = false;
+  for (std::shared_ptr<FocusObserver> observer : m_focus_observers)
+  {
+    if (observer)
+      handled |= observer->handleFocusEvent(evt);
+  }
+
+  if (!handled && m_parent) // Propagate event to parent
+    m_parent->fireFocusEvent(evt);
 }
 
 void Widget::grabFocus()

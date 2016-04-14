@@ -6,6 +6,10 @@
 #include "Widget.hpp"
 
 #include "Event.hpp"
+#include "FocusEvent.hpp"
+#include "FocusObserver.hpp"
+#include "KeyEvent.hpp"
+#include "KeyObserver.hpp"
 #include "MouseEvent.hpp"
 #include "MouseObserver.hpp"
 #include "Toplevel.hpp"
