@@ -4,6 +4,7 @@
 
 #include <graphics.hpp>
 
+#include "KeyEvent.hpp"
 #include "MouseEvent.hpp"
 
 namespace wl {
@@ -134,7 +135,9 @@ void Toplevel::handle_genv_mouse_event_button(const genv::event& g_evt)
 
 void Toplevel::handle_genv_key_event(const genv::event& g_evt)
 {
-  // TODO.
+  KeyEvent::KEY_EVT_TYPE type = g_evt.keycode > 0 ? KeyEvent::KEY_PRESSED
+                                                  : KeyEvent::KEY_RELEASED;
+  // TODO!!! Focus!!!
 }
 
 } // namespace wl
