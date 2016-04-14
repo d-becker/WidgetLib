@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+#include <graphics.hpp>
+
 namespace wl {
 
 Container::Container(Container *parent,
@@ -60,6 +62,21 @@ Widget *Container::getWidgetAtPos(const Vec2& pos)
   }
 
   return this;
+}
+
+void Container::paint() const
+{
+  using namespace genv;
+  Vec2 my_pos = getAbsPosition();
+  for (const Widget* child : m_children)
+  {
+    if (child)
+    {
+      Vec2 child_pos = my_pos + child->getPosition();
+      gout << move_to(child_pos.x, child_pos.y);
+      child->paint();
+    }
+  }
 }
 
 } // namespace wl

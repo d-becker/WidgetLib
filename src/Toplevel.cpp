@@ -2,14 +2,15 @@
 
 #include <cmath>
 
+#include <graphics.hpp>
+
 #include "MouseEvent.hpp"
 
 namespace wl {
 
-Toplevel::Toplevel(Vec2 position,
-		   int width,
+Toplevel::Toplevel(int width,
 		   int height)
-  : Container(nullptr, position, width, height),
+  : Container(nullptr, Vec2(0, 0), width, height),
     //m_mouse_btn_left_pressed(nullptr),
     //m_mouse_btn_right_pressed(nullptr),
     m_mouse_inside(nullptr)
@@ -18,6 +19,32 @@ Toplevel::Toplevel(Vec2 position,
 
 Toplevel::~Toplevel()
 {
+}
+
+Toplevel *Toplevel::getToplevel()
+{
+  return this;
+}
+
+void Toplevel::mainloop()
+{
+  // PRELIMINARY!!!
+  using namespace genv;
+  gout.open(getWidth(), getHeight());
+
+  gin.timer(60);
+  event ev;
+  while (gin >> ev && ev.keycode != key_escape)
+  {
+    if (ev.type == ev_timer)
+    {
+      paint();
+      gout << refresh;
+    } else
+    {    
+      handle_genv_event(ev);
+    }
+  }
 }
 
 // Private

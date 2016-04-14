@@ -1,8 +1,6 @@
 #ifndef TOPLEVEL_H
 #define TOPLEVEL_H
 
-#include <graphics.hpp>
-
 #include "Container.hpp"
 
 namespace wl {
@@ -10,12 +8,15 @@ namespace wl {
 class Toplevel : public Container
 {
 public:
-  Toplevel(Vec2 position = Vec2(0, 0),
-	   int width = 0,
+  Toplevel(int width = 0,
 	   int height = 0);
 
   virtual ~Toplevel();
 
+  virtual Toplevel *getToplevel() override;
+  
+  void mainloop();
+  
 private:
   void handle_genv_event(const genv::event& g_evt);
   

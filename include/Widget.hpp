@@ -7,14 +7,17 @@
 #include <graphics.hpp>
 
 #include "Box.hpp"
-#include "MouseObserver.hpp"
 #include "Vec2.hpp"
 
 
 namespace wl {
 
 class Container;
+class KeyEvent;
+class KeyObserver;
 class MouseEvent;
+class MouseObserver;
+class Toplevel;
 
 /**
  * The base class for all widgets in the library. The position of the widget is
@@ -164,6 +167,8 @@ public:
    * system relative to the position of this widget. If there is no widget at
    * the given position, or if this is not a container, returns a \c this.
    *
+   * Note: this method should not normally be overridden.
+   *
    * \param pos The position in the coordinate system of this widget that will
    *            be checked.
    *
@@ -176,6 +181,15 @@ public:
     // Default implementation for non-container widgets.
     return this;
   }
+
+  /**
+   * Returns the \c Toplevel object that this widget is a descendant of.
+   *
+   * Note: this method should not normally be overridden.
+   *
+   * \return The \c Toplevel object that this widget is a descendant of.
+   */
+  virtual Toplevel *getToplevel();
 
   const std::vector< std::shared_ptr<MouseObserver> > getMouseObservers() const
   {
@@ -211,12 +225,46 @@ public:
   /**
    * If a mouse event happens over this widget, the \c Toplevel that created
    * the event communicates it to the widget with this method. This method then
-   * notifies all the observers that are subscribed for this event.
+   * notifies all the observers that are subscribed to this event.
    *
    * \param evt The event to fire.
    */
   void fireMouseEvent(const MouseEvent& evt);
 
+  /**
+   * Subsribes a key observer (if the same observer is not already subscribed)
+   * to this widget. The observer will be notified when a \c KeyEvent is
+   * fired by this widget.
+   *
+   * \param observer The observer to subscribe.
+   */
+  void addKeyObserver(std::shared_ptr<KeyObserver> observer);
+
+  /**
+   * Unsubscribes the \c KeyObserver with the given index if it exists.
+   * This method does nothing if the element with index \a index does not exist.
+   *
+   * \param index The index of the \cKeyObserver to unsubscribe.
+   */
+  void removeKeyObserver(unsigned int index);
+  
+  /**
+   * Unsubscribes the provided \c KeyObserver if is subscribed to this widget.
+   * This method does nothing if provided \c KeyObserver is not subscribed to
+   * this widget.
+   *
+   * \param observer The \c KeyObserver to unsubscribe.
+   */
+  void removeKeyObserver(std::shared_ptr<KeyObserver> observer);
+  
+  /**
+   * If a key event happens over this widget, the \c Toplevel that created
+   * the event communicates it to the widget with this method. This method then
+   * notifies all the observers that are subscribed to this event.
+   *
+   * \param evt The event to fire.
+   */
+  void fireKeyEvent(const KeyEvent& evt);
 
   /**
    * Paints the widget.
@@ -231,6 +279,7 @@ private:
   int m_height;
 
   std::vector< std::shared_ptr<MouseObserver> > m_mouse_observers;
+  std::vector< std::shared_ptr<KeyObserver> > m_key_observers;
 };
 
 } // namespace wl

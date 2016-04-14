@@ -1,17 +1,15 @@
 #include "Button.hpp"
 
+#include <graphics.hpp>
+
 namespace wl {
 
 Button::Button(Container *parent,
 	       Vec2 position,
 	       int width,
-	       int height,
-	       std::function<void()> on_release,
-	       std::function<void()> on_press
+	       int height
 	       )
-  : Widget(parent, position, width, height),
-    m_on_release(on_release),
-    m_on_press(on_press)
+  : Widget(parent, position, width, height)
 {
 }
 
@@ -19,18 +17,14 @@ Button::~Button()
 {
 }
 
-void Button::bindOnRelease(std::function<void()> on_release)
-{
-  m_on_release = on_release;
-}
-
-void Button::bindOnPress(std::function<void()> on_press)
-{
-  m_on_press = on_press;
-}
-
 void Button::paint() const
 {
+  // Testing
+  using namespace genv;
+  Vec2 pos = getAbsPosition();
+  gout << move_to(pos.x, pos.y);
+  gout << color(0, 0, 255);
+  gout << box(getWidth(), getHeight());
 }
 
 } // namespace wl

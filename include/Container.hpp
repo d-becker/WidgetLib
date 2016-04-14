@@ -51,7 +51,8 @@ public:
 
   
   virtual Widget* getWidgetAtPos(const Vec2& pos) override;
-  
+
+  virtual void paint() const override;
 private:
   std::vector<Widget*> m_children;
 };

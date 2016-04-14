@@ -1,43 +1,39 @@
 #include <iostream>
 
 #include <graphics.hpp>
-/*
+
 #include "Button.hpp"
 #include "Widget.hpp"
 
 #include "Event.hpp"
-#include "MouseEvent.hpp"*/
+#include "MouseEvent.hpp"
+#include "MouseObserver.hpp"
+#include "Toplevel.hpp"
 
 using namespace std;
 using namespace genv;
-//using namespace wl;
+using namespace wl;
+
+class ML : public MouseObserver
+{
+  virtual bool handleMouseEvent(const MouseEvent& evt) override
+  {
+    static unsigned int counter = 0;
+    cerr << "Event handled :" << counter++ << "!!!\n";
+    return true;
+  }
+};
 
 int main()
 {
-  cout << "Hello World." << endl;
-  gout.open(400, 400);
+  Toplevel* tl = new Toplevel(400, 400);
+  Button* b = new Button(tl, Vec2(50, 50), 60, 60);
 
-  canvas c;
-  c.open(50, 50);
-  c << move_to(0, 0);
-  c << color(0, 0, 255);
-  c<< box(50, 50);
+  std::shared_ptr<MouseObserver> mo = make_shared<ML>();
+  b->addMouseObserver(mo);
 
-  c << refresh;
-
-  gout << stamp(c, 375, 100);
-
-  unsigned int counter = 0;
-
-  gout << refresh;
+  tl->mainloop();
   
-  event ev;
-  while(gin >> ev)
-  {
-    cerr << "Loop " << counter++ << ".\n";
-    if (ev.keycode == key_escape)
-      break;
-  }
-  
+  delete tl;
   return 0;
 }

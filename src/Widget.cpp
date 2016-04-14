@@ -3,6 +3,10 @@
 #include <algorithm>
 
 #include "Container.hpp"
+#include "KeyEvent.hpp"
+#include "KeyObserver.hpp"
+#include "MouseEvent.hpp"
+#include "MouseObserver.hpp"
 
 namespace wl {
 
@@ -28,6 +32,14 @@ Vec2 Widget::getAbsPosition() const
     return m_parent->getAbsPosition() + m_position;
   else
     return m_position;
+}
+
+Toplevel *Widget::getToplevel()
+{
+  if (m_parent)
+    return m_parent->getToplevel();
+  else
+    return nullptr;
 }
 
 void Widget::addMouseObserver(std::shared_ptr<MouseObserver> observer)
@@ -62,8 +74,51 @@ void Widget::fireMouseEvent(const MouseEvent& evt)
       handled |= observer->handleMouseEvent(evt);
   }
 
-  if (!handled && m_parent)
+  if (!handled && m_parent) // Propagate event to parent
     m_parent->fireMouseEvent(evt);
+}
+
+void Widget::addKeyObserver(std::shared_ptr<KeyObserver> observer)
+{
+  if (std::find(m_key_observers.begin(), m_key_observers.end(), observer)
+      == m_key_observers.end())
+    m_key_observers.emplace_back(observer);
+}
+
+void Widget::removeKeyObserver(unsigned int index)
+{
+  auto it = m_key_observers.begin() + index;
+  if (it < m_key_observers.end())
+    m_key_observers.erase(it);
+}
+
+void Widget::removeKeyObserver(std::shared_ptr<KeyObserver> observer)
+{
+  auto it = std::find(m_key_observers.begin(),
+		      m_key_observers.end(),
+		      observer);
+  if (it < m_key_observers.end())
+    m_key_observers.erase(it);
+}
+  
+/**
+ * If a key event happens over this widget, the \c Toplevel that created
+ * the event communicates it to the widget with this method. This method then
+ * notifies all the observers that are subscribed to this event.
+ *
+ * \param evt The event to fire.
+ */
+void Widget::fireKeyEvent(const KeyEvent& evt)
+{
+  bool handled = false;
+  for (std::shared_ptr<KeyObserver> observer : m_key_observers)
+  {
+    if (observer)
+      handled |= observer->handleKeyEvent(evt);
+  }
+
+  if (!handled && m_parent) // Propagate event to parent
+    m_parent->fireKeyEvent(evt);
 }
 
 } // namespace wl

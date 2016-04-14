@@ -8,6 +8,14 @@ namespace wl {
 class MouseObserver
 {
 public:
+  /**
+   * Handles a mouse event.
+   *
+   * \param evt The mouse event to handle.
+   *
+   * \return \c true if the event has been fully handled and need not be
+   *         propagated to the parent; \c false otherwise.
+   */
   virtual bool handleMouseEvent(const MouseEvent& evt) = 0;
 };
 
