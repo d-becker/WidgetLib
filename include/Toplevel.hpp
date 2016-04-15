@@ -8,8 +8,8 @@ namespace wl {
 class Toplevel : public Container
 {
 public:
-  Toplevel(int width = 0,
-	   int height = 0);
+  Toplevel(int width,
+	   int height);
 
   virtual ~Toplevel();
 
@@ -42,7 +42,7 @@ private:
   void handle_genv_key_event(const genv::event& g_evt);
   
 private:
-  //Widget *m_mouse_btn_left_pressed;
+  Widget *m_mouse_btn_left_pressed;
   //Widget *m_mouse_btn_right_pressed;
   Widget *m_mouse_inside;
 

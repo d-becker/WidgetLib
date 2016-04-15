@@ -313,6 +313,12 @@ public:
    */
   virtual void paint() const = 0;
 
+protected:
+  // These methods send the events to the observers and return \c true if at
+  // least one of the observers indicated that it has fully handled the event
+  bool send_mouse_evt_to_observers(const MouseEvent& evt);
+  bool send_key_evt_to_observers(const KeyEvent& evt);
+  bool send_focus_evt_to_observers(const FocusEvent& evt);
 private:
   Container *m_parent;
   

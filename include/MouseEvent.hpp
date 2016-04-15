@@ -17,7 +17,8 @@ public:
     MOUSE_BTN_RELEASED,
     MOUSE_MOVED,
     MOUSE_ENTERED,
-    MOUSE_LEFT
+    MOUSE_LEFT,
+    CLICKED_ON_WIDGET
   };
 
   enum class MOUSE_BTN

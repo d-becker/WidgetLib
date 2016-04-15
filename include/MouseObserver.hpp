@@ -8,6 +8,8 @@ namespace wl {
 class MouseObserver
 {
 public:
+  virtual ~MouseObserver() {}
+  
   /**
    * Handles a mouse event.
    *

@@ -70,13 +70,7 @@ void Widget::removeMouseObserver(std::shared_ptr<MouseObserver> observer)
 
 void Widget::fireMouseEvent(const MouseEvent& evt)
 {
-  bool handled = false;
-  for (std::shared_ptr<MouseObserver> observer : m_mouse_observers)
-  {
-    if (observer)
-      handled |= observer->handleMouseEvent(evt);
-  }
-
+  bool handled = send_mouse_evt_to_observers(evt);
   if (!handled && m_parent) // Propagate event to parent
     m_parent->fireMouseEvent(evt);
 }
@@ -106,13 +100,7 @@ void Widget::removeKeyObserver(std::shared_ptr<KeyObserver> observer)
 
 void Widget::fireKeyEvent(const KeyEvent& evt)
 {
-  bool handled = false;
-  for (std::shared_ptr<KeyObserver> observer : m_key_observers)
-  {
-    if (observer)
-      handled |= observer->handleKeyEvent(evt);
-  }
-
+  bool handled = send_key_evt_to_observers(evt);
   if (!handled && m_parent) // Propagate event to parent
     m_parent->fireKeyEvent(evt);
 }
@@ -142,13 +130,7 @@ void Widget::removeFocusObserver(std::shared_ptr<FocusObserver> observer)
 
 void Widget::fireFocusEvent(const FocusEvent& evt)
 {
-  bool handled = false;
-  for (std::shared_ptr<FocusObserver> observer : m_focus_observers)
-  {
-    if (observer)
-      handled |= observer->handleFocusEvent(evt);
-  }
-
+  bool handled = send_focus_evt_to_observers(evt);
   if (!handled && m_parent) // Propagate event to parent
     m_parent->fireFocusEvent(evt);
 }
@@ -158,6 +140,43 @@ void Widget::grabFocus()
   Toplevel *tl = getToplevel();
   if (tl)
     tl->setFocussed(this);
+}
+
+// Protected
+bool Widget::send_mouse_evt_to_observers(const MouseEvent& evt)
+{
+  bool handled = false;
+  for (std::shared_ptr<MouseObserver> observer : m_mouse_observers)
+  {
+    if (observer)
+      handled |= observer->handleMouseEvent(evt);
+  }
+
+  return handled;
+}
+
+bool Widget::send_key_evt_to_observers(const KeyEvent& evt)
+{
+  bool handled = false;
+  for (std::shared_ptr<KeyObserver> observer : m_key_observers)
+  {
+    if (observer)
+      handled |= observer->handleKeyEvent(evt);
+  }
+
+  return handled;
+}
+
+bool Widget::send_focus_evt_to_observers(const FocusEvent& evt)
+{
+  bool handled = false;
+  for (std::shared_ptr<FocusObserver> observer : m_focus_observers)
+  {
+    if (observer)
+      handled |= observer->handleFocusEvent(evt);
+  }
+  
+  return handled;
 }
 
 } // namespace wl

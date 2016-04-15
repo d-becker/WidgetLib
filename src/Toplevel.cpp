@@ -13,7 +13,7 @@ namespace wl {
 Toplevel::Toplevel(int width,
 		   int height)
   : Container(nullptr, Vec2(0, 0), width, height),
-    //m_mouse_btn_left_pressed(nullptr),
+    m_mouse_btn_left_pressed(nullptr),
     //m_mouse_btn_right_pressed(nullptr),
     m_mouse_inside(nullptr),
     m_focussed(nullptr)
@@ -155,11 +155,32 @@ void Toplevel::handle_genv_mouse_event_button(const genv::event& g_evt)
   else
     type = MouseEvent::MOUSE_BTN_RELEASED;
 
-  // Creating the event
+  // Creating the event(s)
   if (widget_under_cursor)
   {
-    MouseEvent event = MouseEvent(widget_under_cursor, mouse_position, type, button);
+    // Normal low level event
+    MouseEvent event(widget_under_cursor, mouse_position, type, button);
     widget_under_cursor->fireMouseEvent(event);
+
+    // Creating MouseEvent::CLICKED_ON_WIDGET event if the left button has been
+    // released on the widget on which it was pressed before
+    if (button == MouseEvent::MOUSE_BTN::LEFT
+	&& type == MouseEvent::MOUSE_BTN_RELEASED
+        && widget_under_cursor == m_mouse_btn_left_pressed)
+    {
+      MouseEvent clicked_event(widget_under_cursor, mouse_position,
+			       MouseEvent::CLICKED_ON_WIDGET, button);
+      widget_under_cursor->fireMouseEvent(clicked_event);
+    }
+  }
+
+  // Updating m_mouse_btn_left_pressed
+  if (button == MouseEvent::MOUSE_BTN::LEFT)
+  {
+    if (type == MouseEvent::MOUSE_BTN_PRESSED)
+      m_mouse_btn_left_pressed = widget_under_cursor;
+    else if (type == MouseEvent::MOUSE_BTN_RELEASED)
+      m_mouse_btn_left_pressed = nullptr;
   }
 }
 
@@ -167,12 +188,19 @@ void Toplevel::handle_genv_key_event(const genv::event& g_evt)
 {
   KeyEvent::KEY_EVT_TYPE type = g_evt.keycode > 0 ? KeyEvent::KEY_PRESSED
                                                   : KeyEvent::KEY_RELEASED;
+  // In the case of key events, in contrast to other events, first the Toplevel
+  // gets a chance to handle the event and only if the Toplevel didn't indicate
+  // that it fully handled the event will it be sent to the focussed widget.
+  // After that, the propagation to parent widgets is done as usual.
+  KeyEvent evt(this, type, g_evt.keycode);
+  bool handled = send_key_evt_to_observers(evt);
 
-  // If a widget is in focus, that widget receives the event.
-  // If not, this Toplevel receives the event.
-  Widget *source = m_focussed ? m_focussed : this;
-  KeyEvent evt(source, type, g_evt.keycode);
-  source->fireKeyEvent(evt);
+  if (!handled && m_focussed) // If a widget is in focus,
+			      // that widget receives the event.
+  {
+    KeyEvent w_evt(m_focussed, type, g_evt.keycode);
+    m_focussed->fireKeyEvent(w_evt);
+  }
 }
 
 } // namespace wl
