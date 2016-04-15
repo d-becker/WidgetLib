@@ -8,5 +8,14 @@ set(SRC_FILES
 	Widget.cpp	
 )
 
+set(LIBS 
+	libgraphics.a
+	${SDL_LIBRARY}
+	${SDL_TTF_LIBRARY}
+)
+
+message("Almafa: ")
+message("${SDL_TTF_LIBRARY}")
+
 add_executable(WidgetLib ${SRC_FILES})
-target_link_libraries(WidgetLib libgraphics.a)
+target_link_libraries(WidgetLib ${LIBS})
