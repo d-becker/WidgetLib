@@ -2,15 +2,14 @@
 
 #include <algorithm>
 
-#include <graphics.hpp>
-
 namespace wl {
 
 Container::Container(Container *parent,
 		     Vec2 position,
 		     int width,
 		     int height)
-  : Widget(parent, position, width, height)
+  : Widget(parent, position, width, height),
+    m_background_colour(0, 0, 0)
 {
 }
 
@@ -49,6 +48,23 @@ bool Container::removeChild(Widget *child)
 const std::vector<Widget*>& Container::getChildren() const
 {
   return m_children;
+}
+
+genv::color Container::getBackgroundColour() const
+{
+  return m_background_colour;
+}
+
+void Container::setBackgroundColour(int red,
+				    int green,
+				    int blue)
+{
+  m_background_colour = genv::color(red, green, blue);
+}
+
+void Container::setBackgroundColour(genv::color colour)
+{
+  m_background_colour = colour;
 }
 
 Widget *Container::getWidgetAtPos(const Vec2& pos)

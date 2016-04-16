@@ -21,12 +21,21 @@ Widget::Widget(Container *parent,
     m_position(position),
     m_width(width),
     m_height(height),
-    m_mouse_observers()
+    m_mouse_observers(),
+    m_key_observers(),
+    m_focus_observers(),
+    m_canvas(nullptr)
 {
   if (m_parent)
   {
     parent->addChild(this);
   }
+
+  getNewCanvas();
+}
+
+Widget::~Widget()
+{
 }
 
 Vec2 Widget::getAbsPosition() const
@@ -177,6 +186,16 @@ bool Widget::send_focus_evt_to_observers(const FocusEvent& evt)
   }
   
   return handled;
+}
+
+void Widget::getNewCanvas()
+{
+  m_canvas = std::make_shared<genv::canvas>(m_width, m_height);
+}
+
+std::shared_ptr<genv::canvas> Widget::getCanvas()
+{
+  return m_canvas;
 }
 
 } // namespace wl

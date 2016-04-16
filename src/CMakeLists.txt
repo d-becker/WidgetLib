@@ -14,8 +14,5 @@ set(LIBS
 	${SDL_TTF_LIBRARY}
 )
 
-message("Almafa: ")
-message("${SDL_TTF_LIBRARY}")
-
 add_executable(WidgetLib ${SRC_FILES})
 target_link_libraries(WidgetLib ${LIBS})

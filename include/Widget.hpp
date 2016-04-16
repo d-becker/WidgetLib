@@ -34,9 +34,7 @@ public:
 	 int width = 0,
 	 int height = 0);
   
-  virtual ~Widget()
-  {
-  }
+  virtual ~Widget();
 
   /**
    * Returns a pointer to the parent widget of this widget.
@@ -133,7 +131,10 @@ public:
   void setWidth(int w)
   {
     if (w >= 0)
+    {
       m_width = w;
+      getNewCanvas();
+    }
   }
 
   /**
@@ -145,7 +146,29 @@ public:
   void setHeight(int h)
   {
     if (h >= 0)
+    {
       m_height = h;
+      getNewCanvas();
+    }
+  }
+
+  /**
+   * Sets the site of this \c Widget to  the specified values
+   * if those are not negative. If at least one of the values is negative,
+   * nothing is done.
+   *
+   * \param width The new width of the widget.
+   * \param height The new height of the widget.
+   */
+  void setSize(int width, int height)
+  {
+    if (width >= 0 && height >= 0)
+    {
+      m_width = width;
+      m_height = height;
+
+      getNewCanvas();
+    }
   }
 
   /**
@@ -319,6 +342,13 @@ protected:
   bool send_mouse_evt_to_observers(const MouseEvent& evt);
   bool send_key_evt_to_observers(const KeyEvent& evt);
   bool send_focus_evt_to_observers(const FocusEvent& evt);
+
+  // Destructs the previous canvas and creates a new one
+  // with the current widget size
+  void getNewCanvas();
+
+  // Returns the canvas associated with this widget.
+  std::shared_ptr<genv::canvas> getCanvas();
 private:
   Container *m_parent;
   
@@ -329,6 +359,8 @@ private:
   std::vector< std::shared_ptr<MouseObserver> > m_mouse_observers;
   std::vector< std::shared_ptr<KeyObserver> > m_key_observers;
   std::vector< std::shared_ptr<FocusObserver> > m_focus_observers;
+
+  std::shared_ptr<genv::canvas> m_canvas;
 };
 
 } // namespace wl
