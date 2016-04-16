@@ -160,7 +160,8 @@ public:
    * \param width The new width of the widget.
    * \param height The new height of the widget.
    */
-  void setSize(int width, int height)
+  void setSize(int width,
+	       int height)
   {
     if (width >= 0 && height >= 0)
     {
@@ -332,9 +333,28 @@ public:
   void grabFocus();
 
   /**
+   * Stamps the canvas on which this widget draws onto the given canvas. This
+   * method can be used by parent (container) widgets to draw their children.
+   *
+   * \param on_which The canvas on which to stamp
+   *        the canvas on which this widget draws.
+   * \param x The x position on canvas \a on_which where this widget's canvas
+   *        will be stamped.
+   * \param y The y position on canvas \a on_which where this widget's canvas
+   *        will be stamped.
+   */
+  void stampCanvas(genv::canvas& on_which,
+		   int x,
+		   int y) const
+  {
+    if (m_canvas)
+      on_which << genv::stamp(*m_canvas, x, y);
+  }
+
+  /**
    * Paints the widget.
    */
-  virtual void paint() const = 0;
+  virtual void paint() = 0;
 
 protected:
   // These methods send the events to the observers and return \c true if at

@@ -80,17 +80,27 @@ Widget *Container::getWidgetAtPos(const Vec2& pos)
   return this;
 }
 
-void Container::paint() const
+void Container::paint()
 {
   using namespace genv;
-  Vec2 my_pos = getAbsPosition();
-  for (const Widget* child : m_children)
+  std::shared_ptr<canvas> my_canvas_ptr = getCanvas();
+  if (!my_canvas_ptr)
+    return;
+
+  canvas& my_canvas = *my_canvas_ptr;
+  
+  // Wiping with background colour
+  my_canvas << move_to(0, 0);
+  my_canvas << m_background_colour;
+  my_canvas << box(getWidth(), getHeight());
+
+  for (Widget* child : m_children)
   {
     if (child)
     {
-      Vec2 child_pos = my_pos + child->getPosition();
-      gout << move_to(child_pos.x, child_pos.y);
       child->paint();
+      Vec2 child_pos = child->getPosition();
+      child->stampCanvas(my_canvas, child_pos.x, child_pos.y);
     }
   }
 }

@@ -32,7 +32,7 @@ Button::~Button()
 {
 }
 
-void Button::paint() const
+void Button::paint()
 {
   // Testing
   using namespace genv;

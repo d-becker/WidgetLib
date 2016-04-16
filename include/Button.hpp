@@ -24,7 +24,7 @@ public:
 
   virtual ~Button();
   
-  virtual void paint() const override;
+  virtual void paint() override;
 
 private:
   std::function<bool(const MouseEvent&)>  m_callback;

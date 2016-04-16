@@ -80,7 +80,7 @@ public:
   
   virtual Widget* getWidgetAtPos(const Vec2& pos) override;
 
-  virtual void paint() const override;
+  virtual void paint() override;
 private:
   std::vector<Widget*> m_children;
 
