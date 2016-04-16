@@ -105,7 +105,9 @@ void TextBox::paint()
     // Cursor
     if (m_focussed)
     {
-      canv << move_to(m_horiz_padding + m_cursor * char_width, text_level)
+      canv << move_to(m_horiz_padding
+		      + (m_cursor - m_first_char_displayed)
+		      * char_width, text_level)
 	   << line(0, char_height);
     }
   }
@@ -144,9 +146,9 @@ void TextBox::set_cursor_by_mouse(int x_pos_abs)
   int remainder = dist_from_text_beginning % char_width;
 
   // Choose the cursor position that is the nearest to the mouse pointer
-  int cursor_pos = remainder < char_width / 2 ?
-			       cursor_pos_floor : cursor_pos_floor + 1;
-  set_cursor(cursor_pos);
+  int rel_cursor_pos = remainder < char_width / 2 ?
+			           cursor_pos_floor : cursor_pos_floor + 1;
+  set_cursor(rel_cursor_pos + m_first_char_displayed);
 }
 
 void TextBox::set_cursor(int pos)
@@ -198,15 +200,18 @@ void TextBox::backspace()
 {
   if (m_cursor > 0)
   {
+    m_text.erase(m_cursor - 1, 1);
     decrement_cursor();
-    m_text.erase(m_cursor, 1);
   }
 }
 
 void TextBox::del()
 {
   if (m_cursor < m_text.size())
+  {
     m_text.erase(m_cursor, 1);
+    adjust_display(); // Needed because the cursor position is not reset
+  }
 }
 
 void TextBox::write_char(char ch)
