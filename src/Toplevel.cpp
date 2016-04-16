@@ -42,7 +42,7 @@ void Toplevel::mainloop()
     if (ev.type == ev_timer)
     {
       paint();
-      gout << refresh;
+      gout << stamp(*getCanvas(), 0, 0) << refresh;
     } else
     {    
       handle_genv_event(ev);

@@ -369,6 +369,9 @@ protected:
 
   // Returns the canvas associated with this widget.
   std::shared_ptr<genv::canvas> getCanvas();
+
+  // Const version of the above.
+  std::shared_ptr<const genv::canvas> getCanvas() const;
 private:
   Container *m_parent;
   

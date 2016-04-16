@@ -191,9 +191,15 @@ bool Widget::send_focus_evt_to_observers(const FocusEvent& evt)
 void Widget::getNewCanvas()
 {
   m_canvas = std::make_shared<genv::canvas>(m_width, m_height);
+  m_canvas->load_font("Fonts/LiberationMono-Regular.ttf", 12, false);
 }
 
 std::shared_ptr<genv::canvas> Widget::getCanvas()
+{
+  return m_canvas;
+}
+
+std::shared_ptr<const genv::canvas> Widget::getCanvas() const
 {
   return m_canvas;
 }

@@ -36,10 +36,10 @@ void Button::paint()
 {
   // Testing
   using namespace genv;
-  Vec2 pos = getAbsPosition();
-  gout << move_to(pos.x, pos.y);
-  gout << color(0, 0, 255);
-  gout << box(getWidth(), getHeight());
+  canvas& c = *getCanvas();
+  c << move_to(0, 0);
+  c << color(0, 0, 255);
+  c << box(getWidth(), getHeight());
 }
 
 } // namespace wl

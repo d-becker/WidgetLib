@@ -3,6 +3,7 @@
 #include <graphics.hpp>
 
 #include "Button.hpp"
+#include "TextBox.hpp"
 #include "Widget.hpp"
 
 #include "Event.hpp"
@@ -21,26 +22,6 @@ using namespace std;
 using namespace genv;
 using namespace wl;
 
-class ML : public MouseObserver
-{
-  virtual bool handleMouseEvent(const MouseEvent& evt) override
-  {
-    static unsigned int counter = 0;
-    cerr << "Mouse event handled: " << counter++ << "!!!\n";
-    return true;
-  }
-};
-
-class KL : public KeyObserver
-{
-  virtual bool handleKeyEvent(const KeyEvent& evt) override
-  {
-    static unsigned int counter = 0;
-    cerr << "Key event  handled: " << counter++ << "!!!\n";
-    return true;
-  }
-};
-
 int main()
 {
   Toplevel* tl = new Toplevel(400, 400);
@@ -50,6 +31,8 @@ int main()
       return true;
     });
 
+  TextBox *tb = new TextBox(tl, Vec2(110, 50), 80, 40);
+
   std::shared_ptr<MouseObserver> mo = make_shared<MouseObserverAdapter>([](const MouseEvent& evt){
       static unsigned int counter = 0;
       cerr << "Mouse event handled: " << counter++ << "!!!\n";
@@ -58,7 +41,7 @@ int main()
   std::shared_ptr<KeyObserver> ko = make_shared<KeyObserverAdapter>([](const KeyEvent& evt){
       static unsigned int counter = 0;
       cerr << "Key event  handled: " << counter++ << "!!!\n";
-      return true;
+      return false;
     });
   b->addMouseObserver(mo);
   tl->addKeyObserver(ko);
@@ -66,5 +49,19 @@ int main()
   tl->mainloop();
   
   delete tl;
+
+  // Testing text
+  string A = "A";
+  string V = "V";
+  string AV = A + V;
+
+  string a = "a";
+  string space = " ";
+
+  cout << "String A: " << gout.twidth(A) << ".\n";
+  cout << "String V: " << gout.twidth(V) << ".\n";
+  cout << "String AV: " << gout.twidth(AV) << ".\n";
+  cout << "String a: " << gout.twidth(a) << ".\n";
+  cout << "String space: " << gout.twidth(space) << ".\n";
   return 0;
 }
