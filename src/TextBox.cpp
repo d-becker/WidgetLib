@@ -3,12 +3,12 @@
 #include <cctype>
 #include <memory>
 
+#include "FocusObserver.hpp"
+#include "FocusObserverAdapter.hpp"
 #include "KeyObserver.hpp"
 #include "KeyObserverAdapter.hpp"
 #include "MouseObserver.hpp"
 #include "MouseObserverAdapter.hpp"
-
-#include <iostream> ////////////////////////////////////////////
 
 namespace wl {
 
@@ -20,12 +20,22 @@ TextBox::TextBox(Container *parent,
   : Widget(parent, position, width, height),
     m_text(text),
     m_cursor(0),
-    m_first_char_displayed(0)
+    m_first_char_displayed(0),
+    m_horiz_padding(2),
+    m_focussed(false)
 {
   addMouseObserver(std::make_shared<MouseObserverAdapter>([this](const MouseEvent& evt) {
 	if (evt.getEvtType() == MouseEvent::MOUSE_BTN_PRESSED)
-	  grabFocus();
-	std::cerr << "Mouse over TextBox.\n"; /////////////////////////////////////////////////////////////////////
+	{
+	  if (!m_focussed)
+	    grabFocus();
+
+	  if (evt.getMouseButton() == MouseEvent::MOUSE_BTN::LEFT)
+	  {
+	    Vec2 mouse_pos = evt.getMousePos();
+	    set_cursor_by_mouse(mouse_pos.x);
+	  }
+	}
 	return true;
       }));
 
@@ -46,9 +56,16 @@ TextBox::TextBox(Container *parent,
 	  }
 	}
 
-	// TESTING
-	std::cout << "TextBox text: " << m_text << ".\n";
 	return true;
+      }));
+
+  addFocusObserver(std::make_shared<FocusObserverAdapter>([this](const FocusEvent& evt) {
+	if (evt.getEvtType() == FocusEvent::FOCUS_GAINED)
+	  m_focussed = true;
+	else if (evt.getEvtType() == FocusEvent::FOCUS_LOST)
+	  m_focussed = false;
+
+	return false;
       }));
 }
 
@@ -78,9 +95,19 @@ void TextBox::paint()
 	 << box(getWidth(), getHeight());
 
     // Painting the text
-    canv << move_to(2, getHeight() / 2 - (canv.cascent() + canv.cdescent()) / 2)
+    int char_height = get_char_height();
+    int char_width = get_char_width();
+    int text_level = getHeight() / 2 - char_height / 2;
+    canv << move_to(m_horiz_padding, text_level)
          << color(0, 0, 0)
          << text(get_text_to_display());
+
+    // Cursor
+    if (m_focussed)
+    {
+      canv << move_to(m_horiz_padding + m_cursor * char_width, text_level)
+	   << line(0, char_height);
+    }
   }
 }
 
@@ -93,7 +120,7 @@ int TextBox::get_cursor() const
 void TextBox::increment_cursor()
 {
   if (m_cursor < m_text.size())
-   ++m_cursor;
+    ++m_cursor;
 
   adjust_display();
 }
@@ -104,6 +131,22 @@ void TextBox::decrement_cursor()
     --m_cursor;
 
   adjust_display();
+}
+
+void TextBox::set_cursor_by_mouse(int x_pos_abs)
+{
+  int x_pos_rel = x_pos_abs - getAbsPosition().x; // In the coordinate system
+					      // of this widget
+  int char_width = get_char_width();
+  
+  int dist_from_text_beginning = x_pos_rel - m_horiz_padding;
+  int cursor_pos_floor = dist_from_text_beginning / char_width;
+  int remainder = dist_from_text_beginning % char_width;
+
+  // Choose the cursor position that is the nearest to the mouse pointer
+  int cursor_pos = remainder < char_width / 2 ?
+			       cursor_pos_floor : cursor_pos_floor + 1;
+  set_cursor(cursor_pos);
 }
 
 void TextBox::set_cursor(int pos)
@@ -210,10 +253,19 @@ int TextBox::get_char_width() const
   return canv_ptr->twidth(" ");
 }
 
+int TextBox::get_char_height() const
+{
+  std::shared_ptr<const genv::canvas> canv_ptr = getCanvas();
+  if (!canv_ptr)
+    return 0;
+
+  return canv_ptr->cascent() + canv_ptr->cdescent();
+}
+
 int TextBox::get_num_of_displayable_chars() const
 {
   int char_width = get_char_width();
-  int available_width = getWidth() - 4;
+  int available_width = getWidth() - 2 * m_horiz_padding;
   return available_width / char_width;
 }
 

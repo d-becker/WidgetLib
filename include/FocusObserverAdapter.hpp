@@ -9,6 +9,7 @@ namespace wl {
 
 class FocusObserverAdapter : public FocusObserver
 {
+public:
   FocusObserverAdapter(std::function<bool(const FocusEvent&)> callback)
     : m_callback(callback)
   {

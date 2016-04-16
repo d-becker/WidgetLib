@@ -34,6 +34,7 @@ protected:
   void increment_cursor();
   void decrement_cursor();
 
+  void set_cursor_by_mouse(int x_pos_abs);
   void set_cursor(int pos);
   void cursor_end();
   void cursor_home();
@@ -49,12 +50,16 @@ protected:
   void adjust_display();
 
   int get_char_width() const;
+  int get_char_height() const;
   int get_num_of_displayable_chars() const;
   std::string get_text_to_display() const;
 private:
   std::string m_text;
   unsigned int m_cursor;
   unsigned int m_first_char_displayed;
+  unsigned int m_horiz_padding;
+
+  bool m_focussed;
 };
 
 } // namespace wl
