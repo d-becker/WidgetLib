@@ -2,6 +2,9 @@
 
 #include <algorithm>
 
+#include "ResizeEvent.hpp"
+#include "ResizeObserverAdapter.hpp"
+
 namespace wl {
 
 Container::Container(Container *parent,
@@ -13,6 +16,11 @@ Container::Container(Container *parent,
     m_layout_manager(layout_manager),
     m_background_colour(0, 0, 0)
 {
+  // Lay out children on resize
+  addResizeSuperObserver(std::make_shared<ResizeObserverAdapter>([this](const ResizeEvent& evt) {
+	layOutChildren();
+	return true;
+      }));
 }
 
 Container::~Container()
@@ -32,6 +40,7 @@ bool Container::addChild(Widget *child)
     return false;
 
   m_children.emplace_back(child);
+  layOutChildren();
   return true;
 }
 
@@ -41,6 +50,7 @@ bool Container::removeChild(Widget *child)
   if (it != m_children.end())
   {
     m_children.erase(it);
+    layOutChildren();
     return true;
   }
 
