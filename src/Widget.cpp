@@ -9,9 +9,44 @@
 #include "KeyObserver.hpp"
 #include "MouseEvent.hpp"
 #include "MouseObserver.hpp"
+#include "ResizeEvent.hpp"
+#include "ResizeObserver.hpp"
 #include "Toplevel.hpp"
 
 namespace wl {
+
+namespace { // Anonymous namespace
+
+template <typename T>
+bool vec_contains(const std::vector<T>& vec, T elem)
+{
+  return std::find(vec.begin(), vec.end(), elem) != vec.end();
+}
+
+template <typename T>
+void add_to_vec_uniquely(std::vector<T>& vec, T elem)
+{
+  if (!vec_contains(vec, elem))
+    vec.emplace_back(elem);
+}
+
+template <typename T>
+void remove_from_vec(std::vector<T>& vec, unsigned int index)
+{
+  auto it =vec.begin() + index;
+  if (it < vec.end())
+    vec.erase(it);
+}
+
+template <typename T>
+void remove_from_vec(std::vector<T>& vec, T elem)
+{
+  auto it = std::find(vec.begin(), vec.end(), elem);
+  if (it < vec.end())
+    vec.erase(it);
+}
+
+} // anonymous namespace
 
 Widget::Widget(Container *parent,
 	       Vec2 position,
@@ -56,25 +91,17 @@ Toplevel *Widget::getToplevel()
 
 void Widget::addMouseObserver(std::shared_ptr<MouseObserver> observer)
 {
-  if (std::find(m_mouse_observers.begin(), m_mouse_observers.end(), observer)
-                                                 == m_mouse_observers.end())
-    m_mouse_observers.emplace_back(observer);
+  add_to_vec_uniquely(m_mouse_observers, observer);
 }
 
 void Widget::removeMouseObserver(unsigned int index)
 {
-  auto it = m_mouse_observers.begin() + index;
-  if (it < m_mouse_observers.end())
-    m_mouse_observers.erase(it);
+  remove_from_vec(m_mouse_observers, index);
 }
 
 void Widget::removeMouseObserver(std::shared_ptr<MouseObserver> observer)
 {
-  auto it = std::find(m_mouse_observers.begin(),
-		      m_mouse_observers.end(),
-		      observer);
-  if (it < m_mouse_observers.end())
-    m_mouse_observers.erase(it);
+  remove_from_vec(m_mouse_observers, observer);
 }
 
 void Widget::fireMouseEvent(const MouseEvent& evt)
@@ -86,25 +113,17 @@ void Widget::fireMouseEvent(const MouseEvent& evt)
 
 void Widget::addKeyObserver(std::shared_ptr<KeyObserver> observer)
 {
-  if (std::find(m_key_observers.begin(), m_key_observers.end(), observer)
-      == m_key_observers.end())
-    m_key_observers.emplace_back(observer);
+  add_to_vec_uniquely(m_key_observers, observer);
 }
 
 void Widget::removeKeyObserver(unsigned int index)
 {
-  auto it = m_key_observers.begin() + index;
-  if (it < m_key_observers.end())
-    m_key_observers.erase(it);
+  remove_from_vec(m_key_observers, index);
 }
 
 void Widget::removeKeyObserver(std::shared_ptr<KeyObserver> observer)
 {
-  auto it = std::find(m_key_observers.begin(),
-		      m_key_observers.end(),
-		      observer);
-  if (it < m_key_observers.end())
-    m_key_observers.erase(it);
+  remove_from_vec(m_key_observers, observer);
 }
 
 void Widget::fireKeyEvent(const KeyEvent& evt)
@@ -114,27 +133,41 @@ void Widget::fireKeyEvent(const KeyEvent& evt)
     m_parent->fireKeyEvent(evt);
 }
 
+void Widget::addResizeObserver(std::shared_ptr<ResizeObserver> observer)
+{
+  add_to_vec_uniquely(m_resize_observers, observer);
+}
+
+void Widget::removeResizeObserver(unsigned int index)
+{
+  remove_from_vec(m_resize_observers, index);
+}
+
+void Widget::removeResizeObserver(std::shared_ptr<ResizeObserver> observer)
+{
+  remove_from_vec(m_resize_observers, observer);
+}
+  
+void Widget::fireResizeEvent(const ResizeEvent& evt)
+{
+  // We never propagate the event to the parent as
+  // resizing of the parent can happen separately.
+  send_resize_evt_to_observers(evt);
+}
+
 void Widget::addFocusObserver(std::shared_ptr<FocusObserver> observer)
 {
-  if (std::find(m_focus_observers.begin(), m_focus_observers.end(), observer)
-      == m_focus_observers.end())
-    m_focus_observers.emplace_back(observer);
+  add_to_vec_uniquely(m_focus_observers, observer);
 }
 
 void Widget::removeFocusObserver(unsigned int index)
 {
-  auto it = m_focus_observers.begin() + index;
-  if (it < m_focus_observers.end())
-    m_focus_observers.erase(it);
+  remove_from_vec(m_focus_observers, index);
 }
 
 void Widget::removeFocusObserver(std::shared_ptr<FocusObserver> observer)
 {
-  auto it = std::find(m_focus_observers.begin(),
-		      m_focus_observers.end(),
-		      observer);
-  if (it < m_focus_observers.end())
-    m_focus_observers.erase(it);
+  remove_from_vec(m_focus_observers, observer);
 }
 
 void Widget::fireFocusEvent(const FocusEvent& evt)
@@ -173,6 +206,18 @@ bool Widget::send_key_evt_to_observers(const KeyEvent& evt)
       handled |= observer->handleKeyEvent(evt);
   }
 
+  return handled;
+}
+
+bool Widget::send_resize_evt_to_observers(const ResizeEvent& evt)
+{
+  bool handled = false;
+  for (std::shared_ptr<ResizeObserver> observer : m_resize_observers)
+  {
+    if (observer)
+      handled |= observer->handleResizeEvent(evt);
+  }
+  
   return handled;
 }
 

@@ -40,9 +40,7 @@ public:
   {
   }
 
-  virtual ~MouseEvent()
-  {
-  }
+  virtual ~MouseEvent() {}
 
   Vec2 getMousePos() const
   {

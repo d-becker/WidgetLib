@@ -7,6 +7,7 @@
 #include <graphics.hpp>
 
 #include "Box.hpp"
+#include "ResizeEvent.hpp"
 #include "Vec2.hpp"
 
 
@@ -19,6 +20,7 @@ class KeyEvent;
 class KeyObserver;
 class MouseEvent;
 class MouseObserver;
+class ResizeObserver;
 class Toplevel;
 
 /**
@@ -134,6 +136,7 @@ public:
     {
       m_width = w;
       getNewCanvas();
+      fireResizeEvent(ResizeEvent(this, m_width, m_height));
     }
   }
 
@@ -149,6 +152,7 @@ public:
     {
       m_height = h;
       getNewCanvas();
+      fireResizeEvent(ResizeEvent(this, m_width, m_height));
     }
   }
 
@@ -169,6 +173,7 @@ public:
       m_height = height;
 
       getNewCanvas();
+      fireResizeEvent(ResizeEvent(this, m_width, m_height));
     }
   }
 
@@ -240,7 +245,7 @@ public:
   void removeMouseObserver(unsigned int index);
 
   /**
-   * Unsubscribes the provided \c MouseObserver if is subscribed to this widget.
+   * Unsubscribes the provided \c MouseObserver if it is subscribed to this widget.
    * This method does nothing if provided \c MouseObserver is not subscribed to
    * this widget.
    *
@@ -275,7 +280,7 @@ public:
   void removeKeyObserver(unsigned int index);
   
   /**
-   * Unsubscribes the provided \c KeyObserver if is subscribed to this widget.
+   * Unsubscribes the provided \c KeyObserver if it is subscribed to this widget.
    * This method does nothing if provided \c KeyObserver is not subscribed to
    * this widget.
    *
@@ -291,6 +296,41 @@ public:
    * \param evt The event to fire.
    */
   void fireKeyEvent(const KeyEvent& evt);
+
+   /**
+   * Subsribes a resize observer (if the same observer is not already
+   * subscribed) to this widget. The observer will be notified when a
+   * \c ResizeEvent is fired by this widget.
+   *
+   * \param observer The observer to subscribe.
+   */
+  void addResizeObserver(std::shared_ptr<ResizeObserver> observer);
+
+  /**
+   * Unsubscribes the \c ResizeObserver with the given index if it exists.
+   * This method does nothing if the element with index \a index does not exist.
+   *
+   * \param index The index of the \c ResizeObserver to unsubscribe.
+   */
+  void removeResizeObserver(unsigned int index);
+  
+  /**
+   * Unsubscribes the provided \c ResizeObserver if it is subscribed to
+   * this widget. This method does nothing if provided \c ResizeObserver
+   * is not subscribed to this widget.
+   *
+   * \param observer The \c ResizeObserver to unsubscribe.
+   */
+  void removeResizeObserver(std::shared_ptr<ResizeObserver> observer);
+  
+  /**
+   * If this widget is resized, this method is used to notify all the observers
+   * that are subscribed to this event. This method is called automatically from
+   * \c setWidth, \c setHeight and \c setSize.
+   *
+   * \param evt The event to fire.
+   */
+  void fireResizeEvent(const ResizeEvent& evt);
 
   /**
    * Subsribes a focus observer (if the same observer is not already subscribed)
@@ -310,7 +350,7 @@ public:
   void removeFocusObserver(unsigned int index);
   
   /**
-   * Unsubscribes the provided \c FocusObserver if is subscribed to this widget.
+   * Unsubscribes the provided \c FocusObserver if it is subscribed to this widget.
    * This method does nothing if provided \c FocusObserver is not subscribed to
    * this widget.
    *
@@ -361,6 +401,7 @@ protected:
   // least one of the observers indicated that it has fully handled the event
   bool send_mouse_evt_to_observers(const MouseEvent& evt);
   bool send_key_evt_to_observers(const KeyEvent& evt);
+  bool send_resize_evt_to_observers(const ResizeEvent& evt);
   bool send_focus_evt_to_observers(const FocusEvent& evt);
 
   // Destructs the previous canvas and creates a new one
@@ -381,6 +422,7 @@ private:
 
   std::vector< std::shared_ptr<MouseObserver> > m_mouse_observers;
   std::vector< std::shared_ptr<KeyObserver> > m_key_observers;
+  std::vector< std::shared_ptr<ResizeObserver> > m_resize_observers;
   std::vector< std::shared_ptr<FocusObserver> > m_focus_observers;
 
   std::shared_ptr<genv::canvas> m_canvas;
