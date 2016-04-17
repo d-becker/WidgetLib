@@ -5,9 +5,12 @@
 
 #include <graphics.hpp>
 
+#include "LayoutManager.hpp"
 #include "Widget.hpp"
 
 namespace wl {
+
+class LayoutManager;
 
 class Container : public Widget
 {
@@ -15,7 +18,8 @@ public:
   Container(Container *parent,
 	    Vec2 position = Vec2(0, 0),
 	    int width = 0,
-	    int height = 0);
+	    int height = 0,
+	    std::shared_ptr<LayoutManager> layout_manager = nullptr);
   
   virtual ~Container();
 
@@ -77,12 +81,35 @@ public:
    */
   void setBackgroundColour(genv::color colour);
 
+  /**
+   * Returns a (smart) pointer to the layout manager associated with
+   * this container.
+   *
+   * \return A (smart) pointer to the layout manager associated with
+   *         this container.
+   */
+  std::shared_ptr<LayoutManager> getLayoutManager() const;
+
+  /**
+   * Sets the layout manager associated with this container.
+   *
+   * \param layout_manager The new layout manager.
+   */
+  void setLayoutManager(std::shared_ptr<LayoutManager> layout_manager);
+
+  /**
+   * Calls the layout manager to lay out the children of this container. If there is no layout manager, this method does nothing.
+   */
+  void layOutChildren();
+
   
   virtual Widget* getWidgetAtPos(const Vec2& pos) override;
 
   virtual void paint() override;
 private:
   std::vector<Widget*> m_children;
+
+  std::shared_ptr<LayoutManager> m_layout_manager;
 
   genv::color m_background_colour;
 };

@@ -7,8 +7,10 @@ namespace wl {
 Container::Container(Container *parent,
 		     Vec2 position,
 		     int width,
-		     int height)
+		     int height,
+		     std::shared_ptr<LayoutManager> layout_manager)
   : Widget(parent, position, width, height),
+    m_layout_manager(layout_manager),
     m_background_colour(0, 0, 0)
 {
 }
@@ -65,6 +67,22 @@ void Container::setBackgroundColour(int red,
 void Container::setBackgroundColour(genv::color colour)
 {
   m_background_colour = colour;
+}
+
+std::shared_ptr<LayoutManager> Container::getLayoutManager() const
+{
+  return m_layout_manager;
+}
+
+void Container::setLayoutManager(std::shared_ptr<LayoutManager> layout_manager)
+{
+  m_layout_manager = layout_manager;
+}
+
+void Container::layOutChildren()
+{
+  if (m_layout_manager)
+    m_layout_manager->layOutContainer(*this);
 }
 
 Widget *Container::getWidgetAtPos(const Vec2& pos)

@@ -16,14 +16,13 @@ Button::Button(Container *parent,
   : Widget(parent, position, width, height),
     m_callback(callback)
 {
-  std::shared_ptr<MouseObserver> observer =
-    std::make_shared<MouseObserverAdapter>([this](const MouseEvent& evt) {
+  // Callback on clicking the button
+  addMouseSuperObserver(std::make_shared<MouseObserverAdapter>([this](const MouseEvent& evt) {
 	if (evt.getEvtType() == MouseEvent::CLICKED_ON_WIDGET && m_callback)
 	  return m_callback(evt);
 	else
 	  return false;
-    });
-  addMouseObserver(observer);
+    }));
 }
 
 
