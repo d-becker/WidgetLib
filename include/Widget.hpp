@@ -404,6 +404,12 @@ protected:
   bool send_resize_evt_to_observers(const ResizeEvent& evt);
   bool send_focus_evt_to_observers(const FocusEvent& evt);
 
+  // Registering super observers
+  void addMouseSuperObserver(std::shared_ptr<MouseObserver> observer);
+  void addKeySuperObserver(std::shared_ptr<KeyObserver> observer);
+  void addResizeSuperObserver(std::shared_ptr<ResizeObserver> observer);
+  void addFocusSuperObserver(std::shared_ptr<FocusObserver> observer);
+
   // Destructs the previous canvas and creates a new one
   // with the current widget size
   void getNewCanvas();
@@ -420,10 +426,17 @@ private:
   int m_width;
   int m_height;
 
+  // Observers
   std::vector< std::shared_ptr<MouseObserver> > m_mouse_observers;
   std::vector< std::shared_ptr<KeyObserver> > m_key_observers;
   std::vector< std::shared_ptr<ResizeObserver> > m_resize_observers;
   std::vector< std::shared_ptr<FocusObserver> > m_focus_observers;
+
+  // Super observers - they cannot be deleted from outside, by public methods
+  std::vector< std::shared_ptr<MouseObserver> > m_mouse_super_observers;
+  std::vector< std::shared_ptr<KeyObserver> > m_key_super_observers;
+  std::vector< std::shared_ptr<ResizeObserver> > m_resize_super_observers;
+  std::vector< std::shared_ptr<FocusObserver> > m_focus_super_observers;
 
   std::shared_ptr<genv::canvas> m_canvas;
 };

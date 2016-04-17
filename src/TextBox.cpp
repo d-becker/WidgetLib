@@ -24,7 +24,8 @@ TextBox::TextBox(Container *parent,
     m_horiz_padding(2),
     m_focussed(false)
 {
-  addMouseObserver(std::make_shared<MouseObserverAdapter>([this](const MouseEvent& evt) {
+  // Grab focus and set cursor position on click
+  addMouseSuperObserver(std::make_shared<MouseObserverAdapter>([this](const MouseEvent& evt) {
 	if (evt.getEvtType() == MouseEvent::MOUSE_BTN_PRESSED)
 	{
 	  if (!m_focussed)
@@ -39,7 +40,8 @@ TextBox::TextBox(Container *parent,
 	return true;
       }));
 
-  addKeyObserver(std::make_shared<KeyObserverAdapter>([this](const KeyEvent& evt) {
+  // Handle key events
+  addKeySuperObserver(std::make_shared<KeyObserverAdapter>([this](const KeyEvent& evt) {
 	using namespace genv;
 	if (evt.getEvtType() == KeyEvent::KEY_PRESSED)
 	{
@@ -59,7 +61,8 @@ TextBox::TextBox(Container *parent,
 	return true;
       }));
 
-  addFocusObserver(std::make_shared<FocusObserverAdapter>([this](const FocusEvent& evt) {
+  // Keeping track of whether we are focussed
+  addFocusSuperObserver(std::make_shared<FocusObserverAdapter>([this](const FocusEvent& evt) {
 	if (evt.getEvtType() == FocusEvent::FOCUS_GAINED)
 	  m_focussed = true;
 	else if (evt.getEvtType() == FocusEvent::FOCUS_LOST)

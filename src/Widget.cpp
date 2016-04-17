@@ -58,7 +58,12 @@ Widget::Widget(Container *parent,
     m_height(height),
     m_mouse_observers(),
     m_key_observers(),
+    m_resize_observers(),
     m_focus_observers(),
+    m_mouse_super_observers(),
+    m_key_super_observers(),
+    m_resize_super_observers(),
+    m_focus_super_observers(),
     m_canvas(nullptr)
 {
   if (m_parent)
@@ -188,6 +193,12 @@ void Widget::grabFocus()
 bool Widget::send_mouse_evt_to_observers(const MouseEvent& evt)
 {
   bool handled = false;
+  for (std::shared_ptr<MouseObserver> observer : m_mouse_super_observers)
+  {
+    if (observer)
+      handled |= observer->handleMouseEvent(evt);
+  }
+  
   for (std::shared_ptr<MouseObserver> observer : m_mouse_observers)
   {
     if (observer)
@@ -200,6 +211,12 @@ bool Widget::send_mouse_evt_to_observers(const MouseEvent& evt)
 bool Widget::send_key_evt_to_observers(const KeyEvent& evt)
 {
   bool handled = false;
+  for (std::shared_ptr<KeyObserver> observer : m_key_super_observers)
+  {
+    if (observer)
+      handled |= observer->handleKeyEvent(evt);
+  }
+  
   for (std::shared_ptr<KeyObserver> observer : m_key_observers)
   {
     if (observer)
@@ -212,6 +229,12 @@ bool Widget::send_key_evt_to_observers(const KeyEvent& evt)
 bool Widget::send_resize_evt_to_observers(const ResizeEvent& evt)
 {
   bool handled = false;
+  for (std::shared_ptr<ResizeObserver> observer : m_resize_super_observers)
+  {
+    if (observer)
+      handled |= observer->handleResizeEvent(evt);
+  }
+  
   for (std::shared_ptr<ResizeObserver> observer : m_resize_observers)
   {
     if (observer)
@@ -224,6 +247,12 @@ bool Widget::send_resize_evt_to_observers(const ResizeEvent& evt)
 bool Widget::send_focus_evt_to_observers(const FocusEvent& evt)
 {
   bool handled = false;
+  for (std::shared_ptr<FocusObserver> observer : m_focus_super_observers)
+  {
+    if (observer)
+      handled |= observer->handleFocusEvent(evt);
+  }
+  
   for (std::shared_ptr<FocusObserver> observer : m_focus_observers)
   {
     if (observer)
@@ -231,6 +260,26 @@ bool Widget::send_focus_evt_to_observers(const FocusEvent& evt)
   }
   
   return handled;
+}
+
+void Widget::addMouseSuperObserver(std::shared_ptr<MouseObserver> observer)
+{
+  add_to_vec_uniquely(m_mouse_super_observers, observer);
+}
+
+void Widget::addKeySuperObserver(std::shared_ptr<KeyObserver> observer)
+{
+  add_to_vec_uniquely(m_key_super_observers, observer);
+}
+
+void Widget::addResizeSuperObserver(std::shared_ptr<ResizeObserver> observer)
+{
+  add_to_vec_uniquely(m_resize_super_observers, observer);
+}
+
+void Widget::addFocusSuperObserver(std::shared_ptr<FocusObserver> observer)
+{
+  add_to_vec_uniquely(m_focus_super_observers, observer);
 }
 
 void Widget::getNewCanvas()
