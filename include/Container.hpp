@@ -5,7 +5,6 @@
 
 #include <graphics.hpp>
 
-#include "LayoutManager.hpp"
 #include "Widget.hpp"
 
 namespace wl {
@@ -17,31 +16,9 @@ class Container : public Widget
 public:
   Container(Vec2 position = Vec2(0, 0),
 	    int width = 0,
-	    int height = 0,
-	    std::shared_ptr<LayoutManager> layout_manager = nullptr);
+	    int height = 0);
   
   virtual ~Container();
-
-  /**
-   * Adds the given child to this container if it is not already a child of
-   * this or another container and is not nullptr.
-   *
-   * \param child The widget to add as a child.
-   *
-   * \return \c true if the child was added; \c false otherwise (also when
-   *         \a child is null.
-   */
-  bool addChild(Widget *child);
-
-  /**
-   * Removes the given child if it is a child of this container.
-   *
-   * \param child The child to remove.
-   *
-   * \return \c true if the given widget was a child of this container
-   *         and it was removed; \c false otherwise.
-   */
-  bool removeChild(Widget *child);
 
   /**
    * Returns a vector containing pointers to the children
@@ -78,35 +55,38 @@ public:
    */
   void setBackgroundColour(genv::color colour);
 
-  /**
-   * Returns a (smart) pointer to the layout manager associated with
-   * this container.
-   *
-   * \return A (smart) pointer to the layout manager associated with
-   *         this container.
-   */
-  std::shared_ptr<LayoutManager> getLayoutManager() const;
-
-  /**
-   * Sets the layout manager associated with this container.
-   *
-   * \param layout_manager The new layout manager.
-   */
-  void setLayoutManager(std::shared_ptr<LayoutManager> layout_manager);
-
-  /**
-   * Calls the layout manager to lay out the children of this container. If there is no layout manager, this method does nothing.
-   */
-  void layOutChildren();
-
-  
   virtual Widget* getWidgetAtPos(const Vec2& pos) override;
 
   virtual void paint() override;
+
+  /**
+   * Lay out the children of this container.
+   */
+  virtual void layOutChildren() = 0;
+
+protected:
+  /**
+   * Adds the given child to this container if it is not already a child of
+   * this or another container and is not nullptr.
+   *
+   * \param child The widget to add as a child.
+   *
+   * \return \c true if the child was added; \c false otherwise (also when
+   *         \a child is null.
+   */
+  bool addChild(Widget *child);
+
+  /**
+   * Removes the given child if it is a child of this container.
+   *
+   * \param child The child to remove.
+   *
+   * \return \c true if the given widget was a child of this container
+   *         and it was removed; \c false otherwise.
+   */
+  bool removeChild(Widget *child);
 private:
   std::vector<Widget*> m_children;
-
-  std::shared_ptr<LayoutManager> m_layout_manager;
 
   genv::color m_background_colour;
 };

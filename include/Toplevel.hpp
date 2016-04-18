@@ -31,6 +31,8 @@ public:
    * \param focussed The widget to give the focus to.
    */
   void setFocussed(Widget *focussed);
+
+  virtual void layOutChildren() override;
   
 private:
   void handle_genv_event(const genv::event& g_evt);

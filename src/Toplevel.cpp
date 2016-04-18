@@ -78,6 +78,11 @@ void Toplevel::setFocussed(Widget *focussed)
   }
 }
 
+void Toplevel::layOutChildren()
+{
+  // Does nothing.
+}
+
 // Private
 
 void Toplevel::handle_genv_event(const genv::event& g_evt)
