@@ -23,10 +23,8 @@ public:
   virtual ~Container();
 
   /**
-   * Adds the given child to this container if it is not already a child and
-   * the child's parent is this container. This method should not be used
-   * directly, it will be used when passing this container to the constructor
-   * of the child widget.
+   * Adds the given child to this container if it is not already a child of
+   * this or another container and is not nullptr.
    *
    * \param child The widget to add as a child.
    *
