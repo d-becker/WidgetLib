@@ -30,9 +30,9 @@ class Toplevel;
  */
 class Widget
 {
+  friend class Container;
 public:
-  Widget(Container *parent,
-	 Vec2 position = Vec2(0, 0),
+  Widget(Vec2 position = Vec2(0, 0),
 	 int width = 0,
 	 int height = 0);
   
@@ -419,6 +419,7 @@ protected:
 
   // Const version of the above.
   std::shared_ptr<const genv::canvas> getCanvas() const;
+
 private:
   Container *m_parent;
   
@@ -426,6 +427,9 @@ private:
   int m_width;
   int m_height;
 
+  // Used by the friend class Container
+  void set_parent(Container *parent);
+  
   // Observers
   std::vector< std::shared_ptr<MouseObserver> > m_mouse_observers;
   std::vector< std::shared_ptr<KeyObserver> > m_key_observers;

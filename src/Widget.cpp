@@ -48,11 +48,10 @@ void remove_from_vec(std::vector<T>& vec, T elem)
 
 } // anonymous namespace
 
-Widget::Widget(Container *parent,
-	       Vec2 position,
+Widget::Widget(Vec2 position,
 	       int width,
 	       int height)
-  : m_parent(parent),
+  : m_parent(nullptr),
     m_position(position),
     m_width(width),
     m_height(height),
@@ -66,11 +65,6 @@ Widget::Widget(Container *parent,
     m_focus_super_observers(),
     m_canvas(nullptr)
 {
-  if (m_parent)
-  {
-    parent->addChild(this);
-  }
-
   getNewCanvas();
 }
 
@@ -296,6 +290,11 @@ std::shared_ptr<genv::canvas> Widget::getCanvas()
 std::shared_ptr<const genv::canvas> Widget::getCanvas() const
 {
   return m_canvas;
+}
+
+void Widget::set_parent(Container *parent)
+{
+  m_parent = parent;
 }
 
 } // namespace wl

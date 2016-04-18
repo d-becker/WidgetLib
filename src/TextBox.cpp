@@ -12,12 +12,11 @@
 
 namespace wl {
 
-TextBox::TextBox(Container *parent,
-		 Vec2 position,
+TextBox::TextBox(Vec2 position,
 		 int width,
 		 int height,
 		 std::string text)
-  : Widget(parent, position, width, height),
+  : Widget(position, width, height),
     m_text(text),
     m_cursor(0),
     m_first_char_displayed(0),

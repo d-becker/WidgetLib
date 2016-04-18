@@ -12,7 +12,7 @@ namespace wl {
 
 Toplevel::Toplevel(int width,
 		   int height)
-  : Container(nullptr, Vec2(0, 0), width, height),
+  : Container(Vec2(0, 0), width, height),
     m_mouse_btn_left_pressed(nullptr),
     //m_mouse_btn_right_pressed(nullptr),
     m_mouse_inside(nullptr),

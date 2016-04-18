@@ -15,8 +15,7 @@ namespace wl {
 class Button : public Widget
 {
 public:
-  Button(Container *parent,
-	 Vec2 position = Vec2(0, 0),
+  Button(Vec2 position = Vec2(0, 0),
 	 int width = 50,
 	 int height = 50,
 	 std::function<bool(const MouseEvent&)> callback = {}

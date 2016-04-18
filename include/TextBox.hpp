@@ -16,8 +16,7 @@ namespace wl {
 class TextBox : public Widget
 {
 public:
-  TextBox(Container *parent,
-	  Vec2 position = Vec2(0, 0),
+  TextBox(Vec2 position = Vec2(0, 0),
 	  int width = 50,
 	  int height = 20,
 	  std::string text = {});

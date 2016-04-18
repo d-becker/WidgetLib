@@ -7,12 +7,11 @@
 
 namespace wl {
 
-Container::Container(Container *parent,
-		     Vec2 position,
+Container::Container(Vec2 position,
 		     int width,
 		     int height,
 		     std::shared_ptr<LayoutManager> layout_manager)
-  : Widget(parent, position, width, height),
+  : Widget(position, width, height),
     m_layout_manager(layout_manager),
     m_background_colour(0, 0, 0)
 {
@@ -34,12 +33,13 @@ Container::~Container()
 
 bool Container::addChild(Widget *child)
 {
-  if (!child || child->getParent() != this
+  if (!child || child->getParent() != nullptr
       || std::find(m_children.begin(), m_children.end(), child)
                                            != m_children.end())
     return false;
 
   m_children.emplace_back(child);
+  child->set_parent(this);
   layOutChildren();
   return true;
 }
@@ -50,6 +50,7 @@ bool Container::removeChild(Widget *child)
   if (it != m_children.end())
   {
     m_children.erase(it);
+    child->set_parent(nullptr);
     layOutChildren();
     return true;
   }

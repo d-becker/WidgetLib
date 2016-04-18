@@ -7,13 +7,12 @@
 
 namespace wl {
 
-Button::Button(Container *parent,
-	       Vec2 position,
+Button::Button(Vec2 position,
 	       int width,
 	       int height,
 	       std::function<bool(const MouseEvent&)> callback
 	       )
-  : Widget(parent, position, width, height),
+  : Widget(position, width, height),
     m_callback(callback)
 {
   // Callback on clicking the button
