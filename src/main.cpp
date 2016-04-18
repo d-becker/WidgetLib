@@ -47,8 +47,8 @@ int main()
   b->addMouseObserver(mo);
   tl->addKeyObserver(ko);
 
-  //tl->addChild(b);
-  //tl->addChild(tb);
+  tl->addChild(b);
+  tl->addChild(tb);
 
   tl->mainloop();
   

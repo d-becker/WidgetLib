@@ -12,7 +12,7 @@ namespace wl {
 
 Toplevel::Toplevel(int width,
 		   int height)
-  : Container(Vec2(0, 0), width, height),
+  : FreePanel(Vec2(0, 0), width, height),
     m_mouse_btn_left_pressed(nullptr),
     //m_mouse_btn_right_pressed(nullptr),
     m_mouse_inside(nullptr),
@@ -76,11 +76,6 @@ void Toplevel::setFocussed(Widget *focussed)
     // Updating m_focussed
     m_focussed = focussed;
   }
-}
-
-void Toplevel::layOutChildren()
-{
-  // Does nothing.
 }
 
 // Private

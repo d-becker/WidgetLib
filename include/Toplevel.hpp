@@ -1,11 +1,11 @@
 #ifndef TOPLEVEL_H
 #define TOPLEVEL_H
 
-#include "Container.hpp"
+#include "FreePanel.hpp"
 
 namespace wl {
 
-class Toplevel : public Container
+class Toplevel : public FreePanel
 {
 public:
   Toplevel(int width,
@@ -31,8 +31,6 @@ public:
    * \param focussed The widget to give the focus to.
    */
   void setFocussed(Widget *focussed);
-
-  virtual void layOutChildren() override;
   
 private:
   void handle_genv_event(const genv::event& g_evt);
