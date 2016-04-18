@@ -99,7 +99,6 @@ bool Container::addChild(Widget *child)
 
   m_children.emplace_back(child);
   child->set_parent(this);
-  layOutChildren();
   return true;
 }
 
@@ -110,7 +109,6 @@ bool Container::removeChild(Widget *child)
   {
     m_children.erase(it);
     child->set_parent(nullptr);
-    layOutChildren();
     return true;
   }
 
