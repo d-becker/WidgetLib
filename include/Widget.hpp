@@ -430,7 +430,7 @@ protected:
   bool send_resize_evt_to_observers(const ResizeEvent& evt);
   bool send_focus_evt_to_observers(const FocusEvent& evt);
 
-  // Registering super observers
+  // Registering super observers - they cannot be deleted or added from outside
   void addMouseSuperObserver(std::shared_ptr<MouseObserver> observer);
   void addKeySuperObserver(std::shared_ptr<KeyObserver> observer);
   void addResizeSuperObserver(std::shared_ptr<ResizeObserver> observer);

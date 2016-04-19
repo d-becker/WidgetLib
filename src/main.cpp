@@ -6,6 +6,9 @@
 #include "TextBox.hpp"
 #include "Widget.hpp"
 
+#include "ButtonEvent.hpp"
+#include "ButtonObserver.hpp"
+#include "ButtonObserverAdapter.hpp"
 #include "Event.hpp"
 #include "FocusEvent.hpp"
 #include "FocusObserver.hpp"
@@ -25,17 +28,13 @@ using namespace wl;
 int main()
 {
   Toplevel* tl = new Toplevel(400, 400);
-  Button* b = new Button(Vec2(50, 50), 60, 60, [](const MouseEvent& evt) {
-      static unsigned int counter = 0;
-      cerr << "Button clicked: " << counter++ << "!!!\n";
-      return true;
-    });
+  Button* b = new Button(Vec2(50, 50), 60, 60);
 
   TextBox *tb = new TextBox(Vec2(110, 50), 80, 40);
 
-  std::shared_ptr<MouseObserver> mo = make_shared<MouseObserverAdapter>([](const MouseEvent& evt){
+  std::shared_ptr<ButtonObserver> bo = make_shared<ButtonObserverAdapter>([](const ButtonEvent& evt) {
       static unsigned int counter = 0;
-      cerr << "Mouse event handled: " << counter++ << "!!!\n";
+      cerr << "Button clicked: " << counter++ << "!!!\n";
       return true;
     });
   std::shared_ptr<KeyObserver> ko = make_shared<KeyObserverAdapter>([](const KeyEvent& evt){
@@ -44,7 +43,8 @@ int main()
       return false;
     });
   
-  b->addMouseObserver(mo);
+  b->addButtonObserver(bo);
+  
   tl->addKeyObserver(ko);
 
   tl->addChild(b);
