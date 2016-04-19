@@ -4,13 +4,14 @@
 
 #include "Button.hpp"
 #include "Container.hpp"
+#include "MouseEvent.hpp"
+#include "MouseObserver.hpp"
+#include "MouseObserverAdapter.hpp"
 #include "TextBox.hpp"
 
 namespace wl {
 
-namespace {
-
-class ArrowButton : public Button
+class Spinner::ArrowButton : public Button
 {
 public:
   enum DIRECTION
@@ -49,15 +50,29 @@ public:
       << move_to(0, 0)
       << box(width, height);
 
-    double x_start = width * 0.1;
-    double y_start = m_dir == UP ? height * 0.9 : height * 0.1;
+    double x_relative_padding = 0.2; // ratio
+    double y_relative_padding = 0.2; // ratio
+    
+    double x_start = width * x_relative_padding;
+    double y_start = m_dir == UP ? height * (1 - y_relative_padding)
+                                 : height * y_relative_padding;
 
     double y_coeff = m_dir == UP ? -1.0 : 1.0;
 
-    c << move_to(x_start, y_start)
+    // Drawing the edge
+    c << move_to(0, 0)
       << m_arrow_colour
-      << line(width * 0.4, y_coeff * height * 0.8)
-      << line(width * 0.4, -y_coeff * height * 0.8);
+      << line(width, 0)
+      << line(0, height)
+      << line(-width, 0)
+      << line(0, -height);
+
+    // Drawing the arrow
+    c << move_to(x_start, y_start)
+      << line(width * (1 - 2 * x_relative_padding) / 2,
+	      y_coeff * height * (1 - 2 * y_relative_padding))
+      << line(width * (1 - 2 * x_relative_padding) / 2,
+	      -y_coeff * height * (1 - 2 * y_relative_padding));
   }
 
   
@@ -66,45 +81,41 @@ private:
   genv::color m_arrow_colour;
 };
 
-} // anonymous namespace
-
-class Spinner::SpinnerImpl : public Container
+Spinner::Spinner(Vec2 position,
+		 int width,
+		 int height)
+  : Container(position, width, height),
+    m_text_box(new TextBox()),
+    m_arrow_up(new ArrowButton(Vec2(0, 0), 0, 0, ArrowButton::UP)),
+    m_arrow_down(new ArrowButton(Vec2(0, 0), 0, 0, ArrowButton::DOWN))
 {
-public:
-  SpinnerImpl()
-    : Container(Vec2(0, 0), 0, 0), // Size will be set later
-      m_text_box(),
-      m_arrow_up(new ArrowButton(Vec2(0, 0), 0, 0, ArrowButton::UP)),
-      m_arrow_down(new ArrowButton(Vec2(0, 0), 0, 0, ArrowButton::DOWN))
-  {
-    addChild(m_text_box);
-    addChild(m_arrow_up);
-    addChild(m_arrow_down);
-  }
+  addChild(m_text_box);
+  addChild(m_arrow_up);
+  addChild(m_arrow_down);
 
-  virtual void layOutChildren() override
-  {
-    int whole_width = getWidth();
-    int whole_height = getHeight();
+  layOutChildren();
+}
+
+Spinner::~Spinner()
+{
+}
+
+void Spinner::layOutChildren()
+{
+  int whole_width = getWidth();
+  int whole_height = getHeight();
     
-    int arrow_width = whole_height;
-    int arrow_height = whole_height / 2;
+  int arrow_width = whole_height;
+  int arrow_height = whole_height / 2;
 
-    m_arrow_up->setSize(arrow_width, arrow_height);
-    m_arrow_down->setSize(arrow_width, arrow_height);
+  m_arrow_up->setSize(arrow_width, arrow_height);
+  m_arrow_down->setSize(arrow_width, arrow_height);
 
-    m_arrow_up->setPosition(whole_width - arrow_width, 0);
-    m_arrow_down->setPosition(whole_width - arrow_width, arrow_height);
+  m_arrow_up->setPosition(whole_width - arrow_width, 0);
+  m_arrow_down->setPosition(whole_width - arrow_width, arrow_height);
 
-    m_text_box->setSize(whole_width - arrow_width, whole_height);
-    m_text_box->setPosition(0, 0);
-  }
-
-private:
-  TextBox *m_text_box;
-  ArrowButton *m_arrow_up;
-  ArrowButton *m_arrow_down;
-  
-};
+  m_text_box->setSize(whole_width - arrow_width, whole_height);
+  m_text_box->setPosition(0, 0);
+}
 
 } // namespace wl

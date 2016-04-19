@@ -3,6 +3,7 @@
 #include <graphics.hpp>
 
 #include "Button.hpp"
+#include "Spinner.hpp"
 #include "TextBox.hpp"
 #include "Widget.hpp"
 
@@ -29,8 +30,8 @@ int main()
 {
   Toplevel* tl = new Toplevel(400, 400);
   Button* b = new Button(Vec2(50, 50), 60, 60);
-
   TextBox *tb = new TextBox(Vec2(110, 50), 80, 40);
+  Spinner *sp = new Spinner(Vec2(50, 150), 100, 25);
 
   std::shared_ptr<ButtonObserver> bo = make_shared<ButtonObserverAdapter>([](const ButtonEvent& evt) {
       static unsigned int counter = 0;
@@ -46,9 +47,11 @@ int main()
   b->addButtonObserver(bo);
   
   tl->addKeyObserver(ko);
+  tl->setBackgroundColour(genv::color(0, 150, 0));
 
   tl->addChild(b);
   tl->addChild(tb);
+  tl->addChild(sp);
 
   tl->mainloop();
   
