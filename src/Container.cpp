@@ -10,8 +10,7 @@ namespace wl {
 Container::Container(Vec2 position,
 		     int width,
 		     int height)
-  : Widget(position, width, height),
-    m_background_colour(0, 0, 0)
+  : Widget(position, width, height)
 {
   // Lay out children on resize
   addResizeSuperObserver(std::make_shared<ResizeObserverAdapter>([this](const ResizeEvent& evt) {
@@ -32,23 +31,6 @@ Container::~Container()
 const std::vector<Widget*>& Container::getChildren() const
 {
   return m_children;
-}
-
-genv::color Container::getBackgroundColour() const
-{
-  return m_background_colour;
-}
-
-void Container::setBackgroundColour(int red,
-				    int green,
-				    int blue)
-{
-  m_background_colour = genv::color(red, green, blue);
-}
-
-void Container::setBackgroundColour(genv::color colour)
-{
-  m_background_colour = colour;
 }
 
 Widget *Container::getWidgetAtPos(const Vec2& pos)

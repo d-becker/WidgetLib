@@ -392,6 +392,32 @@ public:
   }
 
   /**
+   * Returns the current background colour of this widget as a
+   * genv::color object.
+   *
+   * \return The current background colour of this container.
+   */
+  genv::color getBackgroundColour() const;
+
+  /**
+   * Sets the background colour of this widget.
+   *
+   * \param red The red component of the new background colour.
+   * \param green The green component of the new background colour.
+   * \param blue The blue component of the new background colour.
+   */
+  void setBackgroundColour(int red,
+			   int green,
+			   int blue);
+
+  /**
+   * Sets the background colour of this widget.
+   *
+   * \param colour The new background colour.
+   */
+  void setBackgroundColour(genv::color colour);
+
+  /**
    * Paints the widget.
    */
   virtual void paint() = 0;
@@ -443,6 +469,9 @@ private:
   std::vector< std::shared_ptr<FocusObserver> > m_focus_super_observers;
 
   std::shared_ptr<genv::canvas> m_canvas;
+
+  // Backgound colour
+  genv::color m_background_colour;
 };
 
 } // namespace wl

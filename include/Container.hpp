@@ -29,32 +29,6 @@ public:
    */
   const std::vector<Widget*>& getChildren() const;
 
-  /**
-   * Returns the current background colour of this container as a
-   * genv::color object.
-   *
-   * \return The current background colour of this container.
-   */
-  genv::color getBackgroundColour() const;
-
-  /**
-   * Sets the background colour of this container.
-   *
-   * \param red The red component of the new background colour.
-   * \param green The green component of the new background colour.
-   * \param blue The blue component of the new background colour.
-   */
-  void setBackgroundColour(int red,
-			   int green,
-			   int blue);
-
-  /**
-   * Sets the background colour of this container.
-   *
-   * \param colour The new background colour.
-   */
-  void setBackgroundColour(genv::color colour);
-
   virtual Widget* getWidgetAtPos(const Vec2& pos) override;
 
   virtual void paint() override;
@@ -87,8 +61,6 @@ protected:
   bool removeChild(Widget *child);
 private:
   std::vector<Widget*> m_children;
-
-  genv::color m_background_colour;
 };
 
 } // namespace wl

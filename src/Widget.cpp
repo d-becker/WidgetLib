@@ -63,7 +63,8 @@ Widget::Widget(Vec2 position,
     m_key_super_observers(),
     m_resize_super_observers(),
     m_focus_super_observers(),
-    m_canvas(nullptr)
+    m_canvas(nullptr),
+    m_background_colour(0, 0, 0)
 {
   getNewCanvas();
 }
@@ -181,6 +182,23 @@ void Widget::grabFocus()
   Toplevel *tl = getToplevel();
   if (tl)
     tl->setFocussed(this);
+}
+
+genv::color Widget::getBackgroundColour() const
+{
+  return m_background_colour;
+}
+
+void Widget::setBackgroundColour(int red,
+				 int green,
+				 int blue)
+{
+  m_background_colour = genv::color(red, green, blue);
+}
+
+void Widget::setBackgroundColour(genv::color colour)
+{
+  m_background_colour = colour;
 }
 
 // Protected
