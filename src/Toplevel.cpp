@@ -135,6 +135,33 @@ void Toplevel::handle_genv_mouse_event_no_button(const genv::event& g_evt)
 
 void Toplevel::handle_genv_mouse_event_button(const genv::event& g_evt)
 {
+  // Filtering out wheel events
+  if (g_evt.button == genv::btn_wheelup)
+  {
+    Vec2 mouse_position = Vec2(g_evt.pos_x, g_evt.pos_y);
+    Widget *widget_under_cursor = getWidgetAtPos(mouse_position);
+    MouseEvent::MOUSE_EVT_TYPE type = MouseEvent::MOUSE_WHEEL_UP;
+    MouseEvent::MOUSE_BTN button = MouseEvent::MOUSE_BTN::NONE;
+    if (widget_under_cursor)
+      widget_under_cursor->fireMouseEvent(
+	       MouseEvent(widget_under_cursor, mouse_position, type,  button));
+  } else if (g_evt.button == genv::btn_wheeldown)
+  {
+    Vec2 mouse_position = Vec2(g_evt.pos_x, g_evt.pos_y);
+    Widget *widget_under_cursor = getWidgetAtPos(mouse_position);
+    MouseEvent::MOUSE_EVT_TYPE type = MouseEvent::MOUSE_WHEEL_DOWN;
+    MouseEvent::MOUSE_BTN button = MouseEvent::MOUSE_BTN::NONE;
+    if (widget_under_cursor)
+      widget_under_cursor->fireMouseEvent(
+	       MouseEvent(widget_under_cursor, mouse_position, type,  button));
+  } else
+  {
+    handle_genv_mouse_event_normal_button(g_evt);
+  }
+}
+
+void Toplevel::handle_genv_mouse_event_normal_button(const genv::event& g_evt)
+{
   Vec2 mouse_position = Vec2(g_evt.pos_x, g_evt.pos_y);
   Widget *widget_under_cursor = getWidgetAtPos(mouse_position);
 

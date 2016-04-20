@@ -52,11 +52,11 @@ public:
   }
 
 private:
-  N m_value;
-
   const N m_lower_limit;
   const N m_upper_limit;
   const N m_step;
+  
+  N m_value;
 };
 
 } // namespace wl

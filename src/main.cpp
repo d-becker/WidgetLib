@@ -3,6 +3,7 @@
 #include <graphics.hpp>
 
 #include "Button.hpp"
+#include "NumberSpinner.hpp"
 #include "Spinner.hpp"
 #include "DefaultSpinnerModel.hpp"
 #include "NumberSpinnerModel.hpp"
@@ -33,8 +34,8 @@ int main()
   Toplevel* tl = new Toplevel(400, 400);
   Button* b = new Button(Vec2(50, 50), 60, 60);
   TextBox *tb = new TextBox(Vec2(110, 50), 80, 40);
-  Spinner<int> *sp = new Spinner<int>(std::make_shared<DefaultSpinnerModel>(),
-				 Vec2(50, 150), 100, 25);
+  NumberSpinner<int> *sp = new NumberSpinner<int>(Vec2(50, 150), 100, 25,
+						  -10, 10, 2, 2);
 
   std::shared_ptr<ButtonObserver> bo = make_shared<ButtonObserverAdapter>([](const ButtonEvent& evt) {
       static unsigned int counter = 0;

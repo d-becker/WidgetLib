@@ -35,8 +35,11 @@ TextBox::TextBox(Vec2 position,
 	    Vec2 mouse_pos = evt.getMousePos();
 	    set_cursor_by_mouse(mouse_pos.x);
 	  }
+
+	  return true;
 	}
-	return true;
+	
+	return false;
       }));
 
   // Handle key events
@@ -85,6 +88,7 @@ std::string TextBox::getText() const
 void TextBox::setText(std::string text)
 {
   m_text = text;
+  set_cursor(m_text.size());
 }
 
 void TextBox::paint()
