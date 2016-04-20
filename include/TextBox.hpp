@@ -44,7 +44,7 @@ protected:
 
   void backspace();
   void del();
-  void write_char(char ch);
+  bool write_char(char ch);
 
   void adjust_display();
 

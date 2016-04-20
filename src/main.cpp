@@ -49,7 +49,7 @@ int main()
   
   b->addButtonObserver(bo);
   
-  tl->addKeyObserver(ko);
+  //tl->addKeyObserver(ko);
   tl->setBackgroundColour(genv::color(0, 150, 0));
 
   tl->addChild(b);

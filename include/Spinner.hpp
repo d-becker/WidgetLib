@@ -10,6 +10,12 @@
 #include "ButtonEvent.hpp"
 #include "ButtonObserver.hpp"
 #include "ButtonObserverAdapter.hpp"
+#include "KeyEvent.hpp"
+#include "KeyObserver.hpp"
+#include "KeyObserverAdapter.hpp"
+#include "MouseEvent.hpp"
+#include "MouseObserver.hpp"
+#include "MouseObserverAdapter.hpp"
 #include "SpinnerModel.hpp"
 #include "TextBox.hpp"
 #include "Vec2.hpp"
@@ -71,6 +77,62 @@ public:
         std::make_shared<ButtonObserverAdapter>([this](const ButtonEvent& evt) {
 	    decrement();
 	    return true;
+	}));
+
+    addKeySuperObserver(
+       std::make_shared<KeyObserverAdapter>([this](const KeyEvent& evt) {
+	  bool handled = false;
+	  if (evt.getEvtType() == KeyEvent::KEY_PRESSED)
+	  {
+	    int keycode = evt.getKeycode();
+	    switch (keycode)
+	    {
+	      case genv::key_enter:
+	      {
+		// Trying to push the text written by the user
+		bool pushed = push_value_in_text_box();
+
+		// If it is not correct, display the correct current value
+		if (!pushed)
+		  update_text_box();
+
+		handled = true;
+		break;
+	      }
+
+	      case genv::key_up:
+	      {
+		increment();
+		handled = true;
+		break;
+	      }
+
+	      case genv::key_down:
+	      {
+		decrement();
+		handled = true;
+		break;
+	      }
+
+	      case genv::key_pgup:
+	      {
+		for (int i = 0; i < 10; ++i)
+		  increment();
+		handled = true;
+		break;
+	      }
+
+	    case genv::key_pgdn:
+	      {
+		for (int i = 0; i < 10; ++i)
+		  decrement();
+		handled = true;
+		break;
+	      }
+	    }
+	  }
+
+	  return handled;	    
 	}));
   }
 
@@ -155,9 +217,20 @@ public:
   }
   
 private:
+  bool push_value_in_text_box()
+  {
+    std::stringstream s(m_text_box->getText());
+    T value;
+    s >> value;
+    bool success = !s.fail();
+    if (success)
+      m_model->setCurrentValue(value);
+
+    return success;
+  }
+  
   void update_text_box()
   {
-    // TODO
     std::string text = obj_to_str(getCurrentValue());
     m_text_box->setText(text);
   }
@@ -180,6 +253,13 @@ private:
 	m_arrow_colour(0, 0, 0)
     {
       setBackgroundColour(192,192,192);
+
+      // Grab focus if clicked
+      addMouseSuperObserver(std::make_shared<MouseObserverAdapter>([this](const MouseEvent& evt) {
+	    if (evt.getEvtType() == MouseEvent::CLICKED_ON_WIDGET)
+	      grabFocus();
+	    return false;
+	  }));
     }
 
     virtual ~ArrowButton() {}

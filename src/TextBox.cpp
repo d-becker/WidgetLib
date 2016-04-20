@@ -42,22 +42,24 @@ TextBox::TextBox(Vec2 position,
   // Handle key events
   addKeySuperObserver(std::make_shared<KeyObserverAdapter>([this](const KeyEvent& evt) {
 	using namespace genv;
+
+	bool handled = false;
 	if (evt.getEvtType() == KeyEvent::KEY_PRESSED)
 	{
 	  int keycode = evt.getKeycode();
 	  switch (keycode)
 	  {
-	  case key_left: {decrement_cursor(); break;}
-	  case key_right: {increment_cursor(); break;}
-	  case key_end: {cursor_end(); break;}
-	  case key_home: {cursor_home(); break;}
-	  case key_backspace: {backspace(); break;}
-	  case key_delete: {del(); break;}
-	  default: {write_char(keycode); break;}
+	  case key_left: {decrement_cursor(); handled = true; break;}
+	  case key_right: {increment_cursor(); handled = true; break;}
+	  case key_end: {cursor_end(); handled = true; break;}
+	  case key_home: {cursor_home(); handled = true; break;}
+	  case key_backspace: {backspace(); handled = true; break;}
+	  case key_delete: {del(); handled = true; break;}
+	  default: {handled = write_char(keycode); break;}
 	  }
 	}
 
-	return true;
+	return handled;
       }));
 
   // Keeping track of whether we are focussed
@@ -216,13 +218,16 @@ void TextBox::del()
   }
 }
 
-void TextBox::write_char(char ch)
+bool TextBox::write_char(char ch)
 {
   if (!iscntrl(ch))
   {
     m_text.insert(m_cursor, 1, ch);
     increment_cursor();
+    return true;
   }
+
+  return false;
 }
 
 void TextBox::adjust_display()
