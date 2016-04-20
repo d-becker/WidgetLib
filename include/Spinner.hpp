@@ -31,15 +31,6 @@ std::string obj_to_str(T o)
   return s.str();
 }
 
-template <typename T>
-T str_to_obj(const std::string& str)
-{
-  std::stringstream s(str);
-  T res;
-  s >> res;
-  return res;
-}
-
 // Class
 template <typename T>
 class Spinner : public Container
@@ -79,6 +70,21 @@ public:
 	    return true;
 	}));
 
+    addMouseSuperObserver(
+	std::make_shared<MouseObserverAdapter>([this](const MouseEvent& evt) {
+	    if (evt.getEvtType() == MouseEvent::MOUSE_WHEEL_UP)
+	    {
+	      increment();
+	      return true;
+	    } else if (evt.getEvtType() == MouseEvent::MOUSE_WHEEL_DOWN)
+	    {
+	      decrement();
+	      return true;
+	    }
+	      
+	    return false;
+	}));
+    
     addKeySuperObserver(
        std::make_shared<KeyObserverAdapter>([this](const KeyEvent& evt) {
 	  bool handled = false;
@@ -222,7 +228,9 @@ private:
     std::stringstream s(m_text_box->getText());
     T value;
     s >> value;
-    bool success = !s.fail();
+
+    // No error and we have read the while string 
+    bool success = !s.fail() && s.eof();
     if (success)
       m_model->setCurrentValue(value);
 

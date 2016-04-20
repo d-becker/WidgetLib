@@ -38,6 +38,8 @@ private:
   void handle_genv_mouse_event(const genv::event& g_evt);
   void handle_genv_mouse_event_no_button(const genv::event& g_evt);
   void handle_genv_mouse_event_button(const genv::event& g_evt);
+  void handle_genv_mouse_event_wheel(const genv::event& g_evt);
+  void handle_genv_mouse_event_normal_button(const genv::event& g_evt);
   
   void handle_genv_key_event(const genv::event& g_evt);
   
