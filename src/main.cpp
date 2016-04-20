@@ -4,6 +4,8 @@
 
 #include "Button.hpp"
 #include "Spinner.hpp"
+#include "DefaultSpinnerModel.hpp"
+#include "NumberSpinnerModel.hpp"
 #include "TextBox.hpp"
 #include "Widget.hpp"
 
@@ -31,7 +33,8 @@ int main()
   Toplevel* tl = new Toplevel(400, 400);
   Button* b = new Button(Vec2(50, 50), 60, 60);
   TextBox *tb = new TextBox(Vec2(110, 50), 80, 40);
-  Spinner *sp = new Spinner(Vec2(50, 150), 100, 25);
+  Spinner<int> *sp = new Spinner<int>(std::make_shared<DefaultSpinnerModel>(),
+				 Vec2(50, 150), 100, 25);
 
   std::shared_ptr<ButtonObserver> bo = make_shared<ButtonObserverAdapter>([](const ButtonEvent& evt) {
       static unsigned int counter = 0;

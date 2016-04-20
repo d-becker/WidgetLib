@@ -5,7 +5,6 @@ set(SRC_FILES
 	Button.cpp
 	Container.cpp
 	FreePanel.cpp
-	Spinner.cpp
 	TextBox.cpp
 	Toplevel.cpp
 	Widget.cpp	
