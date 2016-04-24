@@ -6,6 +6,7 @@
 #include "NumberSpinner.hpp"
 #include "Spinner.hpp"
 #include "DefaultSpinnerModel.hpp"
+#include "Label.hpp"
 #include "NumberSpinnerModel.hpp"
 #include "TextBox.hpp"
 #include "Widget.hpp"
@@ -36,6 +37,7 @@ int main()
   TextBox *tb = new TextBox(Vec2(110, 50), 80, 40);
   NumberSpinner<int> *sp = new NumberSpinner<int>(Vec2(50, 150), 100, 25,
 						  -10, 10, 2, 2);
+  Label *l = new Label(Vec2(50, 180), 100, 25, "Label");
 
   std::shared_ptr<ButtonObserver> bo = make_shared<ButtonObserverAdapter>([](const ButtonEvent& evt) {
       static unsigned int counter = 0;
@@ -56,6 +58,7 @@ int main()
   tl->addChild(b);
   tl->addChild(tb);
   tl->addChild(sp);
+  tl->addChild(l);
 
   tl->mainloop();
   

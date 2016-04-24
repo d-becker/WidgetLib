@@ -24,7 +24,7 @@ void TextDisplay::paint()
     // Painting the background
     canvas& canv = *canv_ptr;
     canv << move_to(0, 0)
-	 << color(255, 255, 255)
+	 << getBackgroundColour()
 	 << box(getWidth(), getHeight());
 
     // Painting the text

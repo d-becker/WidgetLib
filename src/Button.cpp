@@ -14,7 +14,8 @@ Button::Button(Vec2 position,
 	       int width,
 	       int height
 	       )
-  : Widget(position, width, height)
+  : Widget(position, width, height),
+    m_observers()
 {
   addMouseSuperObserver(std::make_shared<MouseObserverAdapter>([this](const MouseEvent& evt) {
 	if (evt.getEvtType() == MouseEvent::CLICKED_ON_WIDGET

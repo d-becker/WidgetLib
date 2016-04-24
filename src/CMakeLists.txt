@@ -3,6 +3,7 @@ cmake_minimum_required (VERSION 2.8)
 set(SRC_FILES
 	main.cpp
 	Button.cpp
+	Checkbox.cpp
 	Container.cpp
 	FreePanel.cpp
 	Label.cpp

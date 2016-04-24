@@ -10,7 +10,6 @@ namespace wl {
 class MouseEvent : public Event
 {
 public:
-
   enum MOUSE_EVT_TYPE
   {
     MOUSE_BTN_PRESSED,
