@@ -3,6 +3,8 @@
 
 #include <algorithm>
 
+#include <graphics.hpp>
+
 namespace wl {
 
 template <typename T>

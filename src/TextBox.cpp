@@ -9,6 +9,7 @@
 #include "KeyObserverAdapter.hpp"
 #include "MouseObserver.hpp"
 #include "MouseObserverAdapter.hpp"
+#include "Util.hpp"
 
 namespace wl {
 
@@ -16,13 +17,14 @@ TextBox::TextBox(Vec2 position,
 		 int width,
 		 int height,
 		 std::string text)
-  : Widget(position, width, height),
-    m_text(text),
+  : TextDisplay(position, width, height, text),
     m_cursor(0),
     m_first_char_displayed(0),
-    m_horiz_padding(2),
     m_focussed(false)
 {
+  // Setting the background colour
+  setBackgroundColour(0, 0, 0 );
+  
   // Grab focus and set cursor position on click
   addMouseSuperObserver(std::make_shared<MouseObserverAdapter>([this](const MouseEvent& evt) {
 	if (evt.getEvtType() == MouseEvent::MOUSE_BTN_PRESSED)
@@ -94,29 +96,28 @@ void TextBox::setText(std::string text)
 void TextBox::paint()
 {
   using namespace genv;
+
+  // Painting the background and the text
+  TextDisplay::paint();
+  
   if (auto canv_ptr = getCanvas())
-  {
-    // Painting the background
-    canvas& canv = *canv_ptr;
-    canv << move_to(0, 0)
-	 << color(255, 255, 255)
-	 << box(getWidth(), getHeight());
-
-    // Painting the text
-    int char_height = get_char_height();
-    int char_width = get_char_width();
-    int text_level = getHeight() / 2 - char_height / 2;
-    canv << move_to(m_horiz_padding, text_level)
-         << color(0, 0, 0)
-         << text(get_text_to_display());
-
+  {    
     // Cursor
-    if (m_focussed)
+    if (auto canv_ptr = getCanvas())
     {
-      canv << move_to(m_horiz_padding
-		      + (m_cursor - m_first_char_displayed)
-		      * char_width, text_level)
-	   << line(0, char_height);
+      canvas& canv = *canv_ptr;
+
+      int char_height = get_char_height();
+      int char_width = get_char_width();
+      int text_level = getHeight() / 2 - char_height / 2;
+      
+      if (m_focussed)
+      {
+	canv << move_to(m_horiz_inset
+			+ (m_cursor - m_first_char_displayed)
+			* char_width, text_level)
+	     << line(0, char_height);
+      }
     }
   }
 }
@@ -149,7 +150,7 @@ void TextBox::set_cursor_by_mouse(int x_pos_abs)
 					      // of this widget
   int char_width = get_char_width();
   
-  int dist_from_text_beginning = x_pos_rel - m_horiz_padding;
+  int dist_from_text_beginning = x_pos_rel - m_horiz_inset;
   int cursor_pos_floor = dist_from_text_beginning / char_width;
   int remainder = dist_from_text_beginning % char_width;
 
@@ -258,31 +259,6 @@ void TextBox::adjust_display()
     int repeat = displayable_length - disp_text_length;
     decrement_first_char_displayed(repeat);
   }
-}
-
-int TextBox::get_char_width() const
-{
-  std::shared_ptr<const genv::canvas> canv_ptr = getCanvas();
-  if (!canv_ptr)
-    return 0;
-
-  return canv_ptr->twidth(" ");
-}
-
-int TextBox::get_char_height() const
-{
-  std::shared_ptr<const genv::canvas> canv_ptr = getCanvas();
-  if (!canv_ptr)
-    return 0;
-
-  return canv_ptr->cascent() + canv_ptr->cdescent();
-}
-
-int TextBox::get_num_of_displayable_chars() const
-{
-  int char_width = get_char_width();
-  int available_width = getWidth() - 2 * m_horiz_padding;
-  return available_width / char_width;
 }
 
 std::string TextBox::get_text_to_display() const

@@ -1,7 +1,7 @@
 #ifndef TEXTBOX_HPP
 #define TEXTBOX_HPP
 
-#include "Widget.hpp"
+#include "TextDisplay.hpp"
 
 #include <string>
 
@@ -13,7 +13,7 @@ namespace wl {
 /**
  * A single line text entry box.
  */
-class TextBox : public Widget
+class TextBox : public TextDisplay
 {
 public:
   TextBox(Vec2 position = Vec2(0, 0),
@@ -47,16 +47,11 @@ protected:
   bool write_char(char ch);
 
   void adjust_display();
-
-  int get_char_width() const;
-  int get_char_height() const;
-  int get_num_of_displayable_chars() const;
-  std::string get_text_to_display() const;
+  virtual std::string get_text_to_display() const override;
+  
 private:
-  std::string m_text;
   unsigned int m_cursor;
   unsigned int m_first_char_displayed;
-  unsigned int m_horiz_padding;
 
   bool m_focussed;
 };
