@@ -7,6 +7,7 @@ set(SRC_FILES
 	Container.cpp
 	FreePanel.cpp
 	Label.cpp
+	Selector.cpp
 	TextBox.cpp
 	TextDisplay.cpp
 	Toplevel.cpp

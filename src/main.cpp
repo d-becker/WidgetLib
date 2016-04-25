@@ -3,6 +3,7 @@
 #include <graphics.hpp>
 
 #include "Button.hpp"
+#include "Checkbox.hpp"
 #include "NumberSpinner.hpp"
 #include "Spinner.hpp"
 #include "DefaultSpinnerModel.hpp"
@@ -38,6 +39,7 @@ int main()
   NumberSpinner<int> *sp = new NumberSpinner<int>(Vec2(50, 150), 100, 25,
 						  -10, 10, 2, 2);
   Label *l = new Label(Vec2(50, 180), 100, 25, "Label");
+  Checkbox *cb = new Checkbox(Vec2(50, 220), 25, 25);
 
   std::shared_ptr<ButtonObserver> bo = make_shared<ButtonObserverAdapter>([](const ButtonEvent& evt) {
       static unsigned int counter = 0;
@@ -59,6 +61,7 @@ int main()
   tl->addChild(tb);
   tl->addChild(sp);
   tl->addChild(l);
+  tl->addChild(cb);
 
   tl->mainloop();
   

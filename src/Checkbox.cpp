@@ -2,74 +2,71 @@
 
 #include "Util.hpp"
 
+#include "CheckboxObserverAdapter.hpp"
+#include "MouseObserverAdapter.hpp"
+
 namespace wl {
 
 Checkbox::Checkbox(Vec2 position,
 		   int width,
 		   int height)
-  : Widget(position, width, height),
-    m_observers()
+  : Selector(position, width, height)
 {
+  // Background colour
+  setBackgroundColour(255, 255, 255);
+
+  // Super observers
+  addMouseSuperObserver(std::make_shared<MouseObserverAdapter>([this](const MouseEvent& evt) {
+	if (evt.getEvtType() == MouseEvent::CLICKED_ON_WIDGET)
+	{
+	  toggle();
+	  return true;
+	}
+
+	return false;
+      }));
 }
 
 Checkbox::~Checkbox()
 {
 }
 
-bool Checkbox::isSet() const
-{
-  return m_set;
-}
-
-void Checkbox::set()
-{
-  m_set = true;
-}
-
-void Checkbox::reset()
-{
-  m_set = false;
-}
-
-bool Checkbox::toggle()
-{
-  bool old_value = m_set;
-  m_set = !m_set;
-  return old_value;
-}
-
-void Checkbox::addCheckboxObserver(std::shared_ptr<CheckboxObserver> observer)
-{
-  add_to_vec_uniquely(m_observers, observer);
-}
-
-void Checkbox::removeCheckboxObserver(
-				 std::shared_ptr<CheckboxObserver> observer)
-{
-  remove_from_vec(m_observers, observer);
-}
-
-void Checkbox::fireCheckboxEvent(const CheckboxEvent& evt)
-{
-  send_checkbox_evt_to_observers(evt);
-}
-
 void Checkbox::paint()
 {
+  using namespace genv;
+  
   // TODO.
-}
+  int width = getWidth();
+  int height = getHeight();
 
-// Protected
-bool Checkbox::send_checkbox_evt_to_observers(const CheckboxEvent& evt)
-{
-  bool handled = false;
-  for (std::shared_ptr<CheckboxObserver> observer : m_observers)
+  auto canv_ptr = getCanvas();
+
+  if (!canv_ptr)
+    return;
+
+  canvas& canv = *canv_ptr;
+
+  // Background
+  canv << getBackgroundColour()
+       << move_to(0, 0)
+       << box(width, height);
+  
+  // Edges
+  canv << color(0, 0, 0)
+       << move_to(0, 0)
+       << line(width, 0)
+       << line(0, height)
+       << line(-width, 0)
+       << line(0, -height);
+
+  // Cross
+  if (isSet())
   {
-    if (observer)
-      handled |= observer->handleCheckboxEvent(evt);
+    canv << move_to(0, 0)
+         << line(width, height)
+         << move_to(width - 1, 0)
+         << line(-width, height);
   }
-
-  return handled;
 }
 
 }

@@ -1,23 +1,23 @@
-#ifndef CHECKBOX_OBSERVER_ADAPTER_HPP
-#define CHECKBOX_OBSERVER_ADAPTER_HPP
+#ifndef SELECTOR_OBSERVER_ADAPTER_HPP
+#define SELECTOR_OBSERVER_ADAPTER_HPP
 
-#include "CheckboxObserver.hpp"
+#include "SelectorObserver.hpp"
 
 #include <functional>
 
 namespace wl {
 
-class CheckboxObserverAdapter : public CheckboxObserver
+class SelectorObserverAdapter : public SelectorObserver
 {
 public:
-  CheckboxObserverAdapter(std::function<bool(const CheckboxEvent&)> callback)
+  SelectorObserverAdapter(std::function<bool(const SelectorEvent&)> callback)
     : m_callback(callback)
   {
   }
 
-  virtual ~CheckboxObserverAdapter() {}
+  virtual ~SelectorObserverAdapter() {}
 
-  virtual bool handleCheckboxEvent(const CheckboxEvent& evt) override
+  virtual bool handleSelectorEvent(const SelectorEvent& evt) override
   {
     if (m_callback)
       return m_callback(evt);
@@ -26,9 +26,9 @@ public:
   }
 
 private:
-  std::function<bool(const CheckboxEvent&)> m_callback
+  std::function<bool(const SelectorEvent&)> m_callback;
 };
 
 } // namespace wl
 
-#endif // CHECKBOX_OBSERVER_ADAPTER_HPP
+#endif // SELECTOR_OBSERVER_ADAPTER_HPP
