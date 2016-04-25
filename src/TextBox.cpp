@@ -23,7 +23,7 @@ TextBox::TextBox(Vec2 position,
     m_focussed(false)
 {
   // Setting the background colour
-  setBackgroundColour(0, 0, 0 );
+  setBackgroundColour(255, 255, 255);
   
   // Grab focus and set cursor position on click
   addMouseSuperObserver(std::make_shared<MouseObserverAdapter>([this](const MouseEvent& evt) {

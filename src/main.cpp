@@ -9,6 +9,7 @@
 #include "DefaultSpinnerModel.hpp"
 #include "Label.hpp"
 #include "NumberSpinnerModel.hpp"
+#include "RadioButton.hpp"
 #include "TextBox.hpp"
 #include "Widget.hpp"
 
@@ -40,6 +41,7 @@ int main()
 						  -10, 10, 2, 2);
   Label *l = new Label(Vec2(50, 180), 100, 25, "Label");
   Checkbox *cb = new Checkbox(Vec2(50, 220), 25, 25);
+  RadioButton *rb = new RadioButton(Vec2(50, 250), 25, 25);
 
   std::shared_ptr<ButtonObserver> bo = make_shared<ButtonObserverAdapter>([](const ButtonEvent& evt) {
       static unsigned int counter = 0;
@@ -62,6 +64,7 @@ int main()
   tl->addChild(sp);
   tl->addChild(l);
   tl->addChild(cb);
+  tl->addChild(rb);
 
   tl->mainloop();
   

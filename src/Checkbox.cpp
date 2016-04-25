@@ -34,17 +34,15 @@ Checkbox::~Checkbox()
 void Checkbox::paint()
 {
   using namespace genv;
-  
-  // TODO.
-  int width = getWidth();
-  int height = getHeight();
 
   auto canv_ptr = getCanvas();
-
   if (!canv_ptr)
     return;
 
   canvas& canv = *canv_ptr;
+  
+  int width = getWidth();
+  int height = getHeight();
 
   // Background
   canv << getBackgroundColour()
