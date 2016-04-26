@@ -19,7 +19,7 @@ RadioButton::RadioButton(Vec2 position,
   addMouseSuperObserver(std::make_shared<MouseObserverAdapter>([this](const MouseEvent& evt) {
 	if (evt.getEvtType() == MouseEvent::CLICKED_ON_WIDGET)
 	{
-	  set();
+	  select();
 	  return true;
 	}
 
@@ -86,7 +86,7 @@ void RadioButton::paint()
   }
 
   // Black if selected
-  if (isSet())
+  if (isSelected())
   {
     int s_diameter = diameter * 0.5;
     int s_radius = s_diameter / 2;

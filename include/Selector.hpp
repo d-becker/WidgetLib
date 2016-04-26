@@ -3,15 +3,15 @@
 
 #include "Widget.hpp"
 
-#include "SelectorEvent.hpp"
-#include "SelectorObserver.hpp"
+#include "SelectionEvent.hpp"
+#include "SelectionObserver.hpp"
 
 namespace wl {
 
 /**
  * An abstract base class for checkboxes and radio buttons.
  */
-class Selector : public Widget
+class Selector : public virtual Widget
 {
 public:
   Selector(Vec2 position = Vec2(0, 0),
@@ -25,17 +25,17 @@ public:
    *
    * \return \c true if the selector is set (selected); \c false otherwise.
    */
-  bool isSet() const;
+  bool isSelected() const;
 
   /**
    * Sets (selects) the selector.
    */
-  void set();
+  void select();
 
   /**
    * Resets (deselects) the selector.
    */
-  void reset();
+  void deselect();
 
   /**
    * Toggles the selection of the selector.
@@ -45,35 +45,38 @@ public:
   bool toggle();
 
   /**
-   * Subscribes a selector observer (if the same observer is not already
+   * Subscribes a selection observer (if the same observer is not already
    * subscribed) to this widget. The observer will be notified when a
-   * \c SelectorEvent is fired by this widget.
+   * \c SelectionEvent is fired by this widget.
    *
    * \param observer The observer to subscribe.
    */
-  void addSelectorObserver(std::shared_ptr<SelectorObserver> observer);
+  void addSelectionObserver(std::shared_ptr<SelectionObserver> observer);
 
   /**
-   * Unsubscribes the \c SelectorObserver with the given index if it exists.
+   * Unsubscribes the \c SelectionObserver with the given index if it exists.
    * This method does nothing if the element with index \a index does not exist.
    *
-   * \param index The index of the \c SelectorObserver to unsubscribe.
+   * \param index The index of the \c SelectionObserver to unsubscribe.
    */
-  void removeSelectorObserver(std::shared_ptr<SelectorObserver> observer);
+  void removeSelectionObserver(std::shared_ptr<SelectionObserver> observer);
 
   /**
    * This method notifies all the observers that are subscribed to the
-   * <tt>SelectorEvent</tt>s  events of this selector.
+   * <tt>SelectionEvent</tt>s  events of this selector.
    *
    * \param evt The event to fire.
    */
-  void fireSelectorEvent(const SelectorEvent& evt);
+  void fireSelectionEvent(const SelectionEvent& evt);
   
 protected:
-  bool send_selector_evt_to_observers(const SelectorEvent& evt);
+  void addSelectionSuperObserver(std::shared_ptr<SelectionObserver> observer);
+  
+  bool send_selection_evt_to_observers(const SelectionEvent& evt);
 private:
-  std::vector< std::shared_ptr<SelectorObserver> > m_observers;
-  bool m_set;
+  std::vector< std::shared_ptr<SelectionObserver> > m_observers;
+  std::vector< std::shared_ptr<SelectionObserver> > m_super_observers;
+  bool m_selected;
 };
 
 } // namespace wl

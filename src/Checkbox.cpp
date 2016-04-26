@@ -2,7 +2,7 @@
 
 #include "Util.hpp"
 
-#include "CheckboxObserverAdapter.hpp"
+#include "SelectionObserverAdapter.hpp"
 #include "MouseObserverAdapter.hpp"
 
 namespace wl {
@@ -58,7 +58,7 @@ void Checkbox::paint()
        << line(0, -height);
 
   // Cross
-  if (isSet())
+  if (isSelected())
   {
     canv << move_to(0, 0)
          << line(width, height)

@@ -7,7 +7,7 @@
 
 namespace wl {
 
-class TextDisplay : public Widget
+class TextDisplay : public virtual Widget
 {
 public:
   TextDisplay(Vec2 position = Vec2(0, 0),

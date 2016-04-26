@@ -11,15 +11,13 @@ Selectable::Selectable(Vec2 position,
 		       int height,
 		       std::string text)
   : Label(position, width, height, text),
-    m_selected(false),
     m_normal_bg(255, 255, 255),
     m_selected_bg(0, 0, 255),
     m_normal_text(0, 0, 0),
     m_selected_text(255, 255, 255)
 {
   // Setting colours
-  setBackgroundColour(m_normal_bg);
-  TextDisplay::set_text_colour(m_normal_text);
+  set_normal_colours();
 
   // Super observers
   addMouseSuperObserver(std::make_shared<MouseObserverAdapter>([this](const MouseEvent& evt) {
@@ -35,25 +33,6 @@ Selectable::Selectable(Vec2 position,
 
 Selectable::~Selectable()
 {
-}
-
-bool Selectable::isSelected() const
-{
-  return m_selected;
-}
-
-void Selectable::select()
-{
-  m_selected = true;
-  setBackgroundColour(m_selected_bg);
-  TextDisplay::set_text_colour(m_selected_text);
-}
-
-void Selectable::deselect()
-{
-  m_selected = false;
-  setBackgroundColour(m_normal_bg);
-  TextDisplay::set_text_colour(m_normal_text);
 }
 
 genv::color Selectable::getNormalBackgroundColour() const
@@ -94,6 +73,19 @@ genv::color Selectable::getSelectedTextColour() const
 void Selectable::setSelectedTextColour(genv::color colour)
 {
   m_selected_text = colour;
+}
+
+// Private
+void Selectable::set_normal_colours()
+{
+  setBackgroundColour(m_normal_bg);
+  TextDisplay::set_text_colour(m_normal_text);
+}
+
+void Selectable::set_selected_colours()
+{
+  setBackgroundColour(m_selected_bg);
+  TextDisplay::set_text_colour(m_selected_text);
 }
 
 } // namespace wl

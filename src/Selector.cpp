@@ -9,7 +9,8 @@ Selector::Selector(Vec2 position,
 	 int height)
   : Widget(position, width, height),
     m_observers(),
-    m_set(false)
+    m_super_observers(),
+    m_selected(false)
 {
 }
 
@@ -17,59 +18,71 @@ Selector::~Selector()
 {
 }
 
-bool Selector::isSet() const
+bool Selector::isSelected() const
 {
-  return m_set;
+  return m_selected;
 }
 
-void Selector::set()
+void Selector::select()
 {
-  m_set = true;
-  SelectorEvent event(this, SelectorEvent::SELECTOR_SET);
-  fireSelectorEvent(event);
+  m_selected = true;
+  SelectionEvent event(this, SelectionEvent::SELECTION_SET);
+  fireSelectionEvent(event);
 }
 
-void Selector::reset()
+void Selector::deselect()
 {
-  m_set = false;
-  SelectorEvent event(this, SelectorEvent::SELECTOR_RESET);
-  fireSelectorEvent(event);
+  m_selected = false;
+  SelectionEvent event(this, SelectionEvent::SELECTION_RESET);
+  fireSelectionEvent(event);
 }
 
 bool Selector::toggle()
 {
-  bool old_value = m_set;
+  bool old_value = m_selected;
   if (old_value)
-    reset();
+    deselect();
   else
-    set();
+    select();
   return old_value;
 }
 
-void Selector::addSelectorObserver(std::shared_ptr<SelectorObserver> observer)
+void Selector::addSelectionObserver(std::shared_ptr<SelectionObserver> observer)
 {
   add_to_vec_uniquely(m_observers, observer);
 }
 
-void Selector::removeSelectorObserver(
-				      std::shared_ptr<SelectorObserver> observer)
+void Selector::removeSelectionObserver(
+				   std::shared_ptr<SelectionObserver> observer)
 {
   remove_from_vec(m_observers, observer);
 }
 
-void Selector::fireSelectorEvent(const SelectorEvent& evt)
+void Selector::fireSelectionEvent(const SelectionEvent& evt)
 {
-  send_selector_evt_to_observers(evt);
+  send_selection_evt_to_observers(evt);
 }
 
 // Protected
-bool Selector::send_selector_evt_to_observers(const SelectorEvent& evt)
+void Selector::addSelectionSuperObserver(
+				   std::shared_ptr<SelectionObserver> observer)
+{
+  add_to_vec_uniquely(m_super_observers, observer);
+}
+
+bool Selector::send_selection_evt_to_observers(const SelectionEvent& evt)
 {
   bool handled = false;
-  for (std::shared_ptr<SelectorObserver> observer : m_observers)
+  for (std::shared_ptr<SelectionObserver> observer : m_observers)
   {
     if (observer)
-      handled |= observer->handleSelectorEvent(evt);
+      handled |= observer->handleSelectionEvent(evt);
+  }
+
+  for (std::shared_ptr<SelectionObserver> observer : m_super_observers)
+  {
+    if (observer)
+      handled |= observer->handleSelectionEvent(evt);
   }
 
   return handled;

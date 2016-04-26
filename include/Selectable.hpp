@@ -4,10 +4,13 @@
 #include <graphics.hpp>
 
 #include "Label.hpp"
+#include "SelectionEvent.hpp"
+#include "SelectionObserver.hpp"
+#include "Selector.hpp"
 
 namespace wl {
 
-class Selectable : public Label
+class Selectable : public Label, public Selector
 {
 public:
   Selectable(Vec2 position = Vec2(0, 0),
@@ -16,10 +19,6 @@ public:
 	     std::string text = "Selectable");
 
   virtual ~Selectable();
-
-  bool isSelected() const;
-  void select();
-  void deselect();
 
   genv::color getNormalBackgroundColour() const;
   void setNormalBackgroundColour(genv::color colour);
@@ -34,7 +33,8 @@ public:
   void setSelectedTextColour(genv::color colour);
 
 private:
-  bool m_selected;
+  void set_normal_colours();
+  void set_selected_colours();
   
   genv::color m_normal_bg;
   genv::color m_selected_bg;

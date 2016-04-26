@@ -147,7 +147,7 @@ void TextBox::decrement_cursor()
 void TextBox::set_cursor_by_mouse(int x_pos_abs)
 {
   int x_pos_rel = x_pos_abs - getAbsPosition().x; // In the coordinate system
-					      // of this widget
+					          // of this widget
   int char_width = get_char_width();
   
   int dist_from_text_beginning = x_pos_rel - m_horiz_inset;
