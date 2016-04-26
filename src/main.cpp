@@ -54,8 +54,14 @@ int main()
       cerr << "Key event  handled: " << counter++ << "!!!\n";
       return false;
     });
+  std::shared_ptr<MouseObserver> mo = make_shared<MouseObserverAdapter>([](const MouseEvent& evt) {
+      static unsigned int counter = 0;
+      cerr << "Mouse event: " << counter++ << "!!!\n";
+      return true;
+    });
   
   b->addButtonObserver(bo);
+  cb->addMouseObserver(mo);
   
   //tl->addKeyObserver(ko);
   tl->setBackgroundColour(genv::color(0, 150, 0));

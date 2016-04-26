@@ -5,8 +5,8 @@
 namespace wl {
 
 Selector::Selector(Vec2 position,
-	 int width,
-	 int height)
+		   int width,
+		   int height)
   : Widget(position, width, height),
     m_observers(),
     m_super_observers(),

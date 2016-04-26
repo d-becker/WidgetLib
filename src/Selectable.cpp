@@ -35,6 +35,23 @@ Selectable::~Selectable()
 {
 }
 
+bool Selectable::isSelected() const
+{
+  return m_selected;
+}
+
+void Selectable::select()
+{
+  m_selected = true;
+  set_selected_colours();
+}
+
+void Selectable::deselect()
+{
+  m_selected = false;
+  set_normal_colours();
+}
+
 genv::color Selectable::getNormalBackgroundColour() const
 {
   return m_normal_bg;

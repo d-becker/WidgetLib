@@ -1,49 +1,17 @@
-#ifndef SELECTOR_HPP
-#define SELECTOR_HPP
+#ifndef SELECTION_EVENT_SOURCE_HPP
+#define SELECTION_EVENT_SOURCE_HPP
 
-#include "Widget.hpp"
+#include <memory>
+#include <vector>
 
 #include "SelectionEvent.hpp"
 #include "SelectionObserver.hpp"
 
 namespace wl {
 
-/**
- * An abstract base class for checkboxes and radio buttons.
- */
-class Selector : public Widget
+class SelectionEventSource
 {
 public:
-  Selector(Vec2 position = Vec2(0, 0),
-	   int width = 50,
-	   int height = 50);
-
-  virtual ~Selector();
-
-  /**
-   * Returns whether the selector is set (selected).
-   *
-   * \return \c true if the selector is set (selected); \c false otherwise.
-   */
-  bool isSelected() const;
-
-  /**
-   * Sets (selects) the selector.
-   */
-  void select();
-
-  /**
-   * Resets (deselects) the selector.
-   */
-  void deselect();
-
-  /**
-   * Toggles the selection of the selector.
-   *
-   * \return \c true if the selector is set (selected); \c false otherwise.
-   */
-  bool toggle();
-
   /**
    * Subscribes a selection observer (if the same observer is not already
    * subscribed) to this widget. The observer will be notified when a
@@ -71,14 +39,12 @@ public:
   
 protected:
   void addSelectionSuperObserver(std::shared_ptr<SelectionObserver> observer);
-  
   bool send_selection_evt_to_observers(const SelectionEvent& evt);
 private:
   std::vector< std::shared_ptr<SelectionObserver> > m_observers;
   std::vector< std::shared_ptr<SelectionObserver> > m_super_observers;
-  bool m_selected;
 };
 
 } // namespace wl
 
-#endif // SELECTOR_HPP
+#endif // SELECTION_EVENT_SOURCE_HPP
