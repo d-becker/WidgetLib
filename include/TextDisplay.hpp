@@ -3,6 +3,8 @@
 
 #include "Widget.hpp"
 
+#include <graphics.hpp>
+
 namespace wl {
 
 class TextDisplay : public Widget
@@ -18,6 +20,9 @@ public:
   virtual void paint() override;
   
 protected:
+  const genv::color& get_text_colour() const;
+  void set_text_colour(genv::color colour);
+  
   // Returns the width of a character on the canvas of \a widget.
   int get_char_width() const;
 
@@ -30,6 +35,8 @@ protected:
   // Fields
   std::string m_text;
   unsigned int m_horiz_inset;
+
+  genv::color m_text_colour;
 };
 
 } // namespace wl

@@ -8,7 +8,8 @@ TextDisplay::TextDisplay(Vec2 position,
 			 std::string text)
   : Widget(position, width, height),
     m_text(text),
-    m_horiz_inset(2)
+    m_horiz_inset(2),
+    m_text_colour(0, 0, 0)
 {
 }
 
@@ -31,9 +32,20 @@ void TextDisplay::paint()
     int char_height = get_char_height();
     int text_level = getHeight() / 2 - char_height / 2;
     canv << move_to(m_horiz_inset, text_level)
-         << color(0, 0, 0)
+         << m_text_colour
          << text(get_text_to_display());
   }
+}
+
+// Protected
+const genv::color& TextDisplay::get_text_colour() const
+{
+  return m_text_colour;
+}
+
+void TextDisplay::set_text_colour(genv::color colour)
+{
+  m_text_colour = colour;
 }
 
 int TextDisplay::get_char_width() const

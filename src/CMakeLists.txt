@@ -8,6 +8,7 @@ set(SRC_FILES
 	FreePanel.cpp
 	Label.cpp
 	RadioButton.cpp
+	Selectable.cpp
 	Selector.cpp
 	TextBox.cpp
 	TextDisplay.cpp

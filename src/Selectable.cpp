@@ -1,0 +1,99 @@
+#include "Selectable.hpp"
+
+#include "MouseEvent.hpp"
+#include "MouseObserver.hpp"
+#include "MouseObserverAdapter.hpp"
+
+namespace wl {
+
+Selectable::Selectable(Vec2 position,
+		       int width,
+		       int height,
+		       std::string text)
+  : Label(position, width, height, text),
+    m_selected(false),
+    m_normal_bg(255, 255, 255),
+    m_selected_bg(0, 0, 255),
+    m_normal_text(0, 0, 0),
+    m_selected_text(255, 255, 255)
+{
+  // Setting colours
+  setBackgroundColour(m_normal_bg);
+  TextDisplay::set_text_colour(m_normal_text);
+
+  // Super observers
+  addMouseSuperObserver(std::make_shared<MouseObserverAdapter>([this](const MouseEvent& evt) {
+	if (evt.getEvtType() == MouseEvent::CLICKED_ON_WIDGET)
+	{
+	  select();
+	  return true;
+	}
+
+	return false;
+      }));
+}
+
+Selectable::~Selectable()
+{
+}
+
+bool Selectable::isSelected() const
+{
+  return m_selected;
+}
+
+void Selectable::select()
+{
+  m_selected = true;
+  setBackgroundColour(m_selected_bg);
+  TextDisplay::set_text_colour(m_selected_text);
+}
+
+void Selectable::deselect()
+{
+  m_selected = false;
+  setBackgroundColour(m_normal_bg);
+  TextDisplay::set_text_colour(m_normal_text);
+}
+
+genv::color Selectable::getNormalBackgroundColour() const
+{
+  return m_normal_bg;
+}
+
+void Selectable::setNormalBackgroundColour(genv::color colour)
+{
+  m_normal_bg = colour;
+}
+
+genv::color Selectable::getSelectedBackgroundColour() const
+{
+  return m_selected_bg;
+}
+
+void Selectable::setSelectedBackgroundColour(genv::color colour)
+{
+  m_selected_bg = colour;
+}
+
+genv::color Selectable::getNormalTextColour() const
+{
+  return m_normal_text;
+}
+
+void Selectable::setNormalTextColour(genv::color colour)
+{
+  m_normal_text = colour;
+}
+
+genv::color Selectable::getSelectedTextColour() const
+{
+  return m_selected_text;
+}
+
+void Selectable::setSelectedTextColour(genv::color colour)
+{
+  m_selected_text = colour;
+}
+
+} // namespace wl
