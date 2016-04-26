@@ -9,6 +9,7 @@ set(SRC_FILES
 	Label.cpp
 	RadioButton.cpp
 	Selectable.cpp
+	SelectablePanel.cpp
 	SelectionEventSource.cpp
 	Selector.cpp
 	TextBox.cpp

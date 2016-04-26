@@ -44,12 +44,18 @@ void Selectable::select()
 {
   m_selected = true;
   set_selected_colours();
+  
+  SelectionEvent evt(this, SelectionEvent::SELECTION_SET);
+  fireSelectionEvent(evt);
 }
 
 void Selectable::deselect()
 {
   m_selected = false;
   set_normal_colours();
+  
+  SelectionEvent evt(this, SelectionEvent::SELECTION_RESET);
+  fireSelectionEvent(evt);
 }
 
 genv::color Selectable::getNormalBackgroundColour() const
