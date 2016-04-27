@@ -55,7 +55,7 @@ public:
    * \param option The option to select.
    *
    * \return \c true if the selection was set to the given option;
-   * \c false otherwise.
+   *         \c false otherwise.
    */
   bool setSelected(const std::string& option);
 
