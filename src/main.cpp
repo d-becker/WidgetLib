@@ -11,6 +11,7 @@
 #include "NumberSpinnerModel.hpp"
 #include "RadioButton.hpp"
 #include "Selectable.hpp"
+#include "SelectablePanel.hpp"
 #include "TextBox.hpp"
 #include "Widget.hpp"
 
@@ -42,7 +43,9 @@ int main()
 						  -10, 10, 2, 2);
   Label *l = new Label(Vec2(50, 180), 100, 25, "Label");
   Checkbox *cb = new Checkbox(Vec2(50, 220), 25, 25);
-  Selectable *sel = new Selectable(Vec2(50, 250), 75, 25);
+  Selectable *sel1 = new Selectable(Vec2(50, 250), 75, 25);
+  Selectable *sel2 = new Selectable(Vec2(50, 250), 75, 25);
+  SelectablePanel *spanel = new SelectablePanel(Vec2(50, 250), 0, 0);
 
   std::shared_ptr<ButtonObserver> bo = make_shared<ButtonObserverAdapter>([](const ButtonEvent& evt) {
       static unsigned int counter = 0;
@@ -61,8 +64,11 @@ int main()
     });
   
   b->addButtonObserver(bo);
-  cb->addMouseObserver(mo);
-  
+  //cb->addMouseObserver(mo);
+
+  spanel->addElement(sel1);
+  spanel->addElement(sel2);
+					    
   //tl->addKeyObserver(ko);
   tl->setBackgroundColour(genv::color(0, 150, 0));
 
@@ -71,7 +77,7 @@ int main()
   tl->addChild(sp);
   tl->addChild(l);
   tl->addChild(cb);
-  tl->addChild(sel);
+  tl->addChild(spanel);
 
   tl->mainloop();
   
