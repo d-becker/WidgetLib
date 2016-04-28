@@ -11,14 +11,13 @@ SelectablePanel::SelectablePanel(Vec2 position,
 				 int height,
 				 const std::vector<Selectable*>& elems)
   : Container(position, width, height),
-    m_elems()
+    m_elems(),
+    m_first_to_display(0)
 {
   for (Selectable *elem : elems)
   {
-    add_elem_without_resize(elem);
+    addElement(elem);
   }
-
-  adjust_size();
 }
 
 SelectablePanel::~SelectablePanel()
@@ -32,8 +31,10 @@ const std::vector<Selectable*> SelectablePanel::getElements() const
 
 bool SelectablePanel::addElement(Selectable *elem)
 {
-  bool added = add_elem_without_resize(elem);
-  adjust_size();
+  bool added = addChild(elem);
+  if (added)
+    m_elems.emplace_back(elem);
+
   return added;
 }
 
@@ -43,12 +44,6 @@ bool SelectablePanel::removeElement(Selectable *elem)
   if (removed)
   {
     remove_from_vec(m_elems, elem);
-    if (elem) // Adjusting size
-    {
-      int new_height = getHeight() - elem->getHeight();
-      int new_width = get_max_child_width();
-      setSize(new_width, new_height);
-    }
   }
 
   return removed;
@@ -73,16 +68,41 @@ void SelectablePanel::layOutChildren()
   }
 }
 
-// Private
-bool SelectablePanel::add_elem_without_resize(Selectable *elem)
+void SelectablePanel::paint()
 {
-  bool added = addChild(elem);
-  if (added)
-    m_elems.emplace_back(elem);
+  // TODO.
+  using namespace genv;
+  std::shared_ptr<canvas> my_canvas_ptr = getCanvas();
+  if (!my_canvas_ptr)
+    return;
 
-  return added;
+  canvas& my_canvas = *my_canvas_ptr;
+
+  int my_height = getHeight();
+  
+  // Wiping with background colour
+  my_canvas << move_to(0, 0);
+  my_canvas << getBackgroundColour();
+  my_canvas << box(getWidth(), my_height);
+
+  // Painting the children
+  const std::vector<Widget*> children = getChildren();
+  int current_y = 0;
+  for (unsigned int i = m_first_to_display;
+       i < children.size() && current_y < my_height;
+       ++i)
+  {
+    Widget *child = children.at(i);
+    if (child)
+    {
+      child->paint();
+      child->stampCanvas(my_canvas, 0, current_y);
+      current_y += child->getHeight();
+    }
+  }
 }
 
+// Private
 Selectable *SelectablePanel::find_selectable_with_text(const std::string& text)
 {
   for (Selectable *sel : m_elems)
@@ -92,67 +112,6 @@ Selectable *SelectablePanel::find_selectable_with_text(const std::string& text)
   }
 
   return nullptr;
-}
-
-void SelectablePanel::adjust_size()
-{
-  // TODO.
-  int new_width;
-  int new_height;
-  get_new_size(new_width, new_height);
-  setSize(new_width, new_height);
-}
-
-void SelectablePanel::get_new_size(int& new_width, int& new_height) const
-{
-  int max_width = 0;
-  int sum_height = 0;
-  for (const Widget *child : getChildren())
-  {
-    if (child)
-    {
-      int child_width = child->getWidth();
-      if (child_width > max_width)
-        max_width = child_width;
-
-      sum_height += child->getHeight();
-    }
-  }
-
-  new_width = max_width;
-  new_height = sum_height;
-}
-
-int SelectablePanel::get_max_child_width() const
-{
-  int max_width = 0;
-
-  for (const Widget *child : getChildren())
-  {
-    if (child)
-    {
-      int new_max_width = child->getWidth();
-      if (new_max_width > max_width)
-	max_width = new_max_width;
-    }
-  }
-
-  return max_width;
-}
-
-int SelectablePanel::get_sum_child_height() const
-{
-  int sum_height = 0;
-
-  for (const Widget *child : getChildren())
-  {
-    if (child)
-    {
-      sum_height += child->getHeight();
-    }
-  }
-
-  return sum_height;
 }
 
 } // namespace wl

@@ -11,9 +11,9 @@ namespace wl {
 
 /**
  * A panel that contains \c Selectable objects and displays them vertically.
- * It resizes itself to accomodate all children upon adding/removing them.
  */
-class SelectablePanel : public Container
+class SelectablePanel : public Container,
+			//public EventEmitter<SelectionEvent>
 {
 public:
   SelectablePanel(Vec2 position = Vec2(0, 0),
@@ -29,18 +29,13 @@ public:
   bool removeElementByText(std::string text);
 
   virtual void layOutChildren() override;
+  virtual void paint() override;
 
 private:
-  bool add_elem_without_resize(Selectable *elem);
   Selectable *find_selectable_with_text(const std::string& text);
-  void adjust_size();
-
-  // The new size calculated from the child widgets
-  void get_new_size(int& new_width, int& new_height) const;
-  int get_max_child_width() const;
-  int get_sum_child_height() const;
   
   std::vector<Selectable*> m_elems;
+  unsigned int m_first_to_display; // The index of the first child to display
 };
 
 } // namespace wl

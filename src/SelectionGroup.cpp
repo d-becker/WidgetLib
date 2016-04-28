@@ -67,7 +67,8 @@ bool SelectionGroup::removeOption(std::string option)
 
 std::string SelectionGroup::getSelected() const
 {
-  return m_selected;
+  if (m_selected)
+    return m_selected->getText();
 }
 
 bool SelectionGroup::setSelected(const std::string& option)
