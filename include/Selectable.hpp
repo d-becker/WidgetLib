@@ -3,13 +3,14 @@
 
 #include <graphics.hpp>
 
+#include "EventEmitter.hpp"
 #include "Label.hpp"
 #include "SelectionEventSource.hpp"
 #include "Selector.hpp"
 
 namespace wl {
 
-class Selectable : public Label, public SelectionEventSource
+class Selectable : public Label, public EventEmitter<SelectionEvent>
 {
 public:
   Selectable(Vec2 position = Vec2(0, 0),

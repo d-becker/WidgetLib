@@ -13,32 +13,14 @@ namespace wl {
 class Widget;
 
 /**
- * A class that handles registering observers and firing events. The template
- * parameter \a EV should be the type of event whose observers
- * this class handles.
- * This class should never be instantiated on its own and should only be
- * subclassed by classes that also derive from <tt>Widget</tt>. The first
- * parameter of the constructor (the \c Widget pointer) should be a pointer to
- * this object as a <tt>Widget</tt>. Otherwise, the behaviour is undefined.
- *
- * \param EV The type of event whose observers this class handles.
+ * A class that handles registering observers and firing events that never
+ * propagate upwards.
  */
 template <typename EV>
 class EventEmitter
 {
 public:
-  /**
-   * Constructs a new \c EventEmitter object.
-   *
-   * \param this_widget A pointer to this object as a <tt>Widget</tt>
-   *        (see the class documentation for more information).
-   * \param propagate Should be \c true if the events emitted should propagate
-   *        upwards to the parent if they are not fully handled.
-   */
-  EventEmitter(Widget *this_widget,
-	       bool propagate)
-    : m_this_widget(this_widget),
-      m_propagate(propagate)
+  EventEmitter()
   {
   }
   
@@ -69,17 +51,11 @@ public:
    * This method notifies all the observers that are subscribed to the events.
    *
    * \param evt The event to fire.
-   *//*
+   */
   void fireEvent(const EV& evt)
   {
     bool handled = send_selection_evt_to_observers(evt);
-    if (m_propagate && !handled && m_this_widget)
-    {
-      auto parent = m_this_widget->getParent();
-      if (parent)
-	parent->fireEvent(evt);
-    }
-  }*/
+  }
 
 protected:
   void addSuperObserver(std::shared_ptr< Observer<EV> > observer)
@@ -107,11 +83,6 @@ protected:
 private:
   std::vector< std::shared_ptr< Observer<EV> > > m_observers;
   std::vector< std::shared_ptr< Observer<EV> > > m_super_observers;
-
-  bool m_propagate; // True if the event should propagate upwards to the parent
-		    // if it is not fully handled
-
-  Widget *m_this_widget; // A pointer to this object as a \c Widget
 };
 
 } // namespace wl

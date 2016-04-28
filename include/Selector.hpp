@@ -3,14 +3,14 @@
 
 #include "Widget.hpp"
 
-#include "SelectionEventSource.hpp"
+#include "EventEmitter.hpp"
 
 namespace wl {
 
 /**
  * An abstract base class for checkboxes and radio buttons.
  */
-class Selector : public Widget, public SelectionEventSource
+class Selector : public Widget, public EventEmitter<SelectionEvent>
 {
 public:
   Selector(Vec2 position = Vec2(0, 0),

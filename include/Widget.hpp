@@ -7,10 +7,7 @@
 #include <graphics.hpp>
 
 #include "Box.hpp"
-#include "EventEmitter.hpp"
-#include "FocusEvent.hpp"
-#include "KeyEvent.hpp"
-#include "MouseEvent.hpp"
+#include "Observer.hpp"
 #include "ResizeEvent.hpp"
 #include "Vec2.hpp"
 
@@ -19,12 +16,9 @@ namespace wl {
 
 class Container;
 class FocusEvent;
-class FocusObserver;
 class KeyEvent;
-class KeyObserver;
 class MouseEvent;
-class MouseObserver;
-class ResizeObserver;
+class ResizeEvent;
 class Toplevel;
 
 /**
@@ -32,11 +26,7 @@ class Toplevel;
  * the position of the upper left corner of the bounding box, relative
  * to the position of the parent widget.
  */
-class Widget : public EventEmitter<FocusEvent>,
-	       public EventEmitter<KeyEvent>,
-	       public EventEmitter<MouseEvent>,
-	       public EventEmitter<ResizeEvent>
-	       
+class Widget
 {
   friend class Container;
 public:
@@ -230,20 +220,167 @@ public:
    */
   virtual Toplevel *getToplevel();
 
-  /**
-   * The widgets that handle observers derive from \c EventEmitter<T>. In the
-   * \c fireEvent(const T& evt) method of that class, the event can be
-   * propagated to the parent by calling the \c fireEvent(const T& evt) method
-   * of the parent, but it is possible that the parent does not derive from
-   * \c EventEmitter<T>. To avoid the compiler error, this generic default
-   * method is supplied. This method does nothing.
-   */
-  template <typename T>
-  void fireEvent(const T& ev)
+  const std::vector< std::shared_ptr< Observer<MouseEvent> > > getMouseObservers() const
   {
-    // Does nothing.
+    return m_mouse_observers;
   }
+
+  /**
+   * Subsribes a mouse observer (if the same observer is not already subscribed)
+   * to this widget. The observer will be notified when a \c MouseEvent is
+   * fired by this widget.
+   *
+   * \param observer The observer to subscribe.
+   */
+  void addMouseObserver(std::shared_ptr< Observer<MouseEvent> > observer);
+
+  /**
+   * Unsubscribes the \c MouseObserver with the given index if it exists.
+   * This method does nothing if the element with index \a index does not exist.
+   *
+   * \param index The index of the \c MouseObserver to unsubscribe.
+   */
+  void removeMouseObserver(unsigned int index);
+
+  /**
+   * Unsubscribes the provided \c MouseObserver if it is subscribed to this widget.
+   * This method does nothing if provided \c MouseObserver is not subscribed to
+   * this widget.
+   *
+   * \param observer The \c MouseObserver to unsubscribe.
+   */
+  void removeMouseObserver(std::shared_ptr< Observer<MouseEvent> > observer);
+
+  /**
+   * If a mouse event happens over this widget, the \c Toplevel that created
+   * the event communicates it to the widget with this method. This method then
+   * notifies all the observers that are subscribed to this event.
+   *
+   * \param evt The event to fire.
+   */
+  void fireMouseEvent(const MouseEvent& evt);
+
+  /**
+   * Subsribes a key observer (if the same observer is not already subscribed)
+   * to this widget. The observer will be notified when a \c KeyEvent is
+   * fired by this widget.
+   *
+   * \param observer The observer to subscribe.
+   */
+  void addKeyObserver(std::shared_ptr< Observer<KeyEvent> > observer);
+
+  /**
+   * Unsubscribes the \c KeyObserver with the given index if it exists.
+   * This method does nothing if the element with index \a index does not exist.
+   *
+   * \param index The index of the \c KeyObserver to unsubscribe.
+   */
+  void removeKeyObserver(unsigned int index);
   
+  /**
+   * Unsubscribes the provided \c KeyObserver if it is subscribed to this widget.
+   * This method does nothing if provided \c KeyObserver is not subscribed to
+   * this widget.
+   *
+   * \param observer The \c KeyObserver to unsubscribe.
+   */
+  void removeKeyObserver(std::shared_ptr< Observer<KeyEvent> > observer);
+  
+  /**
+   * If a key event happens over this widget, the \c Toplevel that created
+   * the event communicates it to the widget with this method. This method then
+   * notifies all the observers that are subscribed to this event.
+   *
+   * \param evt The event to fire.
+   */
+  void fireKeyEvent(const KeyEvent& evt);
+
+   /**
+   * Subsribes a resize observer (if the same observer is not already
+   * subscribed) to this widget. The observer will be notified when a
+   * \c ResizeEvent is fired by this widget.
+   *
+   * \param observer The observer to subscribe.
+   */
+  void addResizeObserver(std::shared_ptr< Observer<ResizeEvent> > observer);
+
+  /**
+   * Unsubscribes the \c ResizeObserver with the given index if it exists.
+   * This method does nothing if the element with index \a index does not exist.
+   *
+   * \param index The index of the \c ResizeObserver to unsubscribe.
+   */
+  void removeResizeObserver(unsigned int index);
+  
+  /**
+   * Unsubscribes the provided \c ResizeObserver if it is subscribed to
+   * this widget. This method does nothing if provided \c ResizeObserver
+   * is not subscribed to this widget.
+   *
+   * \param observer The \c ResizeObserver to unsubscribe.
+   */
+  void removeResizeObserver(std::shared_ptr< Observer<ResizeEvent> > observer);
+  
+  /**
+   * If this widget is resized, this method is used to notify all the observers
+   * that are subscribed to this event. This method is called automatically from
+   * \c setWidth, \c setHeight and \c setSize.
+   *
+   * \param evt The event to fire.
+   */
+  void fireResizeEvent(const ResizeEvent& evt);
+
+  /**
+   * Subsribes a focus observer (if the same observer is not already subscribed)
+   * to this widget. The observer will be notified when a \c FocusEvent is
+   * fired by this widget.
+   *
+   * \param observer The observer to subscribe.
+   */
+  void addFocusObserver(std::shared_ptr< Observer<FocusEvent> > observer);
+
+  /**
+   * Unsubscribes the \c FocusObserver with the given index if it exists.
+   * This method does nothing if the element with index \a index does not exist.
+   *
+   * \param index The index of the \c FocusObserver to unsubscribe.
+   */
+  void removeFocusObserver(unsigned int index);
+  
+  /**
+   * Unsubscribes the provided \c FocusObserver if it is subscribed to this widget.
+   * This method does nothing if provided \c FocusObserver is not subscribed to
+   * this widget.
+   *
+   * \param observer The \c FocusObserver to unsubscribe.
+   */
+  void removeFocusObserver(std::shared_ptr< Observer<FocusEvent> > observer);
+  
+  /**
+   * If a focus event happens over this widget, the \c Toplevel that created
+   * the event communicates it to the widget with this method. This method then
+   * notifies all the observers that are subscribed to this event.
+   *
+   * \param evt The event to fire.
+   */
+  void fireFocusEvent(const FocusEvent& evt);
+
+  /**
+   * Grabs the focus.
+   */
+  void grabFocus();
+
+  /**
+   * Stamps the canvas on which this widget draws onto the given canvas. This
+   * method can be used by parent (container) widgets to draw their children.
+   *
+   * \param on_which The canvas on which to stamp
+   *        the canvas on which this widget draws.
+   * \param x The x position on canvas \a on_which where this widget's canvas
+   *        will be stamped.
+   * \param y The y position on canvas \a on_which where this widget's canvas
+   *        will be stamped.
+   */
   void stampCanvas(genv::canvas& on_which,
 		   int x,
 		   int y) const
@@ -292,10 +429,10 @@ protected:
   bool send_focus_evt_to_observers(const FocusEvent& evt);
 
   // Registering super observers - they cannot be deleted or added from outside
-  void addMouseSuperObserver(std::shared_ptr<MouseObserver> observer);
-  void addKeySuperObserver(std::shared_ptr<KeyObserver> observer);
-  void addResizeSuperObserver(std::shared_ptr<ResizeObserver> observer);
-  void addFocusSuperObserver(std::shared_ptr<FocusObserver> observer);
+  void addMouseSuperObserver(std::shared_ptr< Observer<MouseEvent> > observer);
+  void addKeySuperObserver(std::shared_ptr< Observer<KeyEvent> > observer);
+  void addResizeSuperObserver(std::shared_ptr< Observer<ResizeEvent> > observer);
+  void addFocusSuperObserver(std::shared_ptr< Observer<FocusEvent> > observer);
 
   // Destructs the previous canvas and creates a new one
   // with the current widget size
@@ -318,16 +455,16 @@ private:
   void set_parent(Container *parent);
   
   // Observers
-  std::vector< std::shared_ptr<MouseObserver> > m_mouse_observers;
-  std::vector< std::shared_ptr<KeyObserver> > m_key_observers;
-  std::vector< std::shared_ptr<ResizeObserver> > m_resize_observers;
-  std::vector< std::shared_ptr<FocusObserver> > m_focus_observers;
+  std::vector< std::shared_ptr< Observer<MouseEvent> > > m_mouse_observers;
+  std::vector< std::shared_ptr< Observer<KeyEvent> > > m_key_observers;
+  std::vector< std::shared_ptr< Observer<ResizeEvent> > > m_resize_observers;
+  std::vector< std::shared_ptr< Observer<FocusEvent> > > m_focus_observers;
 
   // Super observers - they cannot be deleted from outside, by public methods
-  std::vector< std::shared_ptr<MouseObserver> > m_mouse_super_observers;
-  std::vector< std::shared_ptr<KeyObserver> > m_key_super_observers;
-  std::vector< std::shared_ptr<ResizeObserver> > m_resize_super_observers;
-  std::vector< std::shared_ptr<FocusObserver> > m_focus_super_observers;
+  std::vector< std::shared_ptr< Observer<MouseEvent> > > m_mouse_super_observers;
+  std::vector< std::shared_ptr< Observer<KeyEvent> > > m_key_super_observers;
+  std::vector< std::shared_ptr< Observer<ResizeEvent> > > m_resize_super_observers;
+  std::vector< std::shared_ptr< Observer<FocusEvent> > > m_focus_super_observers;
 
   std::shared_ptr<genv::canvas> m_canvas;
 
