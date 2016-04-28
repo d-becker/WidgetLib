@@ -26,11 +26,13 @@ public:
 
   bool addElement(Selectable *elem);
   bool removeElement(Selectable *elem);
+  bool removeElementByText(std::string text);
 
   virtual void layOutChildren() override;
 
 private:
   bool add_elem_without_resize(Selectable *elem);
+  Selectable *find_selectable_with_text(const std::string& text);
   void adjust_size();
 
   // The new size calculated from the child widgets

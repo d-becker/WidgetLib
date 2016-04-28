@@ -5,6 +5,7 @@
 
 #include "SelectionGroupEvent.hpp"
 #include "ObserverAdapter.hpp"
+#include "Util.hpp"
 
 namespace wl {
 
@@ -36,23 +37,37 @@ SelectionGroup::~SelectionGroup()
 
 std::vector<std::string> SelectionGroup::getOptions() const
 {
-  // TODO.
+  std::vector<std::string> res;
+  for (const Selectable * sel : m_panel->getElements())
+  {
+    if (sel)
+      res.emplace_back(sel->getText());
+  }
+
+  return res;
 }
 
 bool SelectionGroup::addOption(std::string option)
 {
-  Selectable *selectable = new Selectable(Vec2(0, 0), getWidth(), 30, option);
-  selectable->addObserver(std::make_shared< ObserverAdapter<SelectionEvent> >(
+  if (!vec_contains(getOptions(), option))
+  {
+    Selectable *selectable = new Selectable(Vec2(0, 0), getWidth(), 30, option);
+    selectable->addObserver(std::make_shared< ObserverAdapter<SelectionEvent> >(
 					    get_observer_lambda(selectable)));
-  m_panel->addElement(selectable);
+    return m_panel->addElement(selectable);
+  }
+
+  return false;
 }
 
 bool SelectionGroup::removeOption(std::string option)
 {
+  return m_panel->removeElementByText(option);
 }
 
 std::string SelectionGroup::getSelected() const
 {
+  return m_selected;
 }
 
 bool SelectionGroup::setSelected(const std::string& option)
@@ -73,7 +88,6 @@ std::function<bool(const SelectionEvent&)>
 SelectionGroup::get_observer_lambda(Selectable *selectable)
 {
   auto res = [this, selectable](const SelectionEvent& evt) {
-    // TODO
     if (evt.getEvtType() == SelectionEvent::SELECTION_SET)
     {
       // Deselecting the previously selected \c Selectable

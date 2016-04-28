@@ -54,6 +54,12 @@ bool SelectablePanel::removeElement(Selectable *elem)
   return removed;
 }
 
+bool SelectablePanel::removeElementByText(std::string text)
+{
+  Selectable *elem = find_selectable_with_text(text);
+  return removeElement(elem);
+}
+
 void SelectablePanel::layOutChildren()
 {
   int sum_height = 0; 
@@ -75,6 +81,17 @@ bool SelectablePanel::add_elem_without_resize(Selectable *elem)
     m_elems.emplace_back(elem);
 
   return added;
+}
+
+Selectable *SelectablePanel::find_selectable_with_text(const std::string& text)
+{
+  for (Selectable *sel : m_elems)
+  {
+    if (sel && sel->getText() == text)
+      return sel;
+  }
+
+  return nullptr;
 }
 
 void SelectablePanel::adjust_size()
