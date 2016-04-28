@@ -77,6 +77,9 @@ public:
    */
   void clearSelection();
 
+  void scrollUp();
+  void scrollDown();
+
   virtual Widget* getWidgetAtPos(const Vec2& pos) override;
   
   virtual void layOutChildren() override;

@@ -26,6 +26,23 @@ SelectablePanel::SelectablePanel(Vec2 position,
   {
     addOption(option);
   }
+
+  // Mouse observer
+  addMouseSuperObserver(std::make_shared< ObserverAdapter<MouseEvent> >([this](const MouseEvent& evt) {
+	auto evt_type = evt.getEvtType();
+	if (evt_type == MouseEvent::MOUSE_WHEEL_UP)
+	{
+	  scrollUp();
+	  return true;
+	}
+	else if (evt_type == MouseEvent::MOUSE_WHEEL_DOWN)
+	{
+	  scrollDown();
+	  return true;
+	}
+
+	return false;
+      }));
 }
 
 SelectablePanel::~SelectablePanel()
@@ -110,7 +127,15 @@ const std::string& SelectablePanel::getSelected() const
 bool SelectablePanel::setSelected(const std::string& option)
 {
   Selectable *to_select = find_selectable_with_text(option);
-  return select_selectable(to_select);
+  bool selected = select_selectable(to_select);
+
+  if (selected)
+  {
+    SelectionGroupEvent evt(this, option);
+    fireEvent(evt);
+  }
+
+  return selected;
 }
 
 void SelectablePanel::clearSelection()
@@ -123,6 +148,18 @@ void SelectablePanel::clearSelection()
   m_selected = nullptr;
 }
 
+void SelectablePanel::scrollUp()
+{
+  if (m_first_to_display > 0)
+    --m_first_to_display;
+}
+
+void SelectablePanel::scrollDown()
+{
+  if (m_first_to_display < m_elems.size() - 1)
+    ++m_first_to_display;
+}
+
 Widget* SelectablePanel::getWidgetAtPos(const Vec2& pos)
 {
   unsigned int index_of_elem = pos.y / m_elem_height;
@@ -131,7 +168,7 @@ Widget* SelectablePanel::getWidgetAtPos(const Vec2& pos)
   if (index_of_elem >= 0 && index_of_elem < children.size())
     return getChildren().at(index_of_elem);
   else
-    return nullptr;
+    return this;
 }
 
 void SelectablePanel::layOutChildren()
