@@ -6,20 +6,32 @@
 #include <string>
 #include <vector>
 
+#include "EventEmitter.hpp"
 #include "SelectablePanel.hpp"
+#include "SelectionGroupEvent.hpp"
 
 namespace wl {
 
-class SelectionGroup : public Container
+class SelectionGroup : public Container,
+		       public EventEmitter<SelectionGroupEvent>
 {
 public:
   SelectionGroup(Vec2 position = Vec2(0, 0),
 		 int width = 50,
 		 int height = 50,
-		 std::vector<std::string> options);
+		 const std::vector<std::string>& options = {"Elem1", "Elem2"});
 
   virtual ~SelectionGroup();
 
+  /**
+   * Returns a vector of the options that are contained in
+   * this \c SelectionGroup.
+   *
+   * \return A vector of the options that are contained in
+   *         this \c SelectionGroup.
+   */
+  std::vector<std::string> getOptions() const;
+  
   /**
    * Adds a new option to this \c SelectionGroup object if that option is not
    * already added.
@@ -64,9 +76,14 @@ public:
    */
   void clearSelection();
 
-  virtual void paint() override;
+  virtual void layOutChildren() override;
+  //virtual void paint() override;
 private:
+  std::function<bool(const SelectionEvent&)> get_observer_lambda(
+							Selectable *selectable);
+  
   SelectablePanel *m_panel;
+  Selectable *m_selected; // The currently selected item
 };
 
 } // namespace wl

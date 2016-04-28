@@ -12,6 +12,7 @@
 #include "RadioButton.hpp"
 #include "Selectable.hpp"
 #include "SelectablePanel.hpp"
+#include "SelectionGroup.hpp"
 #include "TextBox.hpp"
 #include "Widget.hpp"
 
@@ -39,7 +40,8 @@ int main()
   Checkbox *cb = new Checkbox(Vec2(50, 220), 25, 25);
   Selectable *sel1 = new Selectable(Vec2(50, 250), 75, 25);
   Selectable *sel2 = new Selectable(Vec2(50, 250), 75, 25);
-  SelectablePanel *spanel = new SelectablePanel(Vec2(50, 250), 0, 0);
+  //SelectablePanel *spanel = new SelectablePanel(Vec2(50, 250), 0, 0);
+  SelectionGroup *sg = new SelectionGroup(Vec2(50, 250), 100, 90, {"Alma", "Körte", "Szilva"});
 
   std::shared_ptr< Observer<ButtonEvent> > bo = make_shared< ObserverAdapter<ButtonEvent> >([](const ButtonEvent& evt) {
       static unsigned int counter = 0;
@@ -60,8 +62,8 @@ int main()
   b->addObserver(bo);
   //cb->addMouseObserver(mo);
 
-  spanel->addElement(sel1);
-  spanel->addElement(sel2);
+  //spanel->addElement(sel1);
+  //spanel->addElement(sel2);
 					    
   //tl->addKeyObserver(ko);
   tl->setBackgroundColour(genv::color(0, 150, 0));
@@ -71,7 +73,8 @@ int main()
   tl->addChild(sp);
   tl->addChild(l);
   tl->addChild(cb);
-  tl->addChild(spanel);
+  //tl->addChild(spanel);
+  tl->addChild(sg);
 
   tl->mainloop();
   
