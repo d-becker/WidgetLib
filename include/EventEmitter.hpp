@@ -54,7 +54,7 @@ public:
    */
   void fireEvent(const EV& evt)
   {
-    bool handled = send_selection_evt_to_observers(evt);
+    send_evt_to_observers(evt);
   }
 
 protected:

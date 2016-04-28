@@ -11,7 +11,6 @@ set(SRC_FILES
 	Selectable.cpp
 	SelectablePanel.cpp
 	Selection.cpp
-	SelectionEventSource.cpp
 	Selector.cpp
 	TextBox.cpp
 	TextDisplay.cpp

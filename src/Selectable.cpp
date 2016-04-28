@@ -1,8 +1,7 @@
 #include "Selectable.hpp"
 
 #include "MouseEvent.hpp"
-#include "MouseObserver.hpp"
-#include "MouseObserverAdapter.hpp"
+#include "ObserverAdapter.hpp"
 
 namespace wl {
 
@@ -20,7 +19,8 @@ Selectable::Selectable(Vec2 position,
   set_normal_colours();
 
   // Super observers
-  addMouseSuperObserver(std::make_shared<MouseObserverAdapter>([this](const MouseEvent& evt) {
+  addMouseSuperObserver(std::make_shared< ObserverAdapter<MouseEvent> >(
+					 [this](const MouseEvent& evt) {
 	if (evt.getEvtType() == MouseEvent::CLICKED_ON_WIDGET)
 	{
 	  select();
@@ -46,7 +46,7 @@ void Selectable::select()
   set_selected_colours();
   
   SelectionEvent evt(this, SelectionEvent::SELECTION_SET);
-  fireSelectionEvent(evt);
+  fireEvent(evt);
 }
 
 void Selectable::deselect()
@@ -55,7 +55,7 @@ void Selectable::deselect()
   set_normal_colours();
   
   SelectionEvent evt(this, SelectionEvent::SELECTION_RESET);
-  fireSelectionEvent(evt);
+  fireEvent(evt);
 }
 
 genv::color Selectable::getNormalBackgroundColour() const

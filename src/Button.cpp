@@ -1,9 +1,8 @@
 #include "Button.hpp"
 
-
-
 #include <graphics.hpp>
 
+#include "ObserverAdapter.hpp"
 #include "Util.hpp"
 
 namespace wl {
@@ -14,12 +13,12 @@ Button::Button(Vec2 position,
 	       )
   : Widget(position, width, height)
 {
-  addMouseSuperObserver(std::make_shared< Observer<MouseEvent> >([this](const MouseEvent& evt) {
+  addMouseSuperObserver(std::make_shared< ObserverAdapter<MouseEvent> >([this](const MouseEvent& evt) {
 	if (evt.getEvtType() == MouseEvent::CLICKED_ON_WIDGET
 	    && evt.getMouseButton() == MouseEvent::MOUSE_BTN::LEFT)
 	{
 	  ButtonEvent button_event(this);
-	  fireButtonEvent(button_event);
+	  fireEvent(button_event);
 	  return true;
 	}
 

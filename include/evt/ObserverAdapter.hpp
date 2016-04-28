@@ -23,7 +23,7 @@ public:
   }
 
 private:
-  std::function<bool(const EV&)> m_callback
+  std::function<bool(const EV&)> m_callback;
 };
 
 } // namespace

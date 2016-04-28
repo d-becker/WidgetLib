@@ -2,7 +2,8 @@
 
 #include <cmath>
 
-#include "MouseObserverAdapter.hpp"
+#include "MouseEvent.hpp"
+#include "ObserverAdapter.hpp"
 
 namespace wl {
 
@@ -16,7 +17,7 @@ RadioButton::RadioButton(Vec2 position,
   setBackgroundColour(192,192,192);
   
   // Super observers
-  addMouseSuperObserver(std::make_shared<MouseObserverAdapter>([this](const MouseEvent& evt) {
+  addMouseSuperObserver(std::make_shared< ObserverAdapter<MouseEvent> >([this](const MouseEvent& evt) {
 	if (evt.getEvtType() == MouseEvent::CLICKED_ON_WIDGET)
 	{
 	  select();

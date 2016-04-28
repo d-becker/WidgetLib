@@ -8,14 +8,10 @@
 
 #include "Button.hpp"
 #include "ButtonEvent.hpp"
-#include "ButtonObserver.hpp"
-#include "ButtonObserverAdapter.hpp"
 #include "KeyEvent.hpp"
-#include "KeyObserver.hpp"
-#include "KeyObserverAdapter.hpp"
 #include "MouseEvent.hpp"
-#include "MouseObserver.hpp"
-#include "MouseObserverAdapter.hpp"
+#include "Observer.hpp"
+#include "ObserverAdapter.hpp"
 #include "SpinnerModel.hpp"
 #include "TextBox.hpp"
 #include "Vec2.hpp"
@@ -58,20 +54,21 @@ public:
     layOutChildren();
 
     // Observers
-    m_arrow_up->addButtonObserver(
-        std::make_shared<ButtonObserverAdapter>([this](const ButtonEvent& evt) {
+    m_arrow_up->addObserver(std::make_shared< ObserverAdapter<ButtonEvent> >(
+					     [this](const ButtonEvent& evt) {
 	    increment();
 	    return true;
 	}));
 
-    m_arrow_down->addButtonObserver(
-        std::make_shared<ButtonObserverAdapter>([this](const ButtonEvent& evt) {
+    m_arrow_down->addObserver(std::make_shared< ObserverAdapter<ButtonEvent> >(
+					       [this](const ButtonEvent& evt) {
 	    decrement();
 	    return true;
 	}));
 
     addMouseSuperObserver(
-	std::make_shared<MouseObserverAdapter>([this](const MouseEvent& evt) {
+	std::make_shared<  ObserverAdapter<MouseEvent> >(
+			  [this](const MouseEvent& evt) {
 	    if (evt.getEvtType() == MouseEvent::MOUSE_WHEEL_UP)
 	    {
 	      increment();
@@ -86,7 +83,8 @@ public:
 	}));
     
     addKeySuperObserver(
-       std::make_shared<KeyObserverAdapter>([this](const KeyEvent& evt) {
+       std::make_shared< ObserverAdapter<KeyEvent> >(
+		        [this](const KeyEvent& evt) {
 	  bool handled = false;
 	  if (evt.getEvtType() == KeyEvent::KEY_PRESSED)
 	  {
@@ -263,7 +261,8 @@ private:
       setBackgroundColour(192,192,192);
 
       // Grab focus if clicked
-      addMouseSuperObserver(std::make_shared<MouseObserverAdapter>([this](const MouseEvent& evt) {
+      addMouseSuperObserver(std::make_shared< ObserverAdapter<MouseEvent> >(
+					     [this](const MouseEvent& evt) {
 	    if (evt.getEvtType() == MouseEvent::CLICKED_ON_WIDGET)
 	      grabFocus();
 	    return false;

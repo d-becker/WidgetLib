@@ -25,14 +25,14 @@ void Selector::select()
 {
   m_selected = true;
   SelectionEvent event(this, SelectionEvent::SELECTION_SET);
-  fireSelectionEvent(event);
+  fireEvent(event);
 }
 
 void Selector::deselect()
 {
   m_selected = false;
   SelectionEvent event(this, SelectionEvent::SELECTION_RESET);
-  fireSelectionEvent(event);
+  fireEvent(event);
 }
 
 bool Selector::toggle()

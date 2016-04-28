@@ -16,18 +16,12 @@
 #include "Widget.hpp"
 
 #include "ButtonEvent.hpp"
-#include "ButtonObserver.hpp"
-#include "ButtonObserverAdapter.hpp"
 #include "Event.hpp"
 #include "FocusEvent.hpp"
-#include "FocusObserver.hpp"
-#include "FocusObserverAdapter.hpp"
 #include "KeyEvent.hpp"
-#include "KeyObserver.hpp"
-#include "KeyObserverAdapter.hpp"
 #include "MouseEvent.hpp"
-#include "MouseObserver.hpp"
-#include "MouseObserverAdapter.hpp"
+#include "Observer.hpp"
+#include "ObserverAdapter.hpp"
 #include "Toplevel.hpp"
 
 using namespace std;
@@ -47,23 +41,23 @@ int main()
   Selectable *sel2 = new Selectable(Vec2(50, 250), 75, 25);
   SelectablePanel *spanel = new SelectablePanel(Vec2(50, 250), 0, 0);
 
-  std::shared_ptr<ButtonObserver> bo = make_shared<ButtonObserverAdapter>([](const ButtonEvent& evt) {
+  std::shared_ptr< Observer<ButtonEvent> > bo = make_shared< ObserverAdapter<ButtonEvent> >([](const ButtonEvent& evt) {
       static unsigned int counter = 0;
       cerr << "Button clicked: " << counter++ << "!!!\n";
       return true;
     });
-  std::shared_ptr<KeyObserver> ko = make_shared<KeyObserverAdapter>([](const KeyEvent& evt){
+  std::shared_ptr< Observer<KeyEvent> > ko = make_shared< ObserverAdapter<KeyEvent> >([](const KeyEvent& evt){
       static unsigned int counter = 0;
       cerr << "Key event  handled: " << counter++ << "!!!\n";
       return false;
     });
-  std::shared_ptr<MouseObserver> mo = make_shared<MouseObserverAdapter>([](const MouseEvent& evt) {
+  std::shared_ptr< Observer<MouseEvent> > mo = make_shared< ObserverAdapter<MouseEvent> >([](const MouseEvent& evt) {
       static unsigned int counter = 0;
       cerr << "Mouse event: " << counter++ << "!!!\n";
       return true;
     });
   
-  b->addButtonObserver(bo);
+  b->addObserver(bo);
   //cb->addMouseObserver(mo);
 
   spanel->addElement(sel1);

@@ -2,8 +2,8 @@
 
 #include <algorithm>
 
+#include "ObserverAdapter.hpp"
 #include "ResizeEvent.hpp"
-#include "ResizeObserverAdapter.hpp"
 
 namespace wl {
 
@@ -13,7 +13,8 @@ Container::Container(Vec2 position,
   : Widget(position, width, height)
 {
   // Lay out children on resize
-  addResizeSuperObserver(std::make_shared<ResizeObserverAdapter>([this](const ResizeEvent& evt) {
+  addResizeSuperObserver(std::make_shared< ObserverAdapter<ResizeEvent> >(
+					  [this](const ResizeEvent& evt) {
 	layOutChildren();
 	return true;
       }));

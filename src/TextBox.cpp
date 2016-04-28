@@ -3,12 +3,10 @@
 #include <cctype>
 #include <memory>
 
-#include "FocusObserver.hpp"
-#include "FocusObserverAdapter.hpp"
-#include "KeyObserver.hpp"
-#include "KeyObserverAdapter.hpp"
-#include "MouseObserver.hpp"
-#include "MouseObserverAdapter.hpp"
+#include "FocusEvent.hpp"
+#include "KeyEvent.hpp"
+#include "MouseEvent.hpp"
+#include "ObserverAdapter.hpp"
 #include "Util.hpp"
 
 namespace wl {
@@ -26,7 +24,8 @@ TextBox::TextBox(Vec2 position,
   setBackgroundColour(255, 255, 255);
   
   // Grab focus and set cursor position on click
-  addMouseSuperObserver(std::make_shared<MouseObserverAdapter>([this](const MouseEvent& evt) {
+  addMouseSuperObserver(std::make_shared< ObserverAdapter<MouseEvent> >(
+					 [this](const MouseEvent& evt) {
 	if (evt.getEvtType() == MouseEvent::MOUSE_BTN_PRESSED)
 	{
 	  if (!m_focussed)
@@ -45,7 +44,8 @@ TextBox::TextBox(Vec2 position,
       }));
 
   // Handle key events
-  addKeySuperObserver(std::make_shared<KeyObserverAdapter>([this](const KeyEvent& evt) {
+  addKeySuperObserver(std::make_shared< ObserverAdapter<KeyEvent> >(
+				       [this](const KeyEvent& evt) {
 	using namespace genv;
 
 	bool handled = false;
@@ -68,7 +68,7 @@ TextBox::TextBox(Vec2 position,
       }));
 
   // Keeping track of whether we are focussed
-  addFocusSuperObserver(std::make_shared<FocusObserverAdapter>([this](const FocusEvent& evt) {
+  addFocusSuperObserver(std::make_shared< ObserverAdapter<FocusEvent> >([this](const FocusEvent& evt) {
 	if (evt.getEvtType() == FocusEvent::FOCUS_GAINED)
 	  m_focussed = true;
 	else if (evt.getEvtType() == FocusEvent::FOCUS_LOST)

@@ -5,7 +5,6 @@
 
 #include "EventEmitter.hpp"
 #include "Label.hpp"
-#include "SelectionEventSource.hpp"
 #include "Selector.hpp"
 
 namespace wl {

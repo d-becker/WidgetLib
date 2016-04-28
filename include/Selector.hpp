@@ -4,6 +4,7 @@
 #include "Widget.hpp"
 
 #include "EventEmitter.hpp"
+#include "SelectionEvent.hpp"
 
 namespace wl {
 

@@ -1,9 +1,9 @@
 #include "Checkbox.hpp"
 
+#include "EventEmitter.hpp"
+#include "MouseEvent.hpp"
+#include "ObserverAdapter.hpp"
 #include "Util.hpp"
-
-#include "SelectionObserverAdapter.hpp"
-#include "MouseObserverAdapter.hpp"
 
 namespace wl {
 
@@ -16,7 +16,8 @@ Checkbox::Checkbox(Vec2 position,
   setBackgroundColour(255, 255, 255);
 
   // Super observers
-  addMouseSuperObserver(std::make_shared<MouseObserverAdapter>([this](const MouseEvent& evt) {
+  addMouseSuperObserver(std::make_shared< ObserverAdapter<MouseEvent> >(
+					 [this](const MouseEvent& evt) {
 	if (evt.getEvtType() == MouseEvent::CLICKED_ON_WIDGET)
 	{
 	  toggle();
