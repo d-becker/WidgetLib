@@ -22,7 +22,7 @@ public:
    *
    * \return The text of the label.
    */
-  std::string getText() const;
+  const std::string& getText() const;
 
   /**
    * Sets the text of the label.

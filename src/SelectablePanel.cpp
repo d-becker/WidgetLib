@@ -9,14 +9,16 @@ namespace wl {
 SelectablePanel::SelectablePanel(Vec2 position,
 				 int width,
 				 int height,
-				 const std::vector<Selectable*>& elems)
+				 const std::vector<std::string>& options)
   : Container(position, width, height),
     m_elems(),
-    m_first_to_display(0)
+    m_selected(nullptr),
+    m_first_to_display(0),
+    m_elem_height(25)
 {
-  for (Selectable *elem : elems)
+  for (const std::string& option : options)
   {
-    addElement(elem);
+    addOption(option);
   }
 }
 
@@ -24,35 +26,84 @@ SelectablePanel::~SelectablePanel()
 {
 }
 
-const std::vector<Selectable*> SelectablePanel::getElements() const
+const std::vector<std::string> SelectablePanel::getOptions() const
 {
-  return m_elems;
-}
-
-bool SelectablePanel::addElement(Selectable *elem)
-{
-  bool added = addChild(elem);
-  if (added)
-    m_elems.emplace_back(elem);
-
-  return added;
-}
-
-bool SelectablePanel::removeElement(Selectable *elem)
-{
-  bool removed = removeChild(elem);
-  if (removed)
+  std::vector<std::string> res;
+  for (const Selectable *sel : m_elems)
   {
-    remove_from_vec(m_elems, elem);
+    if (sel)
+      res.emplace_back(sel->getText());
   }
 
-  return removed;
+  return res;
 }
 
-bool SelectablePanel::removeElementByText(std::string text)
+bool SelectablePanel::addOption(std::string option)
 {
-  Selectable *elem = find_selectable_with_text(text);
-  return removeElement(elem);
+  Selectable *duplicate = find_selectable_with_text(option);
+  if (duplicate)
+    return false;
+
+  // The position is not important as it will not be taken into account
+  // when painting
+  Selectable *new_elem = new Selectable(Vec2(0, 0), getWidth(),
+					m_elem_height, option);
+
+  bool added = addChild(new_elem);
+  if (added)
+    return true;
+  else
+  {
+    delete new_elem;
+    return false;
+  }
+}
+
+bool SelectablePanel::removeOption(const std::string& option)
+{
+  Selectable *elem = find_selectable_with_text(option);
+  if (elem)
+  {
+    remove_from_vec(m_elems, elem);
+    delete elem;
+    return true;
+  }
+
+  return false;
+}
+
+const std::string& SelectablePanel::getSelected() const
+{
+  static const std::string empty_string = "";
+  if (m_selected)
+    return m_selected->getText();
+  else
+    return empty_string;
+}
+
+bool SelectablePanel::setSelected(const std::string& option)
+{
+  Selectable *to_select = find_selectable_with_text(option);
+  if (to_select)
+  {
+    // Deselecting the previously selected element
+    if (m_selected)
+      m_selected->deselect();
+
+    // Selecting the new one
+    m_selected = to_select;
+    m_selected->select();
+
+    return true;
+  }
+
+  return false;
+}
+
+Widget* SelectablePanel::getWidgetAtPos(const Vec2& pos)
+{
+  int index_of_elem = pos.x / m_elem_height;
+  return m_elems.at(index_of_elem);
 }
 
 void SelectablePanel::layOutChildren()
@@ -63,7 +114,7 @@ void SelectablePanel::layOutChildren()
     if (child)
     {
       child->setPosition(0, sum_height);
-      sum_height += child->getHeight();
+      sum_height += m_elem_height;
     }
   }
 }
@@ -97,7 +148,7 @@ void SelectablePanel::paint()
     {
       child->paint();
       child->stampCanvas(my_canvas, 0, current_y);
-      current_y += child->getHeight();
+      current_y += m_elem_height;
     }
   }
 }

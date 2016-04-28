@@ -15,7 +15,7 @@ Label::~Label()
 {
 }
 
-std::string Label::getText() const
+const std::string& Label::getText() const
 {
   return m_text;
 }

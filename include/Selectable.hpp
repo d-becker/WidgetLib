@@ -9,7 +9,7 @@
 
 namespace wl {
 
-class Selectable : public Label, public EventEmitter<SelectionEvent>
+class Selectable : public Label
 {
 public:
   Selectable(Vec2 position = Vec2(0, 0),
