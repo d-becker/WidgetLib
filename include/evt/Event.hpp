@@ -22,7 +22,7 @@ public:
    *
    * \return A pointer to the widget that is the source of the event.
    */
-  Widget *getWidgetSource()
+  Widget *getSource() const
   {
     return m_source;
   }

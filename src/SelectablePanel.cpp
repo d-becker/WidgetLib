@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include "MouseEvent.hpp"
+#include "ObserverAdapter.hpp"
 #include "Util.hpp"
 
 namespace wl {
@@ -16,6 +18,10 @@ SelectablePanel::SelectablePanel(Vec2 position,
     m_first_to_display(0),
     m_elem_height(25)
 {
+  // Setting the background colour
+  setBackgroundColour(255, 255, 255); // white
+  
+  // Creating and adding the children
   for (const std::string& option : options)
   {
     addOption(option);
@@ -51,7 +57,27 @@ bool SelectablePanel::addOption(std::string option)
 
   bool added = addChild(new_elem);
   if (added)
+  {
+    m_elems.emplace_back(new_elem);
+    
+    // Mouse observer
+    new_elem->addMouseObserver(
+	       std::make_shared< ObserverAdapter<MouseEvent> >(
+	       [this, new_elem](const MouseEvent& evt)
+	       {
+		 if (evt.getEvtType() == MouseEvent::CLICKED_ON_WIDGET)
+		 {
+		   select_selectable(new_elem);
+		   return true;
+		 }
+		 else
+		 {
+		   return false;
+		 }
+	       }));
+    
     return true;
+  }
   else
   {
     delete new_elem;
@@ -84,26 +110,28 @@ const std::string& SelectablePanel::getSelected() const
 bool SelectablePanel::setSelected(const std::string& option)
 {
   Selectable *to_select = find_selectable_with_text(option);
-  if (to_select)
-  {
-    // Deselecting the previously selected element
-    if (m_selected)
-      m_selected->deselect();
+  return select_selectable(to_select);
+}
 
-    // Selecting the new one
-    m_selected = to_select;
-    m_selected->select();
+void SelectablePanel::clearSelection()
+{
+  // Deselecting the previously selected element
+  if (m_selected)
+    m_selected->deselect();
 
-    return true;
-  }
-
-  return false;
+  // Nulling m_selected
+  m_selected = nullptr;
 }
 
 Widget* SelectablePanel::getWidgetAtPos(const Vec2& pos)
 {
-  int index_of_elem = pos.x / m_elem_height;
-  return m_elems.at(index_of_elem);
+  unsigned int index_of_elem = pos.y / m_elem_height;
+  const std::vector<Widget*>& children = getChildren();
+  
+  if (index_of_elem >= 0 && index_of_elem < children.size())
+    return getChildren().at(index_of_elem);
+  else
+    return nullptr;
 }
 
 void SelectablePanel::layOutChildren()
@@ -163,6 +191,24 @@ Selectable *SelectablePanel::find_selectable_with_text(const std::string& text)
   }
 
   return nullptr;
+}
+
+bool SelectablePanel::select_selectable(Selectable *to_select)
+{
+  if (to_select && vec_contains(m_elems, to_select))
+  {
+    // Deselecting the previously selected element
+    if (m_selected)
+      m_selected->deselect();
+
+    // Selecting the new one
+    m_selected = to_select;
+    m_selected->select();
+
+    return true;
+  }
+
+  return false;
 }
 
 } // namespace wl

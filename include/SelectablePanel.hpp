@@ -84,6 +84,7 @@ public:
 
 private:
   Selectable *find_selectable_with_text(const std::string& text);
+  bool select_selectable(Selectable *to_select);
   
   std::vector<Selectable*> m_elems;
   Selectable *m_selected;
