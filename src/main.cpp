@@ -76,15 +76,21 @@ int main()
   // Escape on pressing the esc button (if no other widget handled the key event)
   tl->addKeyObserver(std::make_shared< ObserverAdapter<KeyEvent> >([tl](const KeyEvent& evt) {
 	if (evt.getKeycode() == genv::key_escape)
+	{
 	  tl->stopMainLoop();
-	return true;
+	  return true;
+	}
+	return false;
       }));
 
   // Save the values in log.txt on pressing Shift+S
   tl->addKeyObserver(std::make_shared< ObserverAdapter<KeyEvent> >([=](const KeyEvent& evt) {
 	if (evt.getKeycode() == 'S')
+	{
 	  write_to_file(nsp1, nsp2, sel1, sel2);
-	return true;
+	  return true;
+	}
+	return false;
       }));
   
   tl->setBackgroundColour(genv::color(0, 150, 0));

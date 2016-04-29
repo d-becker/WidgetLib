@@ -15,4 +15,5 @@ find_package(SDL_ttf REQUIRED)
 
 link_directories(lib)
 
+#add_subdirectory(lib)
 add_subdirectory(src)
