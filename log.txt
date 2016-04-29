@@ -1,4 +1,0 @@
-First number selector:	2
-Second number selector:	-15
-First selection widget:	Apple
-Second selection widget:	
