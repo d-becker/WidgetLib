@@ -21,8 +21,10 @@ public:
    * Implementations are allowed to do nothing in this method.
    *
    * \param value The new value.
+   *
+   * \return \c true if the value was set; \c false otherwise.
    */
-  virtual void setCurrentValue(T value) = 0;
+  virtual bool setCurrentValue(T value) = 0;
 
   /**
    * Increments the current value.

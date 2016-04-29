@@ -1,18 +1,16 @@
-#include <iostream>
 #include <fstream>
 
 #include <graphics.hpp>
 
 #include "NumberSpinner.hpp"
-#include "Spinner.hpp"
 #include "Selection.hpp"
+#include "Toplevel.hpp"
 
 #include "Event.hpp"
 #include "KeyEvent.hpp"
 #include "MouseEvent.hpp"
 #include "Observer.hpp"
 #include "ObserverAdapter.hpp"
-#include "Toplevel.hpp"
 
 using namespace std;
 using namespace genv;
@@ -38,7 +36,7 @@ void write_to_file(NumberSpinner<int> *ns1,
 }
 
 int main()
-{
+{  
   //
   // Number selector widgets
   //

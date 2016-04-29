@@ -228,12 +228,16 @@ private:
     T value;
     s >> value;
 
-    // No error and we have read the while string 
+    // No error and we have read the whole string 
     bool success = !s.fail() && s.eof();
-    if (success)
-      m_model->setCurrentValue(value);
 
-    return success;
+    if (success)
+    {
+      return m_model->setCurrentValue(value);
+    } else
+    {
+      return false;
+    }
   }
   
   void update_text_box()

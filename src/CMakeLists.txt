@@ -19,7 +19,7 @@ set(SRC_FILES
 )
 
 set(LIBS 
-	libgraphics.a
+	FlugiLib
 	${SDL_LIBRARY}
 	${SDL_TTF_LIBRARY}
 )

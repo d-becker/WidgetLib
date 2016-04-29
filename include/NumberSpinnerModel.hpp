@@ -32,9 +32,18 @@ public:
     return m_value;
   }
 
-  virtual void setCurrentValue(N value) override
+  virtual bool setCurrentValue(N value) override
   {
+    // Checking the limits
+    if (value < m_lower_limit || value > m_upper_limit)
+      return false;
+
+    // Checking for correctness as regards to step
+    if ((value - m_value) % m_step != 0)
+      return false;
+    
     m_value = value;
+    return true;
   }
 
   virtual void increment() override
