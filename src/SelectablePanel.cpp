@@ -156,13 +156,13 @@ void SelectablePanel::scrollUp()
 
 void SelectablePanel::scrollDown()
 {
-  if (m_first_to_display < m_elems.size() - 1)
+  if (m_first_to_display < m_elems.size() - getHeight() /  m_elem_height)
     ++m_first_to_display;
 }
 
 Widget* SelectablePanel::getWidgetAtPos(const Vec2& pos)
 {
-  unsigned int index_of_elem = pos.y / m_elem_height;
+  unsigned int index_of_elem = pos.y / m_elem_height + m_first_to_display;
   const std::vector<Widget*>& children = getChildren();
   
   if (index_of_elem >= 0 && index_of_elem < children.size())
