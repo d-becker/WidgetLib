@@ -1,39 +1,34 @@
-#ifndef SELECTION_GROUP_HPP
-#define SELECTION_GROUP_HPP
+#ifndef SELECTION_HPP
+#define SELECTION_HPP
 
 #include "Container.hpp"
-
-#include <string>
-#include <vector>
-
-#include "EventEmitter.hpp"
+#include "Label.hpp"
 #include "SelectablePanel.hpp"
-#include "SelectionGroupEvent.hpp"
 
 namespace wl {
 
-class SelectionGroup : public Container,
-		       public EventEmitter<SelectionGroupEvent>
+class Selection : public Container
 {
 public:
-  SelectionGroup(Vec2 position = Vec2(0, 0),
-		 int width = 50,
-		 int height = 50,
-		 const std::vector<std::string>& options = {"Elem1", "Elem2"});
-
-  virtual ~SelectionGroup();
+  Selection(Vec2 position = Vec2(0, 0),
+	    int width = 50,
+	    int height = 50,
+	    const std::vector<std::string>& options = {},
+	    std::string title = "Selection",
+	    int title_bar_height = 25);
+  virtual ~Selection();
 
   /**
    * Returns a vector of the options that are contained in
-   * this \c SelectionGroup.
+   * this \c Selection.
    *
    * \return A vector of the options that are contained in
-   *         this \c SelectionGroup.
+   *         this \c Selection.
    */
-  std::vector<std::string> getOptions() const;
-  
+  const std::vector<std::string> getOptions() const;
+
   /**
-   * Adds a new option to this \c SelectionGroup object if that option is not
+   * Adds a new option to this \c Selection object if that option is not
    * already added.
    *
    * \param option The option to add.
@@ -43,14 +38,14 @@ public:
   bool addOption(std::string option);
 
   /**
-   * Removes an option from this \c SelectionGroup object if that option is
+   * Removes an option from this \c Selection object if that option is
    * contained in it.
    *
    * \param option The option to remove.
    *
    * \return \c true if the option was removed; \c false otherwise.
    */
-  bool removeOption(std::string option);
+  bool removeOption(const std::string& option);
 
   /**
    * Returns the option that is currently selected.
@@ -58,11 +53,11 @@ public:
    *
    * \return The option that is currently selected.
    */
-  std::string getSelected() const;
+  const std::string& getSelected() const;
 
   /**
    * Sets the selection to the given option if that option is contained in
-   * this \c SelectionGroup object and deselects all other options.
+   * this \c Selection object and deselects all other options.
    *
    * \param option The option to select.
    *
@@ -77,15 +72,14 @@ public:
   void clearSelection();
 
   virtual void layOutChildren() override;
-  //virtual void paint() override;
-private:
-  std::function<bool(const SelectionEvent&)> get_observer_lambda(
-							Selectable *selectable);
   
+private:
+  int m_title_bar_height;
+
+  Label *m_title_bar;
   SelectablePanel *m_panel;
-  Selectable *m_selected; // The currently selected item
 };
 
 } // namespace wl
 
-#endif // SELECTION_GROUP_HPP
+#endif // SELECTION_HPP

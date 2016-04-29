@@ -26,15 +26,15 @@ public:
 
   /**
    * Returns a vector of the options that are contained in
-   * this \c SelectionGroup.
+   * this \c SelectablePanel.
    *
    * \return A vector of the options that are contained in
-   *         this \c SelectionGroup.
+   *         this \c SelectablePanel.
    */
   const std::vector<std::string> getOptions() const;
 
   /**
-   * Adds a new option to this \c SelectionPanel object if that option is not
+   * Adds a new option to this \c SelectablePanel object if that option is not
    * already added.
    *
    * \param option The option to add.
@@ -44,7 +44,7 @@ public:
   bool addOption(std::string option);
 
   /**
-   * Removes an option from this \c SelectionGroup object if that option is
+   * Removes an option from this \c SelectablePanel object if that option is
    * contained in it.
    *
    * \param option The option to remove.
@@ -63,7 +63,7 @@ public:
 
   /**
    * Sets the selection to the given option if that option is contained in
-   * this \c SelectionGroup object and deselects all other options.
+   * this \c SelectablePanel object and deselects all other options.
    *
    * \param option The option to select.
    *

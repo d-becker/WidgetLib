@@ -173,14 +173,13 @@ Widget* SelectablePanel::getWidgetAtPos(const Vec2& pos)
 
 void SelectablePanel::layOutChildren()
 {
-  int sum_height = 0; 
-  for (Widget *child : getChildren())
+  // Only the size needs to be adjusted as the positions
+  // are not taken into account when painting.
+  int width = getWidth();
+  for (Selectable *elem : m_elems)
   {
-    if (child)
-    {
-      child->setPosition(0, sum_height);
-      sum_height += m_elem_height;
-    }
+    if (elem)
+      elem->setSize(m_elem_height, width);
   }
 }
 
@@ -202,17 +201,16 @@ void SelectablePanel::paint()
   my_canvas << box(getWidth(), my_height);
 
   // Painting the children
-  const std::vector<Widget*> children = getChildren();
   int current_y = 0;
   for (unsigned int i = m_first_to_display;
-       i < children.size() && current_y < my_height;
+       i < m_elems.size() && current_y < my_height;
        ++i)
   {
-    Widget *child = children.at(i);
-    if (child)
+    Selectable *elem = m_elems.at(i);
+    if (elem)
     {
-      child->paint();
-      child->stampCanvas(my_canvas, 0, current_y);
+      elem->paint();
+      elem->stampCanvas(my_canvas, 0, current_y);
       current_y += m_elem_height;
     }
   }
