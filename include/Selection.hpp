@@ -13,8 +13,8 @@ public:
   Selection(Vec2 position = Vec2(0, 0),
 	    int width = 50,
 	    int height = 50,
-	    const std::vector<std::string>& options = {},
 	    std::string title = "Selection",
+	    const std::vector<std::string>& options = {},
 	    int title_bar_height = 25);
   virtual ~Selection();
 

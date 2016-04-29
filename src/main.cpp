@@ -1,24 +1,13 @@
 #include <iostream>
+#include <fstream>
 
 #include <graphics.hpp>
 
-#include "Button.hpp"
-#include "Checkbox.hpp"
 #include "NumberSpinner.hpp"
 #include "Spinner.hpp"
-#include "DefaultSpinnerModel.hpp"
-#include "Label.hpp"
-#include "NumberSpinnerModel.hpp"
-#include "RadioButton.hpp"
-#include "Selectable.hpp"
-#include "SelectablePanel.hpp"
 #include "Selection.hpp"
-#include "TextBox.hpp"
-#include "Widget.hpp"
 
-#include "ButtonEvent.hpp"
 #include "Event.hpp"
-#include "FocusEvent.hpp"
 #include "KeyEvent.hpp"
 #include "MouseEvent.hpp"
 #include "Observer.hpp"
@@ -29,65 +18,87 @@ using namespace std;
 using namespace genv;
 using namespace wl;
 
+void write_to_file(NumberSpinner<int> *ns1,
+		   NumberSpinner<int> *ns2,
+		   Selection *sel1,
+		   Selection *sel2,
+		   std::string filename = "log.txt")
+{  
+  ofstream out(filename);
+  out << "First number selector:\t"
+      << (ns1 ? to_string(ns1->getCurrentValue()) : "nullptr") << endl
+      << "Second number selector:\t"
+      << (ns2 ? to_string(ns2->getCurrentValue()) : "nullptr") << endl
+      << "First selection widget:\t"
+      << (sel1 ? sel1->getSelected() : "nullptr") << endl
+      << "Second selection widget:\t"
+      << (sel2 ? sel2->getSelected() : "nullptr") << endl;
+
+  // RAII - the destructor closes the file stream
+}
+
 int main()
 {
-  Toplevel* tl = new Toplevel(400, 400);
-  Button* b = new Button(Vec2(50, 50), 60, 60);
-  TextBox *tb = new TextBox(Vec2(110, 50), 80, 40);
-  NumberSpinner<int> *sp = new NumberSpinner<int>(Vec2(50, 150), 100, 25,
-						  -10, 10, 2, 2);
-  Label *l = new Label(Vec2(50, 180), 100, 25, "Label");
-  Checkbox *cb = new Checkbox(Vec2(50, 220), 25, 25);
-  //Selectable *sel1 = new Selectable(Vec2(50, 250), 75, 25);
-  //Selectable *sel2 = new Selectable(Vec2(50, 250), 75, 25);
-  Selection *spanel = new Selection(Vec2(50, 250), 100, 90, {"Alma", "Körte", "Szilva", "Narancs", "Grépfrút"}, "Gyümölcs");
-
-  std::shared_ptr< Observer<ButtonEvent> > bo = make_shared< ObserverAdapter<ButtonEvent> >([](const ButtonEvent& evt) {
-      static unsigned int counter = 0;
-      cerr << "Button clicked: " << counter++ << "!!!\n";
-      return true;
-    });
-  std::shared_ptr< Observer<KeyEvent> > ko = make_shared< ObserverAdapter<KeyEvent> >([](const KeyEvent& evt){
-      static unsigned int counter = 0;
-      cerr << "Key event  handled: " << counter++ << "!!!\n";
-      return false;
-    });
-  std::shared_ptr< Observer<MouseEvent> > mo = make_shared< ObserverAdapter<MouseEvent> >([](const MouseEvent& evt) {
-      static unsigned int counter = 0;
-      cerr << "Mouse event: " << counter++ << "!!!\n";
-      return true;
-    });
+  //
+  // Number selector widgets
+  //
+  // To change the value of the NumberSpinners, you can use the buttons,
+  // the up/down/pgup/pgdown keys, but you can also type in the desired
+  // value and press enter to validate and push it to the NumberSpinner
+  // - if the value is incorrect, the previous value is restored.
   
-  b->addObserver(bo);
-  //cb->addMouseObserver(mo);
-					    
-  //tl->addKeyObserver(ko);
+  // Number range from -10 to 10, step is 2, initial value is 2
+  NumberSpinner<int> *nsp1 = new NumberSpinner<int>(Vec2(50, 150), 100, 25,
+						  -10, 10, 2, 2);
+
+  // Number range from -15 to 15, step is 1, initial value is 0
+  NumberSpinner<int> *nsp2 = new NumberSpinner<int>(Vec2(50, 180), 100, 25,
+						  -15, 15, 1, 0);
+
+  //
+  // Selection widgets
+  //
+  // Scroll up and down with the arrows and the mouse wheel
+  Selection *sel1 = new Selection(Vec2(50, 225), 100, 90,
+		/* Title */   "Fruit",
+		/* Options*/ {"Apple", "Pear", "Plum", "Orange", "Grapefruit"});
+
+  Selection *sel2 = new Selection(Vec2(160, 225), 100, 90,
+		/* Title */   "Language",
+                /* Options*/ {"Norwegian", "Swedish", "Danish", "Icelandic",
+			      "Faroese", "Finnish"});
+
+  //
+  // Creating the toplevel widget and adding observers
+  //
+  Toplevel* tl = new Toplevel(400, 400);
+
+  // Escape on pressing the esc button (if no other widget handled the key event)
+  tl->addKeyObserver(std::make_shared< ObserverAdapter<KeyEvent> >([tl](const KeyEvent& evt) {
+	if (evt.getKeycode() == genv::key_escape)
+	  tl->stopMainLoop();
+	return true;
+      }));
+
+  // Save the values in log.txt on pressing Shift+S
+  tl->addKeyObserver(std::make_shared< ObserverAdapter<KeyEvent> >([=](const KeyEvent& evt) {
+	if (evt.getKeycode() == 'S')
+	  write_to_file(nsp1, nsp2, sel1, sel2);
+	return true;
+      }));
+  
   tl->setBackgroundColour(genv::color(0, 150, 0));
 
-  tl->addChild(b);
-  tl->addChild(tb);
-  tl->addChild(sp);
-  tl->addChild(l);
-  tl->addChild(cb);
-  tl->addChild(spanel);
-  //tl->addChild(sg);
+  // Adding the widgets as children of the Toplevel widget
+  tl->addChild(nsp1);
+  tl->addChild(nsp2);
+  tl->addChild(sel1);
+  tl->addChild(sel2);
 
+  // Starting the main loop
   tl->mainloop();
   
-  delete tl;
+  delete tl; // Recursively deletes all children
 
-  // Testing text
-  string A = "A";
-  string V = "V";
-  string AV = A + V;
-
-  string a = "a";
-  string space = " ";
-
-  cout << "String A: " << gout.twidth(A) << ".\n";
-  cout << "String V: " << gout.twidth(V) << ".\n";
-  cout << "String AV: " << gout.twidth(AV) << ".\n";
-  cout << "String a: " << gout.twidth(a) << ".\n";
-  cout << "String space: " << gout.twidth(space) << ".\n";
   return 0;
 }

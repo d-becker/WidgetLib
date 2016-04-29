@@ -1,22 +1,67 @@
 #include "Selection.hpp"
 
+#include "MouseEvent.hpp"
+#include "KeyEvent.hpp"
+#include "ObserverAdapter.hpp"
+
 namespace wl {
 
 Selection::Selection(Vec2 position,
 		     int width,
 		     int height,
-		     const std::vector<std::string>& options,
 		     std::string title,
+		     const std::vector<std::string>& options,
 		     int title_bar_height)
   : Container(position, width, height),
     m_title_bar_height(title_bar_height > 0 ? title_bar_height : 0),
     m_title_bar(new Label(Vec2(0, 0), width, m_title_bar_height, title)),
     m_panel(new SelectablePanel(Vec2(0, m_title_bar_height),
-				width, height, options))
+				width, height - m_title_bar_height, options))
 {
   // Adding the children
   addChild(m_title_bar);
   addChild(m_panel);
+
+  // Grab focus and on click
+  addMouseSuperObserver(std::make_shared< ObserverAdapter<MouseEvent> >(
+					 [this](const MouseEvent& evt) {
+	if (evt.getEvtType() == MouseEvent::MOUSE_BTN_PRESSED)
+	{
+	  grabFocus();
+	  return true;
+	}
+	
+	return false;
+      }));
+
+  // Handle up and down buttons
+  addKeySuperObserver(
+    std::make_shared< ObserverAdapter<KeyEvent> >(
+		     [this](const KeyEvent& evt) {
+       bool handled = false;
+       if (evt.getEvtType() == KeyEvent::KEY_PRESSED)
+       {
+	 int keycode = evt.getKeycode();
+	 switch (keycode)
+	 {
+	  case genv::key_up:
+	  {
+	    m_panel->scrollUp();
+	    handled = true;
+	    break;
+	  }
+
+	  case genv::key_down:
+	  {
+	    m_panel->scrollDown();
+	    handled = true;
+	    break;
+	  }
+         }
+       }
+
+     return handled;	    
+   }));
 }
 
 Selection::~Selection()

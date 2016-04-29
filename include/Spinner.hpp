@@ -81,7 +81,8 @@ public:
 	      
 	    return false;
 	}));
-    
+
+    // Key observers
     addKeySuperObserver(
        std::make_shared< ObserverAdapter<KeyEvent> >(
 		        [this](const KeyEvent& evt) {

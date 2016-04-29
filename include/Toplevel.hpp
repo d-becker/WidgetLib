@@ -9,13 +9,15 @@ class Toplevel : public FreePanel
 {
 public:
   Toplevel(int width,
-	   int height);
+	   int height,
+	   unsigned int refresh_rate = 60);
 
   virtual ~Toplevel();
 
   virtual Toplevel *getToplevel() override;
   
   void mainloop();
+  void stopMainLoop();
 
   /**
    * Returns a pointer to the widget that currently has focus.
@@ -49,6 +51,10 @@ private:
   Widget *m_mouse_inside;
 
   Widget *m_focussed;
+
+  unsigned int m_refresh_rate;
+
+  bool m_looping;
 };
 
 } // namespace wl

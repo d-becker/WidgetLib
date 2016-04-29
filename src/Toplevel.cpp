@@ -11,12 +11,15 @@
 namespace wl {
 
 Toplevel::Toplevel(int width,
-		   int height)
+		   int height,
+		   unsigned int refresh_rate)
   : FreePanel(Vec2(0, 0), width, height),
     m_mouse_btn_left_pressed(nullptr),
     //m_mouse_btn_right_pressed(nullptr),
     m_mouse_inside(nullptr),
-    m_focussed(nullptr)
+    m_focussed(nullptr),
+    m_refresh_rate(refresh_rate),
+    m_looping(false)
 {
 }
 
@@ -31,13 +34,13 @@ Toplevel *Toplevel::getToplevel()
 
 void Toplevel::mainloop()
 {
-  // PRELIMINARY!!!
   using namespace genv;
   gout.open(getWidth(), getHeight());
 
-  gin.timer(60);
+  m_looping = true;
+  gin.timer(m_refresh_rate);
   event ev;
-  while (gin >> ev && ev.keycode != key_escape)
+  while (gin >> ev && m_looping)
   {
     if (ev.type == ev_timer)
     {
@@ -48,6 +51,11 @@ void Toplevel::mainloop()
       handle_genv_event(ev);
     }
   }
+}
+
+void Toplevel::stopMainLoop()
+{
+  m_looping = false;
 }
 
 Widget *Toplevel::getFocussed() const
