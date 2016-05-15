@@ -14,9 +14,9 @@ class LayoutManager;
 class Container : public Widget
 {
 public:
-  Container(Vec2 position = Vec2(0, 0),
-	    int width = 0,
-	    int height = 0);
+  Container(Vec2 position,
+	    int width,
+	    int height);
   
   virtual ~Container();
 

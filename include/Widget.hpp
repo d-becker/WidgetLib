@@ -30,9 +30,9 @@ class Widget
 {
   friend class Container;
 public:
-  Widget(Vec2 position = Vec2(0, 0),
-	 int width = 0,
-	 int height = 0);
+  Widget(Vec2 position,
+	 int width,
+	 int height);
   
   virtual ~Widget();
 

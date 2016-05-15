@@ -10,9 +10,9 @@ namespace wl {
 class Checkbox : public Selector
 {
 public:
-  Checkbox(Vec2 position = Vec2(0, 0),
-	   int width = 50,
-	   int height = 50);
+  Checkbox(Vec2 position,
+	   int width,
+	   int height);
 
   virtual ~Checkbox();
 

@@ -16,9 +16,9 @@ namespace wl {
 class TextBox : public TextDisplay
 {
 public:
-  TextBox(Vec2 position = Vec2(0, 0),
-	  int width = 50,
-	  int height = 20,
+  TextBox(Vec2 position,
+	  int width,
+	  int height,
 	  std::string text = {});
 
   virtual ~TextBox();

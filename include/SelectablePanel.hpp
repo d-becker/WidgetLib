@@ -18,9 +18,9 @@ class SelectablePanel : public Container,
 			public EventEmitter<SelectionGroupEvent>
 {
 public:
-  SelectablePanel(Vec2 position = Vec2(0, 0),
-		  int width = 50,
-		  int height = 50,
+  SelectablePanel(Vec2 position,
+		  int width,
+		  int height,
 		  const std::vector<std::string>& options = {});
   virtual ~SelectablePanel();
 

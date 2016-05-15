@@ -33,11 +33,11 @@ class Spinner : public Container
 {
 public:
   Spinner(std::shared_ptr< SpinnerModel<T> > model,
-	  Vec2 position = Vec2(0, 0),
-	  int width = 50,
-	  int height = 50)
+	  Vec2 position,
+	  int width,
+	  int height)
     : Container(position, width, height),
-      m_text_box(new TextBox()),
+      m_text_box(new TextBox(Vec2(0, 0), 0, 0)),
       m_arrow_up(new ArrowButton(Vec2(0, 0), 0, 0, ArrowButton::UP)),
       m_arrow_down(new ArrowButton(Vec2(0, 0), 0, 0, ArrowButton::DOWN)),
       m_model(model)

@@ -12,9 +12,9 @@ namespace wl {
 class Selectable : public Label
 {
 public:
-  Selectable(Vec2 position = Vec2(0, 0),
-	     int width = 50,
-	     int height = 50,
+  Selectable(Vec2 position,
+	     int width,
+	     int height,
 	     std::string text = "Selectable");
 
   virtual ~Selectable();

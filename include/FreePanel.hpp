@@ -12,9 +12,9 @@ namespace wl {
 class FreePanel : public Container
 {
 public:
-  FreePanel(Vec2 position = Vec2(0, 0),
-	    int width = 0,
-	    int height = 0);
+  FreePanel(Vec2 position,
+	    int width,
+	    int height);
 
   virtual ~FreePanel();
 

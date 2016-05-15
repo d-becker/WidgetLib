@@ -17,9 +17,9 @@ namespace wl {
 class Button : public Widget, public EventEmitter<ButtonEvent>
 {
 public:
-  Button(Vec2 position = Vec2(0, 0),
-	 int width = 50,
-	 int height = 50);
+  Button(Vec2 position,
+	 int width,
+	 int height);
 
   virtual ~Button();
   

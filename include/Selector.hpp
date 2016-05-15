@@ -14,9 +14,9 @@ namespace wl {
 class Selector : public Widget, public EventEmitter<SelectionEvent>
 {
 public:
-  Selector(Vec2 position = Vec2(0, 0),
-	   int width = 50,
-	   int height = 50);
+  Selector(Vec2 position,
+	   int width,
+	   int height);
 
   virtual ~Selector();
 
