@@ -1,7 +1,6 @@
 cmake_minimum_required (VERSION 2.8)
 
 set(SRC_FILES
-	main.cpp
 	Button.cpp
 	Checkbox.cpp
 	Container.cpp
@@ -19,11 +18,18 @@ set(SRC_FILES
 	Widget.cpp	
 )
 
+set(MAIN_TEST main.cpp)
+
 set(LIBS 
 	FlugiLib
 	${SDL_LIBRARY}
 	${SDL_TTF_LIBRARY}
 )
 
-add_executable(WidgetLib ${SRC_FILES})
+# Making the test executable
+add_executable(WidgetLibTest ${MAIN_TEST} ${SRC_FILES})
+target_link_libraries(WidgetLibTest ${LIBS})
+
+# Making dynamic lib
+add_library(WidgetLib SHARED ${SRC_FILES})
 target_link_libraries(WidgetLib ${LIBS})
