@@ -5,6 +5,7 @@ set(SRC_FILES
 	Button.cpp
 	Checkbox.cpp
 	Container.cpp
+	DrawingCanvas.cpp
 	FreePanel.cpp
 	Label.cpp
 	RadioButton.cpp
