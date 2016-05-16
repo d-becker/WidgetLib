@@ -2,6 +2,7 @@
 #define WIDGET_HPP
 
 #include <memory>
+#include <string>
 #include <vector>
 
 #include <graphics.hpp>
@@ -416,6 +417,14 @@ public:
   void setBackgroundColour(genv::color colour);
 
   /**
+   * Sets the font used by this widget. If the file does not exist,
+   * the default font will be used instead.
+   *
+   * \param font_file The filename with path to the font file to use.
+   */
+  void setFont(std::string font_file);
+
+  /**
    * Paints the widget.
    */
   virtual void paint() = 0;
@@ -444,6 +453,10 @@ protected:
   // Const version of the above.
   std::shared_ptr<const genv::canvas> getCanvas() const;
 
+  // Tries to load the font whose filename is m_font_file. If that doesn't
+  // succeed, tries to load m_default_font_file.
+  void load_font();
+
 private:
   Container *m_parent;
   
@@ -470,6 +483,10 @@ private:
 
   // Backgound colour
   genv::color m_background_colour;
+
+  // Path to font file
+  std::string m_default_font_file;
+  std::string m_font_file;
 };
 
 } // namespace wl

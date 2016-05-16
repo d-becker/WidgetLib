@@ -1,6 +1,7 @@
 #include "Widget.hpp"
 
 #include <algorithm>
+#include <fstream>
 
 #include "Container.hpp"
 #include "FocusEvent.hpp"
@@ -11,6 +12,45 @@
 #include "Toplevel.hpp"
 
 namespace wl {
+
+namespace /* anonymous */ {
+
+bool file_exists(std::string filename)
+{
+  std::ifstream in(filename);
+  return in.good();
+}
+
+// This function tries to detect the location of the font files.
+// Checks for the existence of the files only once and stores
+// the result in the static varuable \a res.
+std::string detect_default_font_file()
+{
+  static std::string locations[] = {
+    "/usr/share/WidgetLib/SDL_Fonts/LiberationMono-Regular.ttf",
+    "/usr/local/share/WidgetLib/SDL_Fonts/LiberationMono-Regular.ttf",
+    "SDL_Fonts/LiberationMono-Regular.ttf"
+  };
+  
+  static std::string res = ""; // Stores the detected file
+
+  if (res.empty())
+  {
+    for (const std::string& file : locations)
+    {
+      if (file_exists(file))
+      {
+        res = file;
+	break;
+      }
+    }
+
+  }
+
+  return res;
+}
+
+} // anonymous namespace
 
 Widget::Widget(Vec2 position,
 	       int width,
@@ -28,7 +68,9 @@ Widget::Widget(Vec2 position,
     m_resize_super_observers(),
     m_focus_super_observers(),
     m_canvas(nullptr),
-    m_background_colour(0, 0, 0)
+    m_background_colour(0, 0, 0),
+    m_default_font_file(detect_default_font_file()),
+    m_font_file(m_default_font_file)
 {
   getNewCanvas();
 }
@@ -165,6 +207,12 @@ void Widget::setBackgroundColour(genv::color colour)
   m_background_colour = colour;
 }
 
+void Widget::setFont(std::string font_file)
+{
+  m_font_file = font_file;
+  load_font();
+}
+
 // Protected
 bool Widget::send_mouse_evt_to_observers(const MouseEvent& evt)
 {
@@ -261,7 +309,7 @@ void Widget::addFocusSuperObserver(std::shared_ptr< Observer<FocusEvent> > obser
 void Widget::getNewCanvas()
 {
   m_canvas = std::make_shared<genv::canvas>(m_width, m_height);
-  m_canvas->load_font("Fonts/LiberationMono-Regular.ttf", 12, false);
+  load_font();
 }
 
 std::shared_ptr<genv::canvas> Widget::getCanvas()
@@ -277,6 +325,13 @@ std::shared_ptr<const genv::canvas> Widget::getCanvas() const
 void Widget::set_parent(Container *parent)
 {
   m_parent = parent;
+}
+
+void Widget::load_font()
+{
+  bool font_loaded = m_canvas->load_font(m_font_file, 12, false);
+  if (!font_loaded)
+    m_canvas->load_font(m_default_font_file, 12, false);
 }
 
 } // namespace wl

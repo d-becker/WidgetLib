@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.2)
+cmake_minimum_required (VERSION 2.8)
 
 project(WidgetLib)
 
@@ -19,4 +19,18 @@ add_subdirectory(lib)
 add_subdirectory(src)
 
 # Copying the fonts
-file(COPY "Fonts" DESTINATION ${PROJECT_SOURCE_DIR}/bin/)
+file(COPY "${PROJECT_SOURCE_DIR}/SDL_Fonts" DESTINATION ${PROJECT_SOURCE_DIR}/bin/)
+
+# Installing files
+file(GLOB_RECURSE HEADERS ${PROJECT_SOURCE_DIR}/include/*.hpp)
+set(HEADERS ${HEADERS} "${PROJECT_SOURCE_DIR}/lib/include/graphics.hpp")
+
+install(FILES ${HEADERS} DESTINATION include/WidgetLib)
+
+file(GLOB FONTS ${PROJECT_SOURCE_DIR}SDL_Fonts/*.ttf)
+install(FILES ${FONTS} DESTINATION share/WidgetLib/SDL_Fonts)
+
+# Packaging
+include (InstallRequiredSystemLibraries)
+
+include (CPack)

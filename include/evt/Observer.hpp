@@ -23,7 +23,7 @@ public:
    * \return \c true if the event has been fully handled and need not be
    *         propagated to the parent; \c false otherwise.
    */
-  virtual bool handleEvent(const T& evt) = 0;
+  virtual bool handleEvent(const E& evt) = 0;
 };
 
 } // namespace wl

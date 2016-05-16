@@ -33,3 +33,6 @@ target_link_libraries(WidgetLibTest ${LIBS})
 # Making dynamic lib
 add_library(WidgetLib SHARED ${SRC_FILES})
 target_link_libraries(WidgetLib ${LIBS})
+
+# Installing
+install(TARGETS WidgetLib DESTINATION lib)
