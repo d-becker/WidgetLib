@@ -2,8 +2,8 @@
 
 #include <cmath>
 
-#include "MouseEvent.hpp"
-#include "ObserverAdapter.hpp"
+#include "evt/MouseEvent.hpp"
+#include "evt/ObserverAdapter.hpp"
 
 namespace wl {
 

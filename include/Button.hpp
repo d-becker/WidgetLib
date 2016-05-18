@@ -3,9 +3,9 @@
 
 #include <memory>
 
-#include "ButtonEvent.hpp"
 #include "EventEmitter.hpp"
-#include "MouseEvent.hpp"
+#include "evt/ButtonEvent.hpp"
+#include "evt/MouseEvent.hpp"
 #include "Widget.hpp"
 
 #include <memory>

@@ -8,8 +8,8 @@
 #include <graphics.hpp>
 
 #include "Box.hpp"
-#include "Observer.hpp"
-#include "ResizeEvent.hpp"
+#include "evt/Observer.hpp"
+#include "evt/ResizeEvent.hpp"
 #include "Vec2.hpp"
 
 

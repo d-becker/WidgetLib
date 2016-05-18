@@ -6,11 +6,11 @@
 #include "Selection.hpp"
 #include "Toplevel.hpp"
 
-#include "Event.hpp"
-#include "KeyEvent.hpp"
-#include "MouseEvent.hpp"
-#include "Observer.hpp"
-#include "ObserverAdapter.hpp"
+#include "evt/Event.hpp"
+#include "evt/KeyEvent.hpp"
+#include "evt/MouseEvent.hpp"
+#include "evt/Observer.hpp"
+#include "evt/ObserverAdapter.hpp"
 
 using namespace std;
 using namespace genv;

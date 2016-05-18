@@ -4,9 +4,9 @@
 
 #include <graphics.hpp>
 
-#include "FocusEvent.hpp"
-#include "KeyEvent.hpp"
-#include "MouseEvent.hpp"
+#include "evt/FocusEvent.hpp"
+#include "evt/KeyEvent.hpp"
+#include "evt/MouseEvent.hpp"
 
 namespace wl {
 

@@ -4,10 +4,10 @@
 #include <fstream>
 
 #include "Container.hpp"
-#include "FocusEvent.hpp"
-#include "KeyEvent.hpp"
-#include "MouseEvent.hpp"
-#include "ResizeEvent.hpp"
+#include "evt/FocusEvent.hpp"
+#include "evt/KeyEvent.hpp"
+#include "evt/MouseEvent.hpp"
+#include "evt/ResizeEvent.hpp"
 #include "Util.hpp"
 #include "Toplevel.hpp"
 

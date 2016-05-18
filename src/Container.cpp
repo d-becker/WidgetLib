@@ -2,8 +2,8 @@
 
 #include <algorithm>
 
-#include "ObserverAdapter.hpp"
-#include "ResizeEvent.hpp"
+#include "evt/ObserverAdapter.hpp"
+#include "evt/ResizeEvent.hpp"
 
 namespace wl {
 
