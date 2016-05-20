@@ -1,9 +1,9 @@
-#include "Container.hpp"
+#include "WidgetLib/Container.hpp"
 
 #include <algorithm>
 
-#include "evt/ObserverAdapter.hpp"
-#include "evt/ResizeEvent.hpp"
+#include "WidgetLib/evt/ObserverAdapter.hpp"
+#include "WidgetLib/evt/ResizeEvent.hpp"
 
 namespace wl {
 

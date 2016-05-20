@@ -3,8 +3,8 @@
 
 #include <memory>
 
-#include "NumberSpinnerModel.hpp"
-#include "Spinner.hpp"
+#include "WidgetLib/NumberSpinnerModel.hpp"
+#include "WidgetLib/Spinner.hpp"
 
 namespace wl {
 

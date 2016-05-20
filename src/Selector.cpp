@@ -1,6 +1,6 @@
-#include "Selector.hpp"
+#include "WidgetLib/Selector.hpp"
 
-#include "Util.hpp"
+#include "WidgetLib/Util.hpp"
 
 namespace wl {
 

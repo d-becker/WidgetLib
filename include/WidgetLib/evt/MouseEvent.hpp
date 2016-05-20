@@ -1,9 +1,9 @@
-#ifndef MOUSE_EVENT_EPP
-#define MOUSE_EVENT_EPP
+#ifndef MOUSE_EVENT_HPP
+#define MOUSE_EVENT_HPP
 
-#include "Event.hpp"
+#include "WidgetLib/evt/Event.hpp"
 
-#include "Vec2.hpp"
+#include "WidgetLib/Vec2.hpp"
 
 namespace wl {
 
@@ -66,4 +66,4 @@ private:
 
 } // namespace wl
 
-#endif // MOUSE_EVENT_EPP
+#endif // MOUSE_EVENT_HPP

@@ -2,15 +2,15 @@
 
 #include <graphics.hpp>
 
-#include "NumberSpinner.hpp"
-#include "Selection.hpp"
-#include "Toplevel.hpp"
+#include "WidgetLib/NumberSpinner.hpp"
+#include "WidgetLib/Selection.hpp"
+#include "WidgetLib/Toplevel.hpp"
 
-#include "evt/Event.hpp"
-#include "evt/KeyEvent.hpp"
-#include "evt/MouseEvent.hpp"
-#include "evt/Observer.hpp"
-#include "evt/ObserverAdapter.hpp"
+#include "WidgetLib/evt/Event.hpp"
+#include "WidgetLib/evt/KeyEvent.hpp"
+#include "WidgetLib/evt/MouseEvent.hpp"
+#include "WidgetLib/evt/Observer.hpp"
+#include "WidgetLib/evt/ObserverAdapter.hpp"
 
 using namespace std;
 using namespace genv;
@@ -49,9 +49,9 @@ int main()
   NumberSpinner<int> *nsp1 = new NumberSpinner<int>(Vec2(50, 150), 100, 25,
 						  -10, 10, 2, 2);
 
-  // Number range from -15 to 15, step is 1, initial value is 0
+  // Number range from -15 to 15, step is 1, initial value is 10
   NumberSpinner<int> *nsp2 = new NumberSpinner<int>(Vec2(50, 180), 100, 25,
-						  -15, 15, 1, 0);
+						  -15, 15, 1, 10);
 
   //
   // Selection widgets

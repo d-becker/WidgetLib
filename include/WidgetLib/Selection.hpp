@@ -1,9 +1,9 @@
 #ifndef SELECTION_HPP
 #define SELECTION_HPP
 
-#include "Container.hpp"
-#include "Label.hpp"
-#include "SelectablePanel.hpp"
+#include "WidgetLib/Container.hpp"
+#include "WidgetLib/Label.hpp"
+#include "WidgetLib/SelectablePanel.hpp"
 
 namespace wl {
 

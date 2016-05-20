@@ -1,15 +1,15 @@
-#include "Widget.hpp"
+#include "WidgetLib/Widget.hpp"
 
 #include <algorithm>
 #include <fstream>
 
-#include "Container.hpp"
-#include "evt/FocusEvent.hpp"
-#include "evt/KeyEvent.hpp"
-#include "evt/MouseEvent.hpp"
-#include "evt/ResizeEvent.hpp"
-#include "Util.hpp"
-#include "Toplevel.hpp"
+#include "WidgetLib/Container.hpp"
+#include "WidgetLib/evt/FocusEvent.hpp"
+#include "WidgetLib/evt/KeyEvent.hpp"
+#include "WidgetLib/evt/MouseEvent.hpp"
+#include "WidgetLib/evt/ResizeEvent.hpp"
+#include "WidgetLib/Util.hpp"
+#include "WidgetLib/Toplevel.hpp"
 
 namespace wl {
 

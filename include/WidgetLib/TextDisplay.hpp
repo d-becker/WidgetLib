@@ -1,7 +1,7 @@
 #ifndef TEXT_DISPLAY_HPP
 #define TEXT_DISPLAY_HPP
 
-#include "Widget.hpp"
+#include "WidgetLib/Widget.hpp"
 
 #include <graphics.hpp>
 

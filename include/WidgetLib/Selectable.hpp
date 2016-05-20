@@ -3,9 +3,9 @@
 
 #include <graphics.hpp>
 
-#include "EventEmitter.hpp"
-#include "Label.hpp"
-#include "Selector.hpp"
+#include "WidgetLib/EventEmitter.hpp"
+#include "WidgetLib/Label.hpp"
+#include "WidgetLib/Selector.hpp"
 
 namespace wl {
 

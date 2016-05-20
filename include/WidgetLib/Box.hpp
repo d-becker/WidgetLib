@@ -1,7 +1,7 @@
 #ifndef BOX_HPP
 #define BOX_HPP
 
-#include "Vec2.hpp"
+#include "WidgetLib/Vec2.hpp"
 
 namespace wl {
 

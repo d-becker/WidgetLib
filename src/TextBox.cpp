@@ -1,13 +1,13 @@
-#include "TextBox.hpp"
+#include "WidgetLib/TextBox.hpp"
 
 #include <cctype>
 #include <memory>
 
-#include "evt/FocusEvent.hpp"
-#include "evt/KeyEvent.hpp"
-#include "evt/MouseEvent.hpp"
-#include "evt/ObserverAdapter.hpp"
-#include "Util.hpp"
+#include "WidgetLib/evt/FocusEvent.hpp"
+#include "WidgetLib/evt/KeyEvent.hpp"
+#include "WidgetLib/evt/MouseEvent.hpp"
+#include "WidgetLib/evt/ObserverAdapter.hpp"
+#include "WidgetLib/Util.hpp"
 
 namespace wl {
 

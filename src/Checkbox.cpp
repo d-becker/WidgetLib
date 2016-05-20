@@ -1,9 +1,9 @@
-#include "Checkbox.hpp"
+#include "WidgetLib/Checkbox.hpp"
 
-#include "EventEmitter.hpp"
-#include "evt/MouseEvent.hpp"
-#include "evt/ObserverAdapter.hpp"
-#include "Util.hpp"
+#include "WidgetLib/EventEmitter.hpp"
+#include "WidgetLib/evt/MouseEvent.hpp"
+#include "WidgetLib/evt/ObserverAdapter.hpp"
+#include "WidgetLib/Util.hpp"
 
 namespace wl {
 

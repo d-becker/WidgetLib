@@ -7,10 +7,10 @@
 
 #include <graphics.hpp>
 
-#include "Box.hpp"
-#include "evt/Observer.hpp"
-#include "evt/ResizeEvent.hpp"
-#include "Vec2.hpp"
+#include "WidgetLib/Box.hpp"
+#include "WidgetLib/evt/Observer.hpp"
+#include "WidgetLib/evt/ResizeEvent.hpp"
+#include "WidgetLib/Vec2.hpp"
 
 
 namespace wl {

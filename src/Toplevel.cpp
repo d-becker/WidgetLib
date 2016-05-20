@@ -1,12 +1,12 @@
-#include "Toplevel.hpp"
+#include "WidgetLib/Toplevel.hpp"
 
 #include <cmath>
 
 #include <graphics.hpp>
 
-#include "evt/FocusEvent.hpp"
-#include "evt/KeyEvent.hpp"
-#include "evt/MouseEvent.hpp"
+#include "WidgetLib/evt/FocusEvent.hpp"
+#include "WidgetLib/evt/KeyEvent.hpp"
+#include "WidgetLib/evt/MouseEvent.hpp"
 
 namespace wl {
 

@@ -4,9 +4,9 @@
 #include <memory>
 #include <vector>
 
-#include "evt/Observer.hpp"
-#include "Util.hpp"
-#include "Widget.hpp"
+#include "WidgetLib/evt/Observer.hpp"
+#include "WidgetLib/Util.hpp"
+#include "WidgetLib/Widget.hpp"
 
 namespace wl {
 

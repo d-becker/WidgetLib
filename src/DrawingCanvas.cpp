@@ -1,4 +1,4 @@
-#include "DrawingCanvas.hpp"
+#include "WidgetLib/DrawingCanvas.hpp"
 
 namespace wl {
 

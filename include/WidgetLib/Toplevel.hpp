@@ -1,7 +1,7 @@
 #ifndef TOPLEVEL_H
 #define TOPLEVEL_H
 
-#include "FreePanel.hpp"
+#include "WidgetLib/FreePanel.hpp"
 
 namespace wl {
 

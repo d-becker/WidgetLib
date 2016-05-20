@@ -1,7 +1,7 @@
 #ifndef DEFAULT_SPINNER_MODEL_HPP
 #define DEFAULT_SPINNER_MODEL_HPP
 
-#include "SpinnerModel.hpp"
+#include "WidgetLib/SpinnerModel.hpp"
 
 namespace wl {
 

@@ -4,10 +4,10 @@
 #include <string>
 #include <vector>
 
-#include "Container.hpp"
-#include "EventEmitter.hpp"
-#include "evt/SelectionGroupEvent.hpp"
-#include "Selectable.hpp"
+#include "WidgetLib/Container.hpp"
+#include "WidgetLib/EventEmitter.hpp"
+#include "WidgetLib/evt/SelectionGroupEvent.hpp"
+#include "WidgetLib/Selectable.hpp"
 
 namespace wl {
 

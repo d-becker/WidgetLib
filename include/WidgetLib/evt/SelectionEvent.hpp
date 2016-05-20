@@ -1,7 +1,7 @@
 #ifndef SELECTION_EVENT_HPP
 #define SELECTION_EVENT_HPP
 
-#include "Event.hpp"
+#include "WidgetLib/evt/Event.hpp"
 
 namespace wl {
 

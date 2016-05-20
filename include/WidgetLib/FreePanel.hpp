@@ -1,7 +1,7 @@
 #ifndef FREE_PANEL_HPP
 #define FREE_PANEL_HPP
 
-#include "Container.hpp"
+#include "WidgetLib/Container.hpp"
 
 namespace wl {
 

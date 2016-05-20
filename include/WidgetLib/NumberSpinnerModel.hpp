@@ -1,7 +1,7 @@
 #ifndef NUMBER_SPINNER_MODEL_H
 #define NUMBER_SPINNER_MODEL_H
 
-#include "SpinnerModel.hpp"
+#include "WidgetLib/SpinnerModel.hpp"
 
 #include <stdexcept>
 

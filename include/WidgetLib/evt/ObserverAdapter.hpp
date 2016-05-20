@@ -1,7 +1,7 @@
 #ifndef OBSERVER_ADAPTER_HPP
 #define OBSERVER_ADAPTER_HPP
 
-#include "Observer.hpp"
+#include "WidgetLib/evt/Observer.hpp"
 
 namespace wl {
 

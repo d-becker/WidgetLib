@@ -1,9 +1,9 @@
-#include "Button.hpp"
+#include "WidgetLib/Button.hpp"
 
 #include <graphics.hpp>
 
-#include "evt/ObserverAdapter.hpp"
-#include "Util.hpp"
+#include "WidgetLib/evt/ObserverAdapter.hpp"
+#include "WidgetLib/Util.hpp"
 
 namespace wl {
 

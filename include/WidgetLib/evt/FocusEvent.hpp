@@ -1,7 +1,7 @@
 #ifndef FOCUS_EVENT_HPP
 #define FOCUS_EVENT_HPP
 
-#include "Event.hpp"
+#include "WidgetLib/evt/Event.hpp"
 
 namespace wl {
 

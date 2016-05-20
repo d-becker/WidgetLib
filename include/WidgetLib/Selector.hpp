@@ -1,10 +1,10 @@
 #ifndef SELECTOR_HPP
 #define SELECTOR_HPP
 
-#include "Widget.hpp"
+#include "WidgetLib/Widget.hpp"
 
-#include "EventEmitter.hpp"
-#include "evt/SelectionEvent.hpp"
+#include "WidgetLib/EventEmitter.hpp"
+#include "WidgetLib/evt/SelectionEvent.hpp"
 
 namespace wl {
 

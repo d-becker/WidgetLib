@@ -1,10 +1,10 @@
-#include "SelectablePanel.hpp"
+#include "WidgetLib/SelectablePanel.hpp"
 
 #include <cmath>
 
-#include "evt/MouseEvent.hpp"
-#include "evt/ObserverAdapter.hpp"
-#include "Util.hpp"
+#include "WidgetLib/evt/MouseEvent.hpp"
+#include "WidgetLib/evt/ObserverAdapter.hpp"
+#include "WidgetLib/Util.hpp"
 
 namespace wl {
 

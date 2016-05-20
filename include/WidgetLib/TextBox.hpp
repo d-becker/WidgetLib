@@ -1,12 +1,12 @@
 #ifndef TEXTBOX_HPP
 #define TEXTBOX_HPP
 
-#include "TextDisplay.hpp"
+#include "WidgetLib/TextDisplay.hpp"
 
 #include <string>
 
-#include "Container.hpp"
-#include "Vec2.hpp"
+#include "WidgetLib/Container.hpp"
+#include "WidgetLib/Vec2.hpp"
 
 namespace wl {
 

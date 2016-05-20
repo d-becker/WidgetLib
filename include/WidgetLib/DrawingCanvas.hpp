@@ -1,7 +1,7 @@
 #ifndef DRAWING_CANVAS_HPP
 #define DRAWING_CANVAS_HPP
 
-#include "Widget.hpp"
+#include "WidgetLib/Widget.hpp"
 
 namespace wl {
 

@@ -1,7 +1,7 @@
 #ifndef OBSERVER_HPP
 #define OBSERVER_HPP
 
-#include "Event.hpp"
+#include "WidgetLib/evt/Event.hpp"
 
 namespace wl {
 

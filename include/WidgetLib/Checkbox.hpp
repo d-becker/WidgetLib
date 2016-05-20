@@ -1,7 +1,7 @@
 #ifndef CHECKBOX_HPP
 #define CHECKBOX_HPP
 
-#include "Selector.hpp"
+#include "WidgetLib/Selector.hpp"
 
 #include <memory>
 

@@ -1,11 +1,11 @@
-#include "SelectionGroup.hpp"
+#include "WidgetLib/SelectionGroup.hpp"
 
 #include <memory>
 #include <vector>
 
-#include "SelectionGroupEvent.hpp"
-#include "ObserverAdapter.hpp"
-#include "Util.hpp"
+#include "WidgetLib/SelectionGroupEvent.hpp"
+#include "WidgetLib/ObserverAdapter.hpp"
+#include "WidgetLib/Util.hpp"
 
 namespace wl {
 

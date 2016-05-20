@@ -1,7 +1,7 @@
 #ifndef RESIZE_EVENT_HPP
 #define RESIZE_EVENT_HPP
 
-#include "Event.hpp"
+#include "WidgetLib/evt/Event.hpp"
 
 namespace wl {
 

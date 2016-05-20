@@ -1,7 +1,7 @@
 #ifndef SELECTION_GROUP_EVENT_HPP
 #define SELECTION_GROUP_EVENT_HPP
 
-#include "Event.hpp"
+#include "WidgetLib/evt/Event.hpp"
 
 #include <string>
 

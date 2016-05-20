@@ -1,4 +1,4 @@
-#include "FreePanel.hpp"
+#include "WidgetLib/FreePanel.hpp"
 
 namespace wl {
 

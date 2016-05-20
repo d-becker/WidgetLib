@@ -1,7 +1,7 @@
 #ifndef LABEL_HPP
 #define LABEL_HPP
 
-#include "TextDisplay.hpp"
+#include "WidgetLib/TextDisplay.hpp"
 
 #include <string>
 

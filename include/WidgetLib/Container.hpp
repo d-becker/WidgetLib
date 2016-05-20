@@ -5,7 +5,7 @@
 
 #include <graphics.hpp>
 
-#include "Widget.hpp"
+#include "WidgetLib/Widget.hpp"
 
 namespace wl {
 

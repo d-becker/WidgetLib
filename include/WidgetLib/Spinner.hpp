@@ -4,17 +4,17 @@
 #include <memory>
 #include <sstream>
 
-#include "Container.hpp"
+#include "WidgetLib/Container.hpp"
 
-#include "Button.hpp"
-#include "evt/ButtonEvent.hpp"
-#include "evt/KeyEvent.hpp"
-#include "evt/MouseEvent.hpp"
-#include "evt/Observer.hpp"
-#include "evt/ObserverAdapter.hpp"
-#include "SpinnerModel.hpp"
-#include "TextBox.hpp"
-#include "Vec2.hpp"
+#include "WidgetLib/Button.hpp"
+#include "WidgetLib/evt/ButtonEvent.hpp"
+#include "WidgetLib/evt/KeyEvent.hpp"
+#include "WidgetLib/evt/MouseEvent.hpp"
+#include "WidgetLib/evt/Observer.hpp"
+#include "WidgetLib/evt/ObserverAdapter.hpp"
+#include "WidgetLib/SpinnerModel.hpp"
+#include "WidgetLib/TextBox.hpp"
+#include "WidgetLib/Vec2.hpp"
 
 namespace wl {
 
@@ -49,9 +49,9 @@ public:
     addChild(m_arrow_up);
     addChild(m_arrow_down);
 
-    update_text_box();
-
     layOutChildren();
+
+    update_text_box();
 
     // Observers
     m_arrow_up->addObserver(std::make_shared< ObserverAdapter<ButtonEvent> >(

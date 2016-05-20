@@ -1,4 +1,4 @@
-#include "Label.hpp"
+#include "WidgetLib/Label.hpp"
 
 namespace wl {
 
