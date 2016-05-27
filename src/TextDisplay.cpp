@@ -32,8 +32,10 @@ void TextDisplay::paint()
     int char_height = get_char_height();
     int text_level = getHeight() / 2 - char_height / 2;
     canv << move_to(m_horiz_inset, text_level)
-         << m_text_colour
-         << text(get_text_to_display());
+         << m_text_colour;
+    std::string text_to_display = get_text_to_display();
+    if (!text_to_display.empty())
+        canv << text(text_to_display);
   }
 }
 
