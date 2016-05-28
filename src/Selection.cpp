@@ -90,7 +90,14 @@ const std::string& Selection::getSelected() const
 
 bool Selection::setSelected(const std::string& option)
 {
-  return m_panel->setSelected(option);
+  bool selected = m_panel->setSelected(option);
+  if (selected)
+  {
+    SelectionGroupEvent evt(this, option);
+    fireEvent(evt);
+  }
+  
+  return selected;
 }
 
 void Selection::clearSelection()

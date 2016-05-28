@@ -2,12 +2,15 @@
 #define SELECTION_HPP
 
 #include "WidgetLib/Container.hpp"
+#include "WidgetLib/EventEmitter.hpp"
+#include "WidgetLib/evt/SelectionGroupEvent.hpp"
 #include "WidgetLib/Label.hpp"
 #include "WidgetLib/SelectablePanel.hpp"
 
 namespace wl {
 
-class Selection : public Container
+class Selection : public Container,
+		  public EventEmitter<SelectionGroupEvent>
 {
 public:
   Selection(Vec2 position,
