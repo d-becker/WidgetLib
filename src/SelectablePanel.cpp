@@ -109,6 +109,7 @@ bool SelectablePanel::removeOption(const std::string& option)
   {
     remove_from_vec(m_elems, elem);
     removeChild(elem);
+    delete elem;
     return true;
   }
 
